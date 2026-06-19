@@ -1,0 +1,17 @@
+@boarteam/fix
+Copyright 2026 Boar Team
+
+This product includes software developed at Boar Team.
+
+Portions of this library were extracted and re-engineered from an internal
+FIX protocol implementation. All proprietary configuration, credentials,
+venue endpoints, and business logic were removed during extraction.
+
+The FIX 4.4 dictionary data shipped in @boarteam/fix-dict-fix44 is derived
+from the publicly published FIX 4.4 specification (factual protocol-reference
+data: tag numbers, field names, datatypes, message structures, and enumerated
+values).
+
+"FIX" and "Financial Information eXchange" are trademarks of FIX Protocol
+Limited. This project is an independent open-source implementation and is not
+affiliated with, sponsored by, or endorsed by FIX Protocol Limited.
