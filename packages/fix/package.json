@@ -1,0 +1,51 @@
+{
+  "name": "@boarteam/fix",
+  "version": "0.1.0-alpha.0",
+  "description": "Dictionary-driven FIX protocol toolkit: parse, validate, and encode FIX messages. Zero runtime dependencies; runs in the browser and Node.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "fix",
+    "fix-protocol",
+    "fix44",
+    "financial-information-exchange",
+    "market-data",
+    "parser",
+    "validator",
+    "trading",
+    "fintech"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boarteam/fix-protocol.git",
+    "directory": "packages/fix"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}
