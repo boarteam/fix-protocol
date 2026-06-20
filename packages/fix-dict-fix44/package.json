@@ -40,7 +40,11 @@
   "engines": {
     "node": ">=18"
   },
+  "peerDependencies": {
+    "@boarteam/fix": "workspace:^"
+  },
   "devDependencies": {
+    "@boarteam/fix": "workspace:*",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"
   }

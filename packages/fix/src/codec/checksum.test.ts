@@ -9,9 +9,11 @@ describe('calculateChecksum', () => {
     expect(calculateChecksum(`35=A${SOH}`)).toBe('231');
   });
 
-  it('always returns a zero-padded three-digit string', () => {
+  it('zero-pads to three digits and matches the exact value for a realistic fragment', () => {
     expect(calculateChecksum('')).toBe('000');
-    expect(calculateChecksum(`8=FIX.4.4${SOH}9=5${SOH}35=0${SOH}`)).toMatch(/^\d{3}$/);
+    // Golden value (byte-sum mod 256) for a real FIX header fragment — constrains the
+    // value, not just the digit count.
+    expect(calculateChecksum(`8=FIX.4.4${SOH}9=5${SOH}35=0${SOH}`)).toBe('163');
   });
 
   it('wraps modulo 256', () => {

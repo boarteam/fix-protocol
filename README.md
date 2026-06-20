@@ -33,11 +33,11 @@ no sockets, no sequence numbers, no heartbeats — just the protocol.
 
 ## Packages
 
-| Package | Description |
-|---|---|
-| [`@boarteam/fix`](packages/fix) | The engine: tokenize, parse, validate, encode, and the dictionary runtime. |
-| [`@boarteam/fix-dict-fix44`](packages/fix-dict-fix44) | The full FIX 4.4 dictionary as data, generated from the specification. |
-| `@boarteam/fix-codegen` | Build-time generator (spec → dictionary JSON). Not published. |
+| Package                                               | Description                                                                |
+| ----------------------------------------------------- | -------------------------------------------------------------------------- |
+| [`@boarteam/fix`](packages/fix)                       | The engine: tokenize, parse, validate, encode, and the dictionary runtime. |
+| [`@boarteam/fix-dict-fix44`](packages/fix-dict-fix44) | The full FIX 4.4 dictionary as data, generated from the specification.     |
+| `@boarteam/fix-codegen`                               | Build-time generator (spec → dictionary JSON). Not published.              |
 
 ## Planned API (preview)
 
@@ -48,8 +48,13 @@ import { fix44 } from '@boarteam/fix-dict-fix44';
 const fix = createFixEngine(fix44);
 
 const { message, issues } = fix.parse(raw); // never throws; issues is FixIssue[]
-const problems = fix.validate(message);     // presence, enums, datatypes, group counts
-const wire = fix.encode({ msgType: 'V', fields: { /* ... */ } });
+const problems = fix.validate(message); // presence, enums, datatypes, group counts
+const wire = fix.encode({
+  msgType: 'V',
+  fields: {
+    /* ... */
+  },
+});
 ```
 
 ## Development
