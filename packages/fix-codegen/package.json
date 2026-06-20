@@ -6,13 +6,17 @@
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
+    "build": "tsup",
+    "generate": "tsup && node dist/cli.cjs",
     "typecheck": "tsc --noEmit"
   },
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
+    "@boarteam/fix": "workspace:*",
     "@types/node": "^22.10.0",
+    "tsup": "^8.3.5",
     "typescript": "^5.7.2"
   }
 }

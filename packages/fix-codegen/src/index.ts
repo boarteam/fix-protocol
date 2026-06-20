@@ -1,13 +1,16 @@
 /**
  * `@boarteam/fix-codegen` — generates the FIX dictionary JSON consumed by
- * `@boarteam/fix-dict-fix44`.
- *
- * Planned sources (M1 / M4):
- *  - Markdown FIX 4.4 reference (primary) — parses `fields/`, `components/`, `messages/`,
- *    and `data-types.md` into one `DictionaryJSON`.
- *  - QuickFIX `FIX44.xml` (canonical cross-check) — used to detect spec drift in CI.
- *
- * Node-only build tool; never shipped to consumers.
+ * `@boarteam/fix-dict-fix44` from the FIX 4.4 Markdown reference. Node-only build tool;
+ * never shipped to consumers. See `cli.ts` for the command-line entry point.
  */
 
-export {};
+export { generate } from './generate';
+export type { GenerateResult } from './generate';
+export { emitDictionaryJson, emitIndexTs } from './emit';
+export { parseDatatypes } from './datatypes';
+export { parseField, sanitizeIdentifier } from './fields';
+export { parseMemberTable } from './table';
+export type { TableRow, Reqd } from './table';
+export { buildMembers, harvestRegistry } from './structure';
+export type { BuildContext } from './structure';
+export { htmlUnescape, bodyLines, heading } from './markdown';
