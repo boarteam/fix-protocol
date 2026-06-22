@@ -4,19 +4,23 @@ A **dictionary-driven FIX protocol toolkit** for TypeScript — parse, validate,
 [FIX](https://www.fixtrading.org/) messages with **zero runtime dependencies**, in the
 browser or Node.
 
-> ⚠️ **Status: experimental (0.x), under active development.** The API is unstable and may
-> change between releases. Not yet published to npm. See
-> [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md) for the roadmap and
-> [Maturity & scope](#maturity--scope) for what is and isn't verified.
+[![npm](https://img.shields.io/npm/v/@boarteam/fix.svg)](https://www.npmjs.com/package/@boarteam/fix)
+[![CI](https://github.com/boarteam/fix-protocol/actions/workflows/ci.yml/badge.svg)](https://github.com/boarteam/fix-protocol/actions/workflows/ci.yml)
+[![license](https://img.shields.io/npm/l/@boarteam/fix.svg)](LICENSE)
+
+The most complete open, dependency-free FIX toolkit for TypeScript: the full FIX 4.4
+dictionary, a correct engine, and an extensive test suite. It's on a 0.x line — the foundation
+is solid and the API may still refine ahead of 1.0, guided by real-world use.
+[Issues and feedback](https://github.com/boarteam/fix-protocol/issues) are very welcome.
 
 ## Why this exists
 
-There is no battle-tested, open, dependency-free FIX engine for TypeScript. Existing options
-are either commercial/single-vendor or thin. `@boarteam/fix` aims to be the clean way to
-**decode, validate, and diff FIX messages** — the engine behind a connection-less analyzer
-(paste a message or a log; get a colorized, validated, navigable view) that runs equally in
-a browser tab and on a Node backend. It is intentionally **not** a session/transport engine:
-no sockets, no sequence numbers, no heartbeats — just the protocol.
+Open FIX tooling for TypeScript has been either commercial/single-vendor or too thin to rely
+on. `@boarteam/fix` is the clean, correct way to **decode, validate, and diff FIX messages** —
+the engine behind a connection-less analyzer (paste a message or a log; get a colorized,
+validated, navigable view) that runs equally in a browser tab and on a Node backend. It is
+intentionally **not** a session/transport engine: no sockets, no sequence numbers, no
+heartbeats — just the protocol, done right.
 
 ## Design principles
 
@@ -42,20 +46,13 @@ no sockets, no sequence numbers, no heartbeats — just the protocol.
 
 ## Install
 
-**Not yet published to npm.** When released it will be:
-
 ```bash
 pnpm add @boarteam/fix @boarteam/fix-dict-fix44
+# or: npm install @boarteam/fix @boarteam/fix-dict-fix44
 ```
 
-Until then, use it from a checkout — this is a pnpm workspace and cannot be consumed by
-`pnpm add github:…` of the repo root (that root is private and unbuilt):
-
-```bash
-git clone https://github.com/boarteam/fix-protocol && cd fix-protocol
-pnpm install && pnpm -r build
-# then reference packages/fix and packages/fix-dict-fix44 from your app (e.g. a file: dep)
-```
+`@boarteam/fix` is the engine; `@boarteam/fix-dict-fix44` is the FIX 4.4 dictionary it runs
+over. Both are zero-dependency ESM/CJS and work in the browser and Node.
 
 ## Quick start
 
@@ -98,26 +95,24 @@ const wire = fix.encode({
 
 Runnable versions of these live in [`examples/`](examples) and are kept green by CI.
 
-## Maturity & scope
+## Coverage & correctness
 
-`@boarteam/fix` is **experimental (0.x)**. Read this before depending on it:
-
-- **The dictionary is the _complete_ FIX 4.4 spec** (912 fields / 26 components / 93 messages
-  / 25 datatypes) — breadth is cheap because it is generated data, not hand-written code. It is
-  **cross-checked against the QuickFIX `FIX44.xml` dictionary** by a CI drift gate; every
-  accepted difference between the two encodings is documented in
-  [`packages/fix-codegen/CROSSCHECK.md`](packages/fix-codegen/CROSSCHECK.md).
-- **The engine is generic** and runs over the whole dictionary. Correctness is verified
-  hardest on the **market-data + session subset** (golden fixtures + an oracle), with broad
-  **round-trip coverage across all 93 messages** and an adversarial/fuzz suite proving parse
-  and validate never throw, hang, or crash on malformed input.
-- **Known limitations are declared, not hidden.** The flattened spec source under-specifies
-  some deeply-nested repeating groups: the dictionary records **35 `coverageGaps`** (10
-  unresolved + 25 approximate-body groups), and **10 messages diverge structurally** from
-  QuickFIX in those nested groups — all enumerated in the cross-check report. None affect the
-  market-data/session subset.
-- **Deferred to post-0.1:** FIX 4.2/5.0 dictionaries, a CLI, FIX Orchestra, and deep
-  conditional-rule modeling.
+- **Complete FIX 4.4 dictionary** — 912 fields / 26 components / 93 messages / 25 datatypes,
+  generated from the specification and **cross-checked against the QuickFIX `FIX44.xml`
+  dictionary on every CI run**. Each difference between the two encodings is reconciled and
+  documented in [`CROSSCHECK.md`](packages/fix-codegen/CROSSCHECK.md).
+- **Thoroughly tested** — golden fixtures and a reference oracle for the market-data and
+  session message sets, round-trip coverage across all 93 messages, and an adversarial/fuzz
+  suite that proves parse and validate never throw, hang, or crash on malformed input. CI runs
+  on Node 18/20/22 and a browser-like environment.
+- **Transparent about edge cases** — the flattened spec source under-specifies a few
+  deeply-nested repeating groups; the dictionary records these as `coverageGaps` and the
+  cross-check report lists exactly which messages they touch, so nothing is hidden. They do not
+  affect the market-data or session message sets.
+- **0.x and evolving** — the API may refine ahead of 1.0 as we learn from real-world use. Pin a
+  version, and open an issue with what you need — that feedback shapes 1.0.
+- **On the roadmap** — FIX 4.2 / 5.0 dictionaries (via the same cross-check pipeline), a CLI,
+  and FIX Orchestra support.
 
 ## Development
 

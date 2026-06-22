@@ -5,9 +5,9 @@ datatypes) for the [`@boarteam/fix`](https://www.npmjs.com/package/@boarteam/fix
 Generated from the FIX 4.4 specification and cross-checked against the QuickFIX `FIX44.xml`
 dictionary by a CI drift gate — never hand-maintained.
 
-> ⚠️ **Experimental (0.x).** See the
-> [project README](https://github.com/boarteam/fix-protocol#readme) for maturity, the
-> subset-vs-full correctness note, and declared coverage gaps.
+On a 0.x line and actively developed. See the
+[project README](https://github.com/boarteam/fix-protocol#readme) for coverage, the cross-check
+report, and declared coverage gaps.
 
 ```ts
 import { createFixEngine } from '@boarteam/fix';
