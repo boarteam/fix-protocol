@@ -5,9 +5,9 @@ A **dictionary-driven FIX protocol toolkit** for TypeScript — parse, validate,
 or Node. This is the engine; pair it with a dictionary such as
 [`@boarteam/fix-dict-fix44`](https://www.npmjs.com/package/@boarteam/fix-dict-fix44).
 
-> ⚠️ **Experimental (0.x).** API may change between releases. See the
-> [project README](https://github.com/boarteam/fix-protocol#readme) for status, scope, and the
-> roadmap.
+On a 0.x line: the foundation is solid and well-tested, and the API may still refine ahead of
+1.0. See the [project README](https://github.com/boarteam/fix-protocol#readme) for coverage,
+testing, and the roadmap — [feedback](https://github.com/boarteam/fix-protocol/issues) welcome.
 
 ```ts
 import { createFixEngine } from '@boarteam/fix';
