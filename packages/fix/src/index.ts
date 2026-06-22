@@ -3,7 +3,7 @@
  *
  * Parse, validate, and encode FIX messages with zero runtime dependencies, in the
  * browser or Node. See the README and `docs/PROJECT_PLAN.md` for the roadmap; this
- * package is in early (0.x) development — the pure `validate` path lands in M3.
+ * package is in early (0.x) development.
  */
 
 export const VERSION = '0.1.0-alpha.0';
@@ -28,6 +28,12 @@ export type {
 } from './codec/parse';
 export { decodeValue } from './codec/datatypes';
 export type { DecodedValue, DecodeResult } from './codec/datatypes';
+
+// Validate path.
+export { validate } from './validate/validate';
+export type { ValidateOptions } from './validate/validate';
+export { DEFAULT_CONDITIONAL_RULES } from './validate/conditions';
+export type { ConditionalRule, ConditionalContext } from './validate/conditions';
 
 // Engine façade.
 export { createFixEngine } from './engine';

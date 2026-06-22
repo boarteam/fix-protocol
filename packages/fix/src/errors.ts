@@ -10,8 +10,8 @@ export type FixSeverity = 'error' | 'warning' | 'info';
  * SemVer contract, so this union documents the known set and gives callers autocompletion
  * and exhaustiveness — while {@link FixIssue.code} stays open (`KnownIssueCode | string`)
  * so a custom dictionary or future milestone can introduce new codes without a type break.
- * The `dict/*` family is raised by `validateDictionary`, the `parse/*` family by `parse`;
- * the `validate/*` family (presence/enum/datatype/conditional) lands in M3.
+ * The `dict/*` family is raised by `validateDictionary`, the `parse/*` family by `parse`,
+ * and the `validate/*` family (presence/enum/datatype/conditional) by `validate`.
  */
 export type KnownIssueCode =
   // --- dictionary integrity (validateDictionary) ---
@@ -65,7 +65,26 @@ export type KnownIssueCode =
   | 'parse/invalid-int'
   | 'parse/invalid-float'
   | 'parse/invalid-boolean'
-  | 'parse/number-precision';
+  | 'parse/number-precision'
+  // --- dictionary conformance (validate) ---
+  // The MsgType is absent or not in the dictionary, so conformance cannot be checked.
+  | 'validate/unknown-msgtype'
+  // A required (`reqd: 'Y'`) field is absent from a scope that is present/required.
+  | 'validate/required-field-missing'
+  // A required repeating group is absent or has zero entries.
+  | 'validate/required-group-missing'
+  // A field is present on the wire but carries no value (`44=` then the separator).
+  | 'validate/empty-value'
+  // An enumerated field's value (or one token of a multi-valued field) is not in its
+  // dictionary enum set.
+  | 'validate/value-not-in-enum'
+  // A field's value does not match the lexical format of its datatype (a malformed
+  // integer/float/Boolean, a multi-character `char`, or a bad date/time/currency/country).
+  | 'validate/invalid-value'
+  // A field that a conditional rule makes required given the message's state is absent
+  // (e.g. the `Length` companion of a present `data` field, or `OrigSendingTime` when
+  // `PossDupFlag` = `Y`).
+  | 'validate/conditional-required';
 
 /**
  * A single diagnostic, returned as data — never thrown — by every analysis entry point

@@ -22,11 +22,15 @@ export interface DecodeResult {
   issues: FixIssue[];
 }
 
-// FIX `int`: optional sign then one or more digits. Leading zeros are allowed (`"00023"`).
-const INT_RE = /^[+-]?\d+$/;
-// FIX `float`: optional sign, digits with an optional decimal point (`"23"`, `"23."`,
-// `"23.5"`, `".5"`, `"00023.230"`). Leading/trailing zeros are allowed.
-const FLOAT_RE = /^[+-]?(?:\d+\.?\d*|\.\d+)$/;
+/** FIX `int`: optional sign then one or more digits. Leading zeros are allowed (`"00023"`). */
+export const INT_RE = /^[+-]?\d+$/;
+/**
+ * FIX `float`: optional sign, digits with an optional decimal point (`"23"`, `"23."`,
+ * `"23.5"`, `".5"`, `"00023.230"`). Leading/trailing zeros are allowed. Shared with the
+ * validator so wire decoding (`parse`) and conformance (`validate`) never disagree on what
+ * a valid number looks like.
+ */
+export const FLOAT_RE = /^[+-]?(?:\d+\.?\d*|\.\d+)$/;
 
 /**
  * Coerce one raw wire value to its typed form per the field's datatype.

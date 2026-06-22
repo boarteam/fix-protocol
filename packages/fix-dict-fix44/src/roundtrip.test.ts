@@ -97,7 +97,7 @@ function walk(
 /** Set every `data` field's preceding `Length` field to the value's byte length. */
 function fixupDataLengths(
   fields: Record<number, string>,
-  groups: Record<number, GroupEntry[]>,
+  groups: Record<number, GroupEntry[]> | undefined,
 ): void {
   for (const tagStr of Object.keys(fields)) {
     const tag = Number(tagStr);
@@ -106,7 +106,7 @@ function fixupDataLengths(
       fields[f.lengthField] = String(byteLen(fields[tag]!));
     }
   }
-  for (const entries of Object.values(groups)) {
+  for (const entries of Object.values(groups ?? {})) {
     for (const e of entries) {
       fixupDataLengths(e.fields as Record<number, string>, e.groups);
     }
