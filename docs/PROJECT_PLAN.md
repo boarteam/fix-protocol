@@ -191,32 +191,40 @@ session state (seq numbers, heartbeats, side behavior, wall-clock); `ProviderTyp
 
 ## Milestones (mapped to readiness Tiers)
 
-- **M0 — Clean-room extraction (Tier 0 gate).** Fresh repo, **Apache-2.0** LICENSE +
+> **Progress (updated 2026-06-22).** ✅ M0 · ✅ M1 · ✅ M2 · ✅ M3 · 🔜 M4 · ⬜ v0.1.0 publish.
+> Commits: M0 `b61b511` · M1 `12e5dd1` · M2 `0f459a0` · M3 `4686f2f`. **215 tests green**; build
+> + `tsc --strict` clean across all source packages (the engine `validate` path and the
+> adversarial/fuzz suite landed in M3). Status legend: ✅ done · 🔜 in progress / next · ⬜ todo.
+
+- **✅ M0 — Clean-room extraction (Tier 0 gate).** Fresh repo, **Apache-2.0** LICENSE +
   NOTICE, **squashed initial commit** (no monorepo history). pnpm workspaces scaffold.
   **Store this plan in the repo** as `docs/PROJECT_PLAN.md` (the user's "store in the
   project" ask). Copy only pure pieces; scrub `InternalInstrument`/comp-IDs/venue names to
   neutral fixtures. **Right-to-publish cleared in writing**; `gitleaks detect
   --log-opts="--all"` clean. Smoke build + test **pass in an offline container**.
-- **M1 — Wire core + Dictionary contract + full-dict generator.** `codec/checksum`/`encode`/
+- **✅ M1 — Wire core + Dictionary contract + full-dict generator.** `codec/checksum`/`encode`/
   `tokenize`; Dictionary JSON `types.ts` + `Dictionary` runtime + `validateDictionary`; build
   **`@boarteam/fix-codegen` Markdown parser** producing the **full** `@boarteam/fix-dict-fix44`
   JSON from `/Users/jifeon/projects/fix`. Reconcile the generated MD/session messages against
   the boar-trading **oracle**. Unit tests: checksum vs known-good messages, round-trip framing,
   `validateDictionary` clean on the full dict.
-- **M2 — Parse with groups + datatypes.** Dictionary-driven `parse` → typed `ParsedMessage`
+- **✅ M2 — Parse with groups + datatypes.** Dictionary-driven `parse` → typed `ParsedMessage`
   with nested groups + diagnostics; `datatypes` coercion; multi-message framing. **Golden
   fixtures for the MD/session subset**, plus **round-trip smoke across all 93 messages**.
-- **M3 — Pure validator.** presence/enum/datatype/group-count/conditional → `FixIssue[]`;
+- **✅ M3 — Pure validator.** presence/enum/datatype/conditional → `FixIssue[]` (group-count
+  consistency lives in `parse`/M2, since the counter scalar is not retained on `ParsedMessage`);
   **adversarial/fuzz suite** (truncated, reordered, bad-checksum, oversized, junk-tag)
   proving the parser **never crashes/hangs** (Tier-2 parser bar). Round-trip identity.
-- **M4 — Cross-check + DX/docs/packaging (Tier 1–2).** QuickFIX-`FIX44.xml` generator path
+  Hardened against a 13-finding adversarial multi-agent review; `validate` is also exposed on
+  `createFixEngine` and as a free function.
+- **🔜 M4 — Cross-check + DX/docs/packaging (Tier 1–2).** QuickFIX-`FIX44.xml` generator path
   + **CI diff vs the Markdown-generated dict** (drift gate). README (why-vs-alternatives,
   install, copy-paste example, `experimental`/0.x maturity + the subset-vs-full honesty
   note), TypeDoc, CHANGELOG/CONTRIBUTING/CODE_OF_CONDUCT/SECURITY, `examples/` kept green by
   CI. Enforce Prettier + ESLint + `tsc --strict` + Vitest in CI across **Node + a
   browser-like env**; bundle check asserts no `net`/`Buffer`/`crypto`/`joi`/`@nestjs` leak;
   Changesets for SemVer; Dependabot + audit + license-check; issue/PR templates; DCO.
-- **v0.1.0 publish.** `@boarteam/fix` + `@boarteam/fix-dict-fix44`, SemVer 0.x with a
+- **⬜ v0.1.0 publish.** `@boarteam/fix` + `@boarteam/fix-dict-fix44`, SemVer 0.x with a
   **written breaking-change policy** (output shape / accepted input / issue codes).
 - **Post-0.1 (deferred).** `dict-fix42`/`dict-fix50` via QuickFIX XML; `@boarteam/fix-cli`;
   FIX Orchestra source adapter; richer conditional rules; deeper conformance across the full
