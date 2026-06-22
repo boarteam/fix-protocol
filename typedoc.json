@@ -1,0 +1,13 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["packages/fix/src/index.ts", "packages/fix-dict-fix44/src/index.ts"],
+  "out": "docs/api",
+  "name": "@boarteam/fix",
+  "readme": "none",
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "excludeExternals": true,
+  "githubPages": false,
+  "hideGenerator": true,
+  "skipErrorChecking": true
+}

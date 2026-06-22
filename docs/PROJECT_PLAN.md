@@ -191,10 +191,14 @@ session state (seq numbers, heartbeats, side behavior, wall-clock); `ProviderTyp
 
 ## Milestones (mapped to readiness Tiers)
 
-> **Progress (updated 2026-06-22).** ✅ M0 · ✅ M1 · ✅ M2 · ✅ M3 · 🔜 M4 · ⬜ v0.1.0 publish.
-> Commits: M0 `b61b511` · M1 `12e5dd1` · M2 `0f459a0` · M3 `4686f2f`. **215 tests green**; build
-> + `tsc --strict` clean across all source packages (the engine `validate` path and the
-> adversarial/fuzz suite landed in M3). Status legend: ✅ done · 🔜 in progress / next · ⬜ todo.
+> **Progress (updated 2026-06-22).** ✅ M0 · ✅ M1 · ✅ M2 · ✅ M3 · ✅ M4 · ⬜ v0.1.0 publish.
+> Commits: M0 `b61b511` · M1 `12e5dd1` · M2 `0f459a0` · M3 `4686f2f` · M4 _(pending commit)_.
+> **250 tests green**; build + `tsc --strict` + ESLint + Prettier + browser-env + bundle-safety
+> all clean. M4 added the **QuickFIX `FIX44.xml` cross-check drift gate** (exact-signature
+> allowlist baseline in `packages/fix-codegen/crosscheck-baseline.json`, hardened against a
+> 24-finding adversarial review — incl. a critical optionality-regression hole), CI
+> (Node 18/20/22 + DCO), Changesets, examples, TypeDoc, and the standard OSS docs. Status
+> legend: ✅ done · 🔜 in progress / next · ⬜ todo.
 
 - **✅ M0 — Clean-room extraction (Tier 0 gate).** Fresh repo, **Apache-2.0** LICENSE +
   NOTICE, **squashed initial commit** (no monorepo history). pnpm workspaces scaffold.
@@ -217,7 +221,7 @@ session state (seq numbers, heartbeats, side behavior, wall-clock); `ProviderTyp
   proving the parser **never crashes/hangs** (Tier-2 parser bar). Round-trip identity.
   Hardened against a 13-finding adversarial multi-agent review; `validate` is also exposed on
   `createFixEngine` and as a free function.
-- **🔜 M4 — Cross-check + DX/docs/packaging (Tier 1–2).** QuickFIX-`FIX44.xml` generator path
+- **✅ M4 — Cross-check + DX/docs/packaging (Tier 1–2).** QuickFIX-`FIX44.xml` generator path
   + **CI diff vs the Markdown-generated dict** (drift gate). README (why-vs-alternatives,
   install, copy-paste example, `experimental`/0.x maturity + the subset-vs-full honesty
   note), TypeDoc, CHANGELOG/CONTRIBUTING/CODE_OF_CONDUCT/SECURITY, `examples/` kept green by

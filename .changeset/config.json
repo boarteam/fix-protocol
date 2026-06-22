@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@boarteam/fix-codegen"]
+  "ignore": ["@boarteam/fix-codegen", "@boarteam/fix-examples"]
 }

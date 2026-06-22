@@ -14,3 +14,19 @@ export type { TableRow, Reqd } from './table';
 export { buildMembers, harvestRegistry } from './structure';
 export type { BuildContext } from './structure';
 export { htmlUnescape, bodyLines, heading } from './markdown';
+
+// QuickFIX-XML cross-check path (the canonical drift gate against the Markdown-generated dict).
+export { parseXml, parseQuickFix, normalizeTypeName } from './quickfix';
+export { diffDictionaries } from './diff';
+export type { Difference, DifferenceCategory, DiffOptions } from './diff';
+export {
+  crossCheck,
+  computeDifferences,
+  clusterFor,
+  buildBaseline,
+  baselineSignatures,
+  renderReport,
+  CLUSTERS,
+  IGNORED_FIELDS,
+} from './crosscheck';
+export type { CrossCheckResult, ClassifiedDifference, Baseline, BaselineEntry } from './crosscheck';
