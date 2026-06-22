@@ -1,8 +1,8 @@
-# @boarteam/fix
+# @boarteam/fix-dict-fix42
 
-## 0.1.1
+## 0.1.0
 
-### Patch Changes
+### Minor Changes
 
 - Add `@boarteam/fix-dict-fix42`: the complete FIX 4.2 dictionary as data (405 fields / 46
   messages / 21 datatypes), generated from the official FIX 4.2 specification (FIX Repository,
@@ -13,14 +13,7 @@
   `MonthYear` as aliases of `UTCDateOnly` and `month-year`, so date/period fields are
   format-validated across dialects. Purely additive; FIX 4.4 behavior is unchanged.
 
-## 0.1.0
-
 ### Patch Changes
 
-- b9187e0: Add a QuickFIX `FIX44.xml` cross-check (drift gate) for the generated FIX 4.4 dictionary, plus
-  v0.1 packaging and DX. The shipped dictionary is now diffed against the independently-maintained
-  QuickFIX encoding on every CI run; all accepted differences are documented in
-  `packages/fix-codegen/CROSSCHECK.md`. Adds a browser-environment (happy-dom) smoke test, a
-  bundle-safety check that fails on any `net`/`Buffer`/`crypto`/`joi`/`@nestjs` leak, runnable
-  examples kept green by CI, TypeDoc API docs, and contributor/security docs. No runtime API
-  changes.
+- Updated dependencies
+  - @boarteam/fix@0.1.1

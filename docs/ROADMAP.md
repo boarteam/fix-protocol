@@ -14,6 +14,9 @@ A zero-dependency FIX toolkit that runs in the browser and in Node:
 - **`@boarteam/fix-dict-fix44`** — the complete FIX 4.4 dictionary as data (912 fields /
   26 components / 93 messages / 25 datatypes), generated from the specification and
   cross-checked against the QuickFIX `FIX44.xml` dictionary.
+- **`@boarteam/fix-dict-fix42`** — the complete FIX 4.2 dictionary as data (405 fields /
+  46 messages / 21 datatypes), generated from the official FIX 4.2 specification (FIX
+  Repository, 2010 Edition) and cross-checked against the QuickFIX `FIX42.xml` dictionary.
 
 Correctness is verified hardest on the market-data and session message sets (golden fixtures
 plus a reference oracle), with round-trip coverage across all 93 messages and an
@@ -26,7 +29,8 @@ message sets.
 
 ## Post-0.1 (planned)
 
-- Additional dictionaries — FIX 4.2 and 5.0 — via the same generate-and-cross-check pipeline.
+- The FIX 5.0 / FIXT.1.1 dictionaries — via the same generate-and-cross-check pipeline (the
+  transport/application-layer split is the remaining design work).
 - A CLI (`parse` / `encode` / `lint` / `gen`).
 - FIX Orchestra as a dictionary source.
 - Richer conditional-rule (`C`) modeling and deeper conformance across the full 93-message set.

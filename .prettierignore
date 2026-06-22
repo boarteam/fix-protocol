@@ -9,3 +9,5 @@ packages/*/CHANGELOG.md
 # Generated dictionary data — not hand-formatted.
 packages/fix-dict-fix44/src/dictionary.json
 packages/fix-dict-fix44/src/index.ts
+packages/fix-dict-fix42/src/dictionary.json
+packages/fix-dict-fix42/src/index.ts

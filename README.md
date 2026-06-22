@@ -42,6 +42,7 @@ heartbeats — just the protocol, done right.
 | ----------------------------------------------------- | -------------------------------------------------------------------------- |
 | [`@boarteam/fix`](packages/fix)                       | The engine: tokenize, parse, validate, encode, and the dictionary runtime. |
 | [`@boarteam/fix-dict-fix44`](packages/fix-dict-fix44) | The full FIX 4.4 dictionary as data, generated from the specification.     |
+| [`@boarteam/fix-dict-fix42`](packages/fix-dict-fix42) | The full FIX 4.2 dictionary as data, generated from the specification.     |
 
 ## Install
 
@@ -101,6 +102,11 @@ Runnable versions of these live in [`examples/`](examples) and are kept green by
   dictionary**. Each difference between the two encodings is reconciled and documented; the
   generator and cross-check tooling are maintained alongside the FIX spec, and the reconciled
   result is committed here as data.
+- **Complete FIX 4.2 dictionary** — 405 fields / 46 messages / 21 datatypes, generated from the
+  official FIX 4.2 specification (FIX Repository, 2010 Edition) and **cross-checked against the
+  QuickFIX `FIX42.xml` dictionary** — its message structures match QuickFIX's exactly, with only
+  a handful of documented naming/enum deltas. Install `@boarteam/fix-dict-fix42` instead of (or
+  alongside) the 4.4 dictionary; the engine is the same.
 - **Thoroughly tested** — golden fixtures and a reference oracle for the market-data and
   session message sets, round-trip coverage across all 93 messages, and an adversarial/fuzz
   suite that proves parse and validate never throw, hang, or crash on malformed input. CI runs
@@ -111,8 +117,8 @@ Runnable versions of these live in [`examples/`](examples) and are kept green by
   or session message sets.
 - **0.x and evolving** — the API may refine ahead of 1.0 as we learn from real-world use. Pin a
   version, and open an issue with what you need — that feedback shapes 1.0.
-- **On the roadmap** — FIX 4.2 / 5.0 dictionaries (via the same cross-check pipeline), a CLI,
-  and FIX Orchestra support.
+- **On the roadmap** — the FIX 5.0 / FIXT.1.1 dictionaries (via the same cross-check pipeline), a
+  CLI, and FIX Orchestra support.
 
 ## Development
 

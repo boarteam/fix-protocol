@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Browser-safety gate for the published packages.
 //
-// `@boarteam/fix` and `@boarteam/fix-dict-fix44` promise zero runtime dependencies and a
-// browser+Node surface. This script bundles each package's *published* ESM output for the
+// `@boarteam/fix` and the `@boarteam/fix-dict-*` dictionaries promise zero runtime dependencies
+// and a browser+Node surface. This script bundles each package's *published* ESM output for the
 // browser with esbuild and fails if:
 //   1. esbuild cannot produce a browser bundle (a Node built-in leaked into the import graph
 //      — `node:net`, `node:crypto`, etc. are unresolvable on the browser platform), or
@@ -20,6 +20,7 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const targets = [
   { name: '@boarteam/fix', entry: 'packages/fix/dist/index.js' },
   { name: '@boarteam/fix-dict-fix44', entry: 'packages/fix-dict-fix44/dist/index.js' },
+  { name: '@boarteam/fix-dict-fix42', entry: 'packages/fix-dict-fix42/dist/index.js' },
 ];
 
 // Patterns that must never appear in browser-facing output.

@@ -60,8 +60,10 @@ const FORMAT_NAMES = new Set([
   'UTCTimestamp',
   'UTCTimeOnly',
   'UTCDateOnly',
+  'UTCDate', // FIX 4.2 spelling of UTCDateOnly
   'LocalMktDate',
   'month-year',
+  'MonthYear', // FIX 4.2 spelling of month-year
   'Currency',
   'Country',
 ]);
@@ -304,10 +306,12 @@ function checkFormat(
     case 'UTCTimeOnly':
       return UTC_TIME_RE.test(raw) ? undefined : badFormat(field, raw, 'UTCTimeOnly', path);
     case 'UTCDateOnly':
+    case 'UTCDate':
     case 'LocalMktDate':
       return DATE_RE.test(raw) ? undefined : badFormat(field, raw, named, path);
     case 'month-year':
-      return MONTH_YEAR_RE.test(raw) ? undefined : badFormat(field, raw, 'month-year', path);
+    case 'MonthYear':
+      return MONTH_YEAR_RE.test(raw) ? undefined : badFormat(field, raw, named, path);
     case 'Currency':
       // ISO 4217 is a heuristic, not a closed set in the dictionary: warn, don't reject.
       return CURRENCY_RE.test(raw)

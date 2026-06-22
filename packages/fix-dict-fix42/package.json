@@ -1,7 +1,7 @@
 {
-  "name": "@boarteam/fix",
-  "version": "0.1.1",
-  "description": "Dictionary-driven FIX protocol toolkit: parse, validate, and encode FIX messages. Zero runtime dependencies; runs in the browser and Node.",
+  "name": "@boarteam/fix-dict-fix42",
+  "version": "0.1.0",
+  "description": "FIX 4.2 dictionary as data (fields, components, messages, datatypes, enums) for @boarteam/fix. Generated from the official FIX 4.2 specification.",
   "license": "Apache-2.0",
   "type": "module",
   "sideEffects": false,
@@ -27,18 +27,14 @@
   "keywords": [
     "fix",
     "fix-protocol",
-    "fix44",
-    "financial-information-exchange",
-    "market-data",
-    "parser",
-    "validator",
-    "trading",
-    "fintech"
+    "fix42",
+    "dictionary",
+    "data-dictionary"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/boarteam/fix-protocol.git",
-    "directory": "packages/fix"
+    "directory": "packages/fix-dict-fix42"
   },
   "homepage": "https://github.com/boarteam/fix-protocol#readme",
   "bugs": "https://github.com/boarteam/fix-protocol/issues",
@@ -48,7 +44,11 @@
   "engines": {
     "node": ">=18"
   },
+  "peerDependencies": {
+    "@boarteam/fix": "workspace:^"
+  },
   "devDependencies": {
+    "@boarteam/fix": "workspace:*",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"
   }
