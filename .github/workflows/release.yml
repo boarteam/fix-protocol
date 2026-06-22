@@ -1,0 +1,48 @@
+name: Release
+
+# When commits land on main:
+#   - if there are pending changesets, open/refresh a "Version Packages" PR;
+#   - once that PR is merged (no changesets left), build and publish to npm.
+# Requires an NPM_TOKEN repository secret (an npm automation/granular token with publish
+# rights to the @boarteam scope — automation tokens bypass 2FA, so no OTP is needed).
+on:
+  push:
+    branches: [main]
+
+concurrency: release
+
+permissions:
+  contents: write # create tags/releases and the version PR's commit
+  pull-requests: write # open the "Version Packages" PR
+  id-token: write # npm provenance (supply-chain attestation)
+
+jobs:
+  release:
+    name: version or publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Create Release PR or publish to npm
+        uses: changesets/action@v1
+        with:
+          version: pnpm version-packages
+          publish: pnpm release
+          commit: 'chore(release): version packages'
+          title: 'chore(release): version packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'
