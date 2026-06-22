@@ -4,15 +4,13 @@ import prettier from 'eslint-config-prettier';
 /**
  * Flat ESLint config for the monorepo. typescript-eslint's recommended rules, with
  * formatting left entirely to Prettier (`eslint-config-prettier` turns off the overlapping
- * rules). Generated data files and vendored sources are not linted.
+ * rules). Generated data files are not linted.
  */
 export default tseslint.config(
   {
     ignores: [
       '**/dist/**',
       '**/node_modules/**',
-      'packages/fix-codegen/vendor/**',
-      'packages/fix-codegen/test-fixtures/**',
       'packages/fix-dict-fix44/src/dictionary.json',
       'packages/fix-dict-fix44/src/index.ts', // generated
       'docs/**',

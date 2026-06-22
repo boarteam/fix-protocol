@@ -64,21 +64,6 @@ importers:
         specifier: 5.7.3
         version: 5.7.3
 
-  packages/fix-codegen:
-    devDependencies:
-      '@boarteam/fix':
-        specifier: workspace:*
-        version: link:../fix
-      '@types/node':
-        specifier: ^22.10.0
-        version: 22.19.21
-      tsup:
-        specifier: ^8.3.5
-        version: 8.5.1(postcss@8.5.15)(typescript@5.7.3)(yaml@2.9.0)
-      typescript:
-        specifier: 5.7.3
-        version: 5.7.3
-
   packages/fix-dict-fix44:
     devDependencies:
       '@boarteam/fix':
@@ -2471,6 +2456,7 @@ snapshots:
   '@types/node@22.19.21':
     dependencies:
       undici-types: 6.21.0
+    optional: true
 
   '@types/unist@3.0.3': {}
 
@@ -3442,7 +3428,8 @@ snapshots:
 
   ufo@1.6.4: {}
 
-  undici-types@6.21.0: {}
+  undici-types@6.21.0:
+    optional: true
 
   universalify@0.1.2: {}
 

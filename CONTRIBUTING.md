@@ -33,21 +33,12 @@ pnpm -r build && pnpm -r typecheck && pnpm lint && pnpm format:check && pnpm tes
 
 ## The dictionary is generated — never hand-edit it
 
-`packages/fix-dict-fix44/src/dictionary.json` and `index.ts` are **generated** by
-`@boarteam/fix-codegen` from the FIX 4.4 Markdown reference. Do not edit them by hand.
+`packages/fix-dict-fix44/src/dictionary.json` and `index.ts` are **generated** from the FIX 4.4
+specification and committed here as data. Do not edit them by hand.
 
-```bash
-# Requires the FIX 4.4 Markdown spec checked out (set FIX_SPEC_DIR or use --spec).
-pnpm --filter @boarteam/fix-codegen generate
-# Cross-check the generated dictionary against the vendored QuickFIX FIX44.xml:
-pnpm crosscheck
-```
-
-The **cross-check drift gate** (`crosscheck.test.ts`) compares the shipped dictionary against
-the independently-maintained QuickFIX `FIX44.xml`. Every accepted difference is documented in
-`packages/fix-codegen/CROSSCHECK.md` and classified in `crosscheck.ts`. If your change moves a
-difference out of its documented cluster, the gate fails — update the pinned allowlist (with a
-reason) only when the divergence is genuinely expected.
+The generator and its QuickFIX `FIX44.xml` cross-check are maintained alongside the FIX spec,
+outside this repository. To change the dictionary, regenerate it with that tooling and commit
+the reconciled result — open an issue if you need a regeneration you can't produce yourself.
 
 ## Changesets (versioning)
 

@@ -48,8 +48,8 @@ jobs:
       - name: Format check (Prettier)
         run: pnpm format:check
 
-      # Vitest runs the Node suites, the happy-dom browser smoke test, the runnable
-      # examples, and the QuickFIX cross-check drift gate.
+      # Vitest runs the Node suites, the happy-dom browser smoke test, and the runnable
+      # examples.
       - name: Test (Node + browser-like env)
         run: pnpm test
 
