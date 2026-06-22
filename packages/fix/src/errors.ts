@@ -10,10 +10,11 @@ export type FixSeverity = 'error' | 'warning' | 'info';
  * SemVer contract, so this union documents the known set and gives callers autocompletion
  * and exhaustiveness — while {@link FixIssue.code} stays open (`KnownIssueCode | string`)
  * so a custom dictionary or future milestone can introduce new codes without a type break.
- * The `dict/*` family is raised by `validateDictionary`; `parse`/`validate` codes land in
- * M2/M3.
+ * The `dict/*` family is raised by `validateDictionary`, the `parse/*` family by `parse`;
+ * the `validate/*` family (presence/enum/datatype/conditional) lands in M3.
  */
 export type KnownIssueCode =
+  // --- dictionary integrity (validateDictionary) ---
   | 'dict/missing-version'
   | 'dict/missing-begin-string'
   | 'dict/missing-datatypes'
@@ -37,7 +38,34 @@ export type KnownIssueCode =
   | 'dict/unknown-group-counter'
   | 'dict/non-counter-group-head'
   | 'dict/empty-group'
-  | 'dict/unresolvable-group-delimiter';
+  | 'dict/unresolvable-group-delimiter'
+  // --- message parsing (parse) ---
+  // framing / structure
+  | 'parse/empty-input'
+  | 'parse/malformed-field'
+  | 'parse/missing-begin-string'
+  | 'parse/missing-body-length'
+  | 'parse/missing-msgtype'
+  | 'parse/framing-order'
+  | 'parse/begin-string-mismatch'
+  | 'parse/unknown-msgtype'
+  | 'parse/missing-checksum'
+  | 'parse/checksum-mismatch'
+  | 'parse/body-length-mismatch'
+  // fields & groups
+  | 'parse/unknown-tag'
+  | 'parse/tag-not-in-message'
+  | 'parse/duplicate-tag'
+  | 'parse/duplicate-group'
+  | 'parse/invalid-group-count'
+  | 'parse/group-count-mismatch'
+  | 'parse/data-length-mismatch'
+  // value coercion (datatypes)
+  | 'parse/unknown-datatype'
+  | 'parse/invalid-int'
+  | 'parse/invalid-float'
+  | 'parse/invalid-boolean'
+  | 'parse/number-precision';
 
 /**
  * A single diagnostic, returned as data — never thrown — by every analysis entry point
