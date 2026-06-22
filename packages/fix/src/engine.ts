@@ -1,7 +1,15 @@
 import { type EncodeMessage, type EncodeOptions, encode } from './codec/encode';
-import { type ParseOptions, type ParseResult, parse, parseAll } from './codec/parse';
+import {
+  type ParseOptions,
+  type ParseResult,
+  type ParsedMessage,
+  parse,
+  parseAll,
+} from './codec/parse';
 import { Dictionary, loadDictionary } from './dictionary/Dictionary';
 import type { DictionaryJSON } from './dictionary/types';
+import type { FixIssue } from './errors';
+import { type ValidateOptions, validate } from './validate/validate';
 
 /** Defaults applied to every call, overridable per call. */
 export interface EngineOptions {
@@ -16,8 +24,6 @@ export interface EngineOptions {
  * dictionary and default options already applied. Holds no session state (sequence numbers,
  * timestamps, comp-IDs) — it is a thin, pure convenience over the free functions, which
  * remain available for callers who prefer to pass the dictionary explicitly.
- *
- * The `validate` method lands in M3.
  */
 export interface FixEngine {
   /** The runtime dictionary this engine is bound to. */
@@ -28,6 +34,8 @@ export interface FixEngine {
   parseAll(raw: string | Uint8Array, options?: ParseOptions): ParseResult[];
   /** Encode a message into a framed FIX string. See {@link encode}. */
   encode(message: EncodeMessage, options?: EncodeOptions): string;
+  /** Validate a parsed message against the dictionary. See {@link validate}. */
+  validate(message: ParsedMessage, options?: ValidateOptions): FixIssue[];
 }
 
 /**
@@ -53,6 +61,7 @@ export function createFixEngine(
     parse: (raw, o) => parse(raw, dict, mergeParse(options, o)),
     parseAll: (raw, o) => parseAll(raw, dict, mergeParse(options, o)),
     encode: (message, o) => encode(message, dict, { ...o, soh: o?.soh ?? options.soh }),
+    validate: (message, o) => validate(message, dict, o),
   };
 }
 
