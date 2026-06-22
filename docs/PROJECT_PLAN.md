@@ -56,7 +56,7 @@ Monorepo at `/Users/jifeon/projects/fix-protocol` (pnpm workspaces). Packages:
 |---|---|---|
 | **`@boarteam/fix`** | ✅ published | Stateless engine: tokenize, parse (+ group reconstruction), encode (ordered + checksum), validate (pure), diagnostics, the **Dictionary** runtime + JSON contract, `createFixEngine`. Zero runtime deps. Browser+Node. |
 | **`@boarteam/fix-dict-fix44`** | ✅ published | The **full** FIX 4.4 dictionary as shipped **JSON data** + emitted typed `Tags`/`MsgType`/enum helpers. **Generated** from this repo's Markdown spec; never hand-maintained. |
-| **`@boarteam/fix-codegen`** | ✅ on critical path, **not** published as a runtime dep | Build-time generator: **Markdown spec → Dictionary JSON** (primary), **QuickFIX `FIX44.xml` → JSON** (canonical cross-check). Node-only; emits the `fix-dict-fix44` data files. Consumers never pull it. |
+| **`@boarteam/fix-codegen`** | ↗ extracted out of this repo | Build-time generator: **Markdown spec → Dictionary JSON** (primary), **QuickFIX `FIX44.xml` → JSON** (canonical cross-check). Node-only; emits the `fix-dict-fix44` data files. Now maintained alongside the FIX spec at `~/projects/fix`, not in this monorepo; its output (`dictionary.json` / `index.ts`) is committed here as data. |
 | **`@boarteam/fix-cli`** | ❌ deferred → M5 | `fixkit parse/encode/lint/gen`. |
 
 > The Dictionary **JSON contract** lives inside `@boarteam/fix` for v0.1 (exported);

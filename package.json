@@ -24,7 +24,6 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "docs": "typedoc",
-    "crosscheck": "pnpm --filter @boarteam/fix-codegen crosscheck",
     "check:bundle": "node scripts/check-bundle.mjs",
     "examples": "node examples/parse-and-validate.mjs && node examples/encode-a-message.mjs",
     "changeset": "changeset",

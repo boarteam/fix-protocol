@@ -42,7 +42,6 @@ heartbeats — just the protocol, done right.
 | ----------------------------------------------------- | -------------------------------------------------------------------------- |
 | [`@boarteam/fix`](packages/fix)                       | The engine: tokenize, parse, validate, encode, and the dictionary runtime. |
 | [`@boarteam/fix-dict-fix44`](packages/fix-dict-fix44) | The full FIX 4.4 dictionary as data, generated from the specification.     |
-| `@boarteam/fix-codegen`                               | Build-time generator (spec → dictionary JSON). Not published.              |
 
 ## Install
 
@@ -99,16 +98,17 @@ Runnable versions of these live in [`examples/`](examples) and are kept green by
 
 - **Complete FIX 4.4 dictionary** — 912 fields / 26 components / 93 messages / 25 datatypes,
   generated from the specification and **cross-checked against the QuickFIX `FIX44.xml`
-  dictionary on every CI run**. Each difference between the two encodings is reconciled and
-  documented in [`CROSSCHECK.md`](packages/fix-codegen/CROSSCHECK.md).
+  dictionary**. Each difference between the two encodings is reconciled and documented; the
+  generator and cross-check tooling are maintained alongside the FIX spec, and the reconciled
+  result is committed here as data.
 - **Thoroughly tested** — golden fixtures and a reference oracle for the market-data and
   session message sets, round-trip coverage across all 93 messages, and an adversarial/fuzz
   suite that proves parse and validate never throw, hang, or crash on malformed input. CI runs
   on Node 18/20/22 and a browser-like environment.
 - **Transparent about edge cases** — the flattened spec source under-specifies a few
-  deeply-nested repeating groups; the dictionary records these as `coverageGaps` and the
-  cross-check report lists exactly which messages they touch, so nothing is hidden. They do not
-  affect the market-data or session message sets.
+  deeply-nested repeating groups; the dictionary records these as `coverageGaps`, naming
+  exactly which messages they touch, so nothing is hidden. They do not affect the market-data
+  or session message sets.
 - **0.x and evolving** — the API may refine ahead of 1.0 as we learn from real-world use. Pin a
   version, and open an issue with what you need — that feedback shapes 1.0.
 - **On the roadmap** — FIX 4.2 / 5.0 dictionaries (via the same cross-check pipeline), a CLI,

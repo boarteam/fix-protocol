@@ -16,10 +16,10 @@
 
 - [ ] `pnpm -r build && pnpm -r typecheck` pass
 - [ ] `pnpm lint && pnpm format:check` pass
-- [ ] `pnpm test` passes (Node + browser-like env, examples, cross-check drift gate)
+- [ ] `pnpm test` passes (Node + browser-like env, examples)
 - [ ] `pnpm check:bundle` passes (no `net`/`Buffer`/`crypto`/`joi`/`@nestjs` in published output)
 - [ ] Added a Changeset if this changes a published package (`pnpm changeset`)
-- [ ] Dictionary data was **regenerated**, not hand-edited (`pnpm --filter @boarteam/fix-codegen generate`)
+- [ ] Dictionary data (`fix-dict-fix44`) was **regenerated** with the spec tooling, not hand-edited
 - [ ] Commits are signed off (`git commit -s`) per the DCO — see CONTRIBUTING.md
 
 ## Notes for reviewers
