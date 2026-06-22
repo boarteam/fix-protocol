@@ -1,5 +1,7 @@
 import type {
+  BaseType,
   ComponentDef,
+  DataTypeDef,
   DictionaryJSON,
   FieldDef,
   GroupMember,
@@ -24,6 +26,8 @@ export class Dictionary {
   readonly #messagesByType = new Map<string, MessageDef>();
   readonly #messagesByName = new Map<string, MessageDef>();
   readonly #allowedTags = new Map<string, Set<number>>();
+  // `null` caches a known-miss so an unknown datatype name is not re-resolved each call.
+  readonly #resolvedDatatypes = new Map<string, ResolvedDatatype | null>();
 
   constructor(json: DictionaryJSON) {
     this.json = json;
@@ -72,7 +76,61 @@ export class Dictionary {
 
   /** Look up a component by name. */
   component(name: string): ComponentDef | undefined {
-    return this.json.components[name];
+    return hasOwn(this.json.components, name) ? this.json.components[name] : undefined;
+  }
+
+  /** Look up a datatype by name. */
+  datatype(name: string): DataTypeDef | undefined {
+    return hasOwn(this.json.datatypes, name) ? this.json.datatypes[name] : undefined;
+  }
+
+  /**
+   * Resolve a datatype name to the coercion-relevant facts the codec needs: the transitive
+   * {@link BaseType} root plus the derivation-chain flags that change how a value is read
+   * (`Boolean` char, the space-delimited list of `MultipleValueString`, length-prefixed
+   * `data`). Walks the `parent` chain with a cycle guard so it is safe on an untrusted
+   * dictionary, and memoises per datatype name.
+   *
+   * @returns the resolved facts, or `undefined` when the datatype name is unknown.
+   */
+  resolveDatatype(name: string): ResolvedDatatype | undefined {
+    const cached = this.#resolvedDatatypes.get(name);
+    if (cached !== undefined) {
+      return cached ?? undefined;
+    }
+    const root = hasOwn(this.json.datatypes, name) ? this.json.datatypes[name] : undefined;
+    if (!root) {
+      this.#resolvedDatatypes.set(name, null);
+      return undefined;
+    }
+    // `base` is already the transitive root primitive (the codegen flattens it); the chain
+    // is walked only to surface flags that live on intermediate nodes — the `Boolean`
+    // marker and the `MultipleValueString` delimiter.
+    let isBoolean = false;
+    let multiValueDelimiter: string | undefined;
+    const seen = new Set<string>();
+    let cursor: DataTypeDef | undefined = root;
+    while (cursor && !seen.has(cursor.name)) {
+      seen.add(cursor.name);
+      if (cursor.name === 'Boolean') {
+        isBoolean = true;
+      }
+      if (multiValueDelimiter === undefined && cursor.multiValueDelimiter !== undefined) {
+        multiValueDelimiter = cursor.multiValueDelimiter;
+      }
+      cursor =
+        cursor.parent && hasOwn(this.json.datatypes, cursor.parent)
+          ? this.json.datatypes[cursor.parent]
+          : undefined;
+    }
+    const resolved: ResolvedDatatype = {
+      base: root.base,
+      isBoolean,
+      multiValueDelimiter,
+      lengthPrefixed: root.base === 'data',
+    };
+    this.#resolvedDatatypes.set(name, resolved);
+    return resolved;
   }
 
   /** Whether a tag heads a repeating group (its datatype is `NumInGroup`). */
@@ -168,7 +226,32 @@ export class Dictionary {
   }
 }
 
+/**
+ * The coercion-relevant facts about a datatype, resolved from its derivation chain by
+ * {@link Dictionary.resolveDatatype}. Drives how the codec reads a raw wire value.
+ */
+export interface ResolvedDatatype {
+  /** The transitive root primitive that determines value coercion. */
+  base: BaseType;
+  /** `true` when the datatype derives from `Boolean` (`Y`/`N` → `true`/`false`). */
+  isBoolean: boolean;
+  /** The list separator when the datatype is multi-valued (`" "` for `MultipleValueString`). */
+  multiValueDelimiter?: string;
+  /** `true` for `data`: the value is length-prefixed and may embed the `SOH` separator. */
+  lengthPrefixed: boolean;
+}
+
 const EMPTY_TAGS: ReadonlySet<number> = new Set();
+
+/**
+ * Own-property check used for every name-keyed lookup into the plain-object dictionary
+ * collections. A datatype/component named like an `Object.prototype` member (`toString`,
+ * `constructor`, `valueOf`, `__proto__`, …) must resolve to a miss, not the inherited
+ * prototype member — important when running over an untrusted dictionary.
+ */
+function hasOwn(obj: object, key: string): boolean {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
 
 /**
  * Build a {@link Dictionary} runtime index from its JSON form. Does not validate the
