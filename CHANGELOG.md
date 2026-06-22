@@ -17,8 +17,8 @@ out in the changeset. Additive changes and fixes are patch bumps.
 
 ## Unreleased
 
-Pre-release development toward **0.1.0**. See [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
-for milestone history. Highlights so far:
+Pre-release development toward **0.1.0**. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the
+roadmap. Highlights so far:
 
 - Dictionary-driven, zero-dependency engine: tokenize, parse (with nested repeating-group
   reconstruction), validate (presence/enum/datatype/conditional), and a byte-accurate ordered

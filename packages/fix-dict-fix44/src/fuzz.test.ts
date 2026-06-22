@@ -12,7 +12,7 @@ import {
 import { dictionary } from './index';
 
 /**
- * The Tier-2 parser bar (PROJECT_PLAN M3): malformed input must produce diagnostics as data
+ * The parser robustness bar: malformed input must produce diagnostics as data
  * and **never throw, crash, or hang**. This suite hammers `parse`/`parseAll`/`validate` with
  * truncated, reordered, bad-checksum, oversized, junk-tag, and fully-random inputs over the
  * real FIX 4.4 dictionary, plus a deterministic byte fuzzer. Determinism: a seeded LCG (no
