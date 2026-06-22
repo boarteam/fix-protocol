@@ -40,6 +40,8 @@
     "url": "git+https://github.com/boarteam/fix-protocol.git",
     "directory": "packages/fix"
   },
+  "homepage": "https://github.com/boarteam/fix-protocol#readme",
+  "bugs": "https://github.com/boarteam/fix-protocol/issues",
   "publishConfig": {
     "access": "public"
   },
