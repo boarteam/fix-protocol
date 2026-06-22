@@ -6,7 +6,8 @@ browser or Node.
 
 > ⚠️ **Status: experimental (0.x), under active development.** The API is unstable and may
 > change between releases. Not yet published to npm. See
-> [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md) for the roadmap.
+> [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md) for the roadmap and
+> [Maturity & scope](#maturity--scope) for what is and isn't verified.
 
 ## Why this exists
 
@@ -39,23 +40,84 @@ no sockets, no sequence numbers, no heartbeats — just the protocol.
 | [`@boarteam/fix-dict-fix44`](packages/fix-dict-fix44) | The full FIX 4.4 dictionary as data, generated from the specification.     |
 | `@boarteam/fix-codegen`                               | Build-time generator (spec → dictionary JSON). Not published.              |
 
-## Planned API (preview)
+## Install
+
+**Not yet published to npm.** When released it will be:
+
+```bash
+pnpm add @boarteam/fix @boarteam/fix-dict-fix44
+```
+
+Until then, use it from a checkout — this is a pnpm workspace and cannot be consumed by
+`pnpm add github:…` of the repo root (that root is private and unbuilt):
+
+```bash
+git clone https://github.com/boarteam/fix-protocol && cd fix-protocol
+pnpm install && pnpm -r build
+# then reference packages/fix and packages/fix-dict-fix44 from your app (e.g. a file: dep)
+```
+
+## Quick start
 
 ```ts
 import { createFixEngine } from '@boarteam/fix';
-import { fix44 } from '@boarteam/fix-dict-fix44';
+import { MsgType, Tags, dictionary } from '@boarteam/fix-dict-fix44';
 
-const fix = createFixEngine(fix44);
+const fix = createFixEngine(dictionary);
 
-const { message, issues } = fix.parse(raw); // never throws; issues is FixIssue[]
-const problems = fix.validate(message); // presence, enums, datatypes, group counts
+// 1. Parse a raw message (SOH-delimited). Never throws — issues come back as data.
+const { message, issues } = fix.parse(raw);
+console.log(message.msgType, issues); // FixIssue[] (framing, datatypes, unknown tags, …)
+
+// Repeating groups are arrays of objects, not parallel arrays:
+for (const entry of message.groups[268] ?? []) {
+  console.log(entry.fields[269]?.value, entry.fields[270]?.value);
+}
+
+// 2. Validate against the dictionary: presence, enums, datatypes, conditional rules.
+const problems = fix.validate(message);
+
+// 3. Encode — fields are emitted in dictionary order; 8/9/10 framing is computed for you.
 const wire = fix.encode({
-  msgType: 'V',
+  msgType: MsgType.NewOrderSingle,
   fields: {
-    /* ... */
+    [Tags.SenderCompID]: 'BUYSIDE',
+    [Tags.TargetCompID]: 'SELLSIDE',
+    [Tags.MsgSeqNum]: 42,
+    [Tags.SendingTime]: '20240101-12:00:00.000',
+    [Tags.ClOrdID]: 'ORDER-1',
+    [Tags.Symbol]: 'EUR/USD',
+    [Tags.Side]: '1',
+    [Tags.TransactTime]: '20240101-12:00:00.000',
+    [Tags.OrderQty]: 1_000_000,
+    [Tags.OrdType]: '2',
+    [Tags.Price]: 1.0921,
   },
 });
 ```
+
+Runnable versions of these live in [`examples/`](examples) and are kept green by CI.
+
+## Maturity & scope
+
+`@boarteam/fix` is **experimental (0.x)**. Read this before depending on it:
+
+- **The dictionary is the _complete_ FIX 4.4 spec** (912 fields / 26 components / 93 messages
+  / 25 datatypes) — breadth is cheap because it is generated data, not hand-written code. It is
+  **cross-checked against the QuickFIX `FIX44.xml` dictionary** by a CI drift gate; every
+  accepted difference between the two encodings is documented in
+  [`packages/fix-codegen/CROSSCHECK.md`](packages/fix-codegen/CROSSCHECK.md).
+- **The engine is generic** and runs over the whole dictionary. Correctness is verified
+  hardest on the **market-data + session subset** (golden fixtures + an oracle), with broad
+  **round-trip coverage across all 93 messages** and an adversarial/fuzz suite proving parse
+  and validate never throw, hang, or crash on malformed input.
+- **Known limitations are declared, not hidden.** The flattened spec source under-specifies
+  some deeply-nested repeating groups: the dictionary records **35 `coverageGaps`** (10
+  unresolved + 25 approximate-body groups), and **10 messages diverge structurally** from
+  QuickFIX in those nested groups — all enumerated in the cross-check report. None affect the
+  market-data/session subset.
+- **Deferred to post-0.1:** FIX 4.2/5.0 dictionaries, a CLI, FIX Orchestra, and deep
+  conditional-rule modeling.
 
 ## Development
 
@@ -67,6 +129,12 @@ pnpm build      # build all packages (tsup -> ESM + CJS + d.ts)
 pnpm test       # run the test suite (vitest)
 pnpm typecheck  # tsc --noEmit across packages
 ```
+
+## Contributing
+
+Contributions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md) for the development
+workflow, the DCO sign-off requirement, and how the cross-check drift gate works. Security
+issues: see [`SECURITY.md`](SECURITY.md).
 
 ## License
 

@@ -1,0 +1,29 @@
+name: Feature request
+description: Suggest a capability for the engine, dictionary, or tooling.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Does this fit the project scope?
+      description: >
+        The library is a connection-less analyzer (parse/validate/encode/dictionary). Session
+        and transport (sockets, sequence numbers, heartbeats) are intentionally out of scope.
+      options:
+        - 'Yes — analyzer/dictionary feature'
+        - 'Unsure'
+        - 'It is session/transport related'
+    validations:
+      required: true

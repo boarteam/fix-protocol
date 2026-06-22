@@ -1,0 +1,52 @@
+name: Bug report
+description: A parse/validate/encode result is wrong, or the engine throws.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report! `@boarteam/fix` is a **stateless analyzer** (no sockets,
+        sessions, or sequence numbers). Bugs about session/transport behaviour are out of
+        scope — see the README.
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: '@boarteam/fix@0.1.0-alpha.0'
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - parse
+        - validate
+        - encode
+        - dictionary
+        - other
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: >
+        A FIX message (SOH shown as `|` is fine) and the code you ran. Please redact any real
+        credentials, comp-IDs, or venue identifiers.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Runtime
+      placeholder: 'Node 20.11 / Chrome 122 / Vitest happy-dom'
+    validations:
+      required: false

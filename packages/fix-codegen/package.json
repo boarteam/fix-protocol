@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsup",
     "generate": "tsup && node dist/cli.cjs",
+    "crosscheck": "tsup && node dist/cli.cjs crosscheck --report packages/fix-codegen/CROSSCHECK.md",
     "typecheck": "tsc --noEmit"
   },
   "engines": {

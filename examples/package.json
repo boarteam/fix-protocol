@@ -1,0 +1,16 @@
+{
+  "name": "@boarteam/fix-examples",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Runnable usage examples for @boarteam/fix, kept green by CI.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "start:parse": "node parse-and-validate.mjs",
+    "start:encode": "node encode-a-message.mjs"
+  },
+  "dependencies": {
+    "@boarteam/fix": "workspace:*",
+    "@boarteam/fix-dict-fix44": "workspace:*"
+  }
+}
