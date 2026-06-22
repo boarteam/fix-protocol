@@ -61,6 +61,21 @@ pnpm changeset
 Pre-1.0 SemVer: breaking changes to the **output shape**, **accepted input**, or **issue
 codes** are a minor bump and must be called out in the changeset. See `CHANGELOG.md`.
 
+## Releasing (maintainers)
+
+Releases are automated by the [Release workflow](.github/workflows/release.yml) using the
+Changesets action:
+
+1. Merge PRs that include changesets into `main`.
+2. The workflow opens a **"chore(release): version packages"** PR that consumes the changesets,
+   bumps versions, and updates the changelogs.
+3. Merging that PR builds and **publishes to npm** (with provenance) and creates the git tags
+   and GitHub releases.
+
+This requires an `NPM_TOKEN` repository secret — an npm **automation/granular** token with
+publish rights to the `@boarteam` scope (automation tokens bypass 2FA, so no OTP is needed).
+A manual fallback is `pnpm -r build && pnpm -r publish --otp=<code>`.
+
 ## Commit sign-off (DCO)
 
 All commits must be signed off under the
