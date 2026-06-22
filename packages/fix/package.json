@@ -1,6 +1,6 @@
 {
   "name": "@boarteam/fix",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "Dictionary-driven FIX protocol toolkit: parse, validate, and encode FIX messages. Zero runtime dependencies; runs in the browser and Node.",
   "license": "Apache-2.0",
   "type": "module",
