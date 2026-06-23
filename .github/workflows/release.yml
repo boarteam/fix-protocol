@@ -33,6 +33,10 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
+      # npm OIDC trusted publishing requires npm >= 11.5.1; Node 20 ships npm 10.x.
+      - name: Upgrade npm for OIDC trusted publishing
+        run: npm install -g npm@latest
+
       - run: pnpm install --frozen-lockfile
 
       - name: Create Release PR or publish to npm
@@ -44,5 +48,6 @@ jobs:
           title: 'chore(release): version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # No NPM_TOKEN: auth is via OIDC trusted publishing (the `id-token: write`
+          # permission above), which also produces provenance attestations.
           NPM_CONFIG_PROVENANCE: 'true'
