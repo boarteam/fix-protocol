@@ -1,0 +1,24 @@
+THIRD-PARTY NOTICES
+
+This repository's dictionary packages incorporate upstream protocol data. The
+packages themselves are licensed under Apache-2.0 (see LICENSE); the full
+upstream license texts are bundled with each package.
+
+- @boarteam/fix-dict-fix44
+  - Structure (fields, components, messages, enums, required-ness): the QuickFIX
+    FIX44.xml data dictionary, under the QuickFIX Software License. This product
+    includes software developed by quickfixengine.org.
+  - Descriptions (field/enum/datatype): FIX Orchestra OrchestraFIX44.xml,
+    Apache-2.0, Copyright (c) FIX Protocol Limited.
+  - Full texts: packages/fix-dict-fix44/THIRD-PARTY-NOTICES.txt
+
+- @boarteam/fix-dict-fix42
+  - Structure: the FIX Repository, 2010 Edition, Copyright (c) FIX Protocol
+    Limited.
+  - Descriptions: FIX Orchestra OrchestraFIX42.xml, Apache-2.0, Copyright (c)
+    FIX Protocol Limited.
+  - Full texts: packages/fix-dict-fix42/THIRD-PARTY-NOTICES.txt
+
+"FIX" and "Financial Information eXchange" are trademarks of FIX Protocol
+Limited. This is an independent open-source project, not affiliated with or
+endorsed by FIX Protocol Limited.

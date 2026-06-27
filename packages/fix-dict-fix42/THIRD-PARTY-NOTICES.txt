@@ -1,0 +1,36 @@
+THIRD-PARTY NOTICES — @boarteam/fix-dict-fix42
+
+The FIX 4.2 dictionary data in this package is derived from the third-party
+sources below. @boarteam/fix-dict-fix42 itself is licensed under Apache-2.0 (see
+LICENSE); these notices cover the upstream material it incorporates.
+
+================================================================================
+1. FIX Repository, 2010 Edition
+   Used for: message / field / component / enum structure and required-ness.
+================================================================================
+
+The structural data (tag numbers, field and enum names, datatypes, message and
+component structure, and required-ness) is generated from the official FIX 4.2
+specification as published in the FIX Repository (2010 Edition) by FIX Protocol
+Limited. Portions of the FIX specification are "Copyright FIX Protocol Limited".
+
+================================================================================
+2. FIX Orchestra — "orchestrations" (OrchestraFIX42.xml)
+   Used for: field, enum, and datatype descriptions.
+================================================================================
+
+Field, enum, and datatype descriptions are derived from OrchestraFIX42.xml in
+the FIX Trading Community "orchestrations" repository
+(https://github.com/FIXTradingCommunity/orchestrations), reshaped into this
+dictionary's JSON form.
+
+Copyright (c) 2017-2026 FIX Protocol Limited.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0 — a copy is also provided
+in this package's LICENSE file.
+
+"FIX" and "Financial Information eXchange" are trademarks of FIX Protocol
+Limited. This is an independent open-source project, not affiliated with or
+endorsed by FIX Protocol Limited.

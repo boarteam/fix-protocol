@@ -9,16 +9,30 @@ import { dictionary, MsgType, Tags } from './index';
 
 const dict = loadDictionary(dictionary);
 
-/** Find a group by counter tag anywhere in a member tree (descending into nested groups). */
-function findGroup(members: MemberRef[], counterTag: number): GroupMember | undefined {
+/** Find a group by counter tag anywhere in a member tree, descending into both nested groups
+ * and component references (the QuickFIX-sourced dictionary factors many groups into components). */
+function findGroup(
+  members: MemberRef[],
+  counterTag: number,
+  seen: Set<string> = new Set(),
+): GroupMember | undefined {
   for (const m of members) {
     if (m.kind === 'group') {
       if (m.counterTag === counterTag) {
         return m;
       }
-      const nested = findGroup(m.members, counterTag);
+      const nested = findGroup(m.members, counterTag, seen);
       if (nested) {
         return nested;
+      }
+    } else if (m.kind === 'component' && !seen.has(m.name)) {
+      seen.add(m.name);
+      const c = dict.component(m.name);
+      if (c) {
+        const nested = findGroup(c.members, counterTag, seen);
+        if (nested) {
+          return nested;
+        }
       }
     }
   }
@@ -54,39 +68,20 @@ describe('FIX 4.4 dictionary — integrity', () => {
 
   it('has the full FIX 4.4 surface', () => {
     expect(Object.keys(dictionary.fields).length).toBe(912);
-    expect(Object.keys(dictionary.components).length).toBe(26);
+    expect(Object.keys(dictionary.components).length).toBe(105);
     expect(dictionary.messages.length).toBe(93);
-    expect(Object.keys(dictionary.datatypes).length).toBe(25);
+    expect(Object.keys(dictionary.datatypes).length).toBe(23);
     expect(dictionary.version).toBe('FIX.4.4');
     expect(dictionary.beginString).toBe('FIX.4.4');
   });
 
-  it('records honest coverage gaps; unresolved ones never touch the MD/session subset', () => {
+  it('records honest coverage gaps: only the conditional-overlay facts QuickFIX cannot place', () => {
     const gaps = dictionary.coverageGaps ?? [];
-    const counterOf = (g: { where: string }) => Number(g.where.match(/NoXxx (\d+)/)![1]);
-    const distinct = (kind: string) =>
-      [...new Set(gaps.filter((g) => g.kind === kind).map(counterOf))].sort((a, b) => a - b);
-
-    // Two honest gap kinds only.
-    expect(new Set(gaps.map((g) => g.kind))).toEqual(
-      new Set(['unresolved-group', 'approximate-group']),
-    );
-    // Bodiless nested sub-groups the flattened Markdown never expresses inline anywhere.
-    expect(distinct('unresolved-group')).toEqual([576, 670, 801, 802, 804, 806, 952]);
-    // Counters whose bodies vary by context: filled with the minimal canonical body.
-    expect(distinct('approximate-group')).toEqual([78, 555, 711]);
-
-    // The *unresolved* (empty) gaps must not occur in the supported subset; approximate
-    // gaps may (711/555 nest there) — those groups are resolved, just minimal.
-    const subsetNames = new Set(
-      ['0', '1', '2', '3', '4', '5', 'A', 'V', 'W', 'X', 'Y', 'x', 'y'].map(
-        (t) => dict.messageByMsgType(t)?.name,
-      ),
-    );
-    const unresolvedInSubset = gaps
-      .filter((g) => g.kind === 'unresolved-group')
-      .some((g) => [...subsetNames].some((n) => n && g.where.includes(n)));
-    expect(unresolvedInSubset).toBe(false);
+    // The QuickFIX-sourced structure fully specifies every repeating-group body, so there are no
+    // group-reconstruction gaps. The only gaps are conditional-required ("C") facts from the
+    // prose-free overlay whose member QuickFIX factors differently (e.g. deeply nested groups).
+    expect(gaps.length).toBeGreaterThan(0);
+    expect(new Set(gaps.map((g) => g.kind))).toEqual(new Set(['conditional-overlay-unmatched']));
   });
 
   it('models datatypes with their derivation roots', () => {
@@ -94,7 +89,7 @@ describe('FIX 4.4 dictionary — integrity', () => {
     expect(dictionary.datatypes['Qty']!.base).toBe('float');
     expect(dictionary.datatypes['Boolean']!.base).toBe('char');
     expect(dictionary.datatypes['NumInGroup']!.base).toBe('int');
-    expect(dictionary.datatypes['month-year']!.base).toBe('String');
+    expect(dictionary.datatypes['MonthYear']!.base).toBe('String');
     expect(dictionary.datatypes['data']!.lengthPrefixed).toBe(true);
     expect(dictionary.datatypes['MultipleValueString']!.multiValueDelimiter).toBe(' ');
   });
@@ -107,15 +102,16 @@ describe('FIX 4.4 dictionary — integrity', () => {
     expect(dictionary.fields[355]!.lengthField).toBe(354); // EncodedText -> EncodedTextLen
   });
 
-  it('unwraps enum values to opaque on-the-wire strings, preserving leading zeros', () => {
+  it('unwraps enum values to opaque on-the-wire strings', () => {
     const side = dictionary.fields[54]!.enumValues!;
-    expect(side.find((e) => e.value === '1')!.name).toBe('Buy');
-    // No value retains the `` `'…'` `` wrapper.
-    expect(side.every((e) => !/[`']/.test(e.value))).toBe(true);
-
-    const currency = dictionary.fields[15]!.enumValues!;
-    expect(currency.some((e) => e.value === '004')).toBe(true); // ISO numeric code, not 4
-    expect(currency.some((e) => e.value === 'USD')).toBe(true);
+    // QuickFIX carries the symbolic enum label as the value name (SCREAMING_CASE).
+    expect(side.find((e) => e.value === '1')!.name).toBe('BUY');
+    // Every enum value across the catalog is an opaque on-the-wire string: no `'…'` wrappers.
+    for (const f of Object.values(dictionary.fields)) {
+      for (const e of f.enumValues ?? []) {
+        expect(/[`']/.test(e.value), `field ${f.tag} value ${e.value}`).toBe(false);
+      }
+    }
   });
 
   it('emits typed Tags and MsgType helpers (incl. the 311/310 guard)', () => {
@@ -125,9 +121,9 @@ describe('FIX 4.4 dictionary — integrity', () => {
     expect(Tags.UnderlyingSecurityType).toBe(310);
     expect(MsgType.Logon).toBe('A');
     expect(MsgType.MarketDataRequest).toBe('V');
-    // The mid-string parenthetical pair keeps distinct, informative keys (no lossy collision).
-    expect(MsgType.NetworkStatusRequest).toBe('BC');
-    expect(MsgType.NetworkStatusResponse).toBe('BD');
+    // Distinct keys for the BC/BD pair (the QuickFIX names disambiguate without collision).
+    expect(MsgType.NetworkCounterpartySystemStatusRequest).toBe('BC');
+    expect(MsgType.NetworkCounterpartySystemStatusResponse).toBe('BD');
   });
 });
 
@@ -172,20 +168,13 @@ describe('FIX 4.4 dictionary — reconciliation with the conformance oracle', ()
     }
   });
 
-  it('Market Data Incremental (X): nested NoUnderlyings/NoLegs resolved canonically', () => {
+  it('Market Data Incremental (X): NoMDEntries holds the nested NoUnderlyings/NoLegs groups', () => {
     const x = dict.messageByMsgType('X')!;
     const entries = findGroup(x.members, 268)!;
-    const underlyings = findGroup(entries.members, 711)!;
-    expect(underlyings.bodyFromCanonical).toBe(true);
-    expect(dict.groupDelimiterTag(underlyings)).toBe(311);
-    // Full canonical body, not just the delimiter: the minimal Underlying Instrument block.
-    expect(underlyings.members).toEqual([
-      { kind: 'component', name: 'Underlying Instrument', reqd: 'C' },
-    ]);
-    expect(findGroup(entries.members, 555)!.bodyFromCanonical).toBe(true);
-    expect(findGroup(entries.members, 555)!.members).toEqual([
-      { kind: 'component', name: 'Instrument Leg', reqd: 'C' },
-    ]);
+    expect(dict.groupDelimiterTag(entries)).toBe(279); // MDUpdateAction heads the incremental entry
+    // The underlyings/legs groups nest inside each MD entry (via QuickFIX's component factoring).
+    expect(dict.groupDelimiterTag(findGroup(entries.members, 711)!)).toBe(311); // UnderlyingSymbol
+    expect(dict.groupDelimiterTag(findGroup(entries.members, 555)!)).toBe(600); // LegSymbol
   });
 
   it('Security List (y): 311 lives inside the NoUnderlyings (711) group, never flat', () => {
