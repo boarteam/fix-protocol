@@ -1,6 +1,6 @@
 {
   "name": "@boarteam/fix-dict-fix44",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "FIX 4.4 dictionary as data (fields, components, messages, datatypes, enums) for @boarteam/fix. Generated from the FIX 4.4 specification.",
   "license": "Apache-2.0",
   "type": "module",
