@@ -77,8 +77,9 @@ jobs:
 
   dco:
     name: DCO sign-off
-    # Skip bot PRs (Dependabot commits are not signed off; they are trusted automation).
-    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
+    # Human PRs must sign off (DCO). Skip bot-authored PRs — Dependabot, Renovate, and the
+    # changesets "Version Packages" release PR are trusted automation that does not sign off.
+    if: github.event_name == 'pull_request' && github.event.pull_request.user.type != 'Bot'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
