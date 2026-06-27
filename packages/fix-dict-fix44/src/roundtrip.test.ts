@@ -169,7 +169,7 @@ describe('FIX 4.4 golden decode — market data', () => {
     const w = encode(synthMessage('W'), dict);
     const { message, issues } = parse(w, dict);
     expect(issues.filter((i) => i.severity === 'error')).toEqual([]);
-    expect(message.name).toBe('Market Data - Snapshot/Full Refresh');
+    expect(message.name).toBe('MarketDataSnapshotFullRefresh');
 
     // The Instrument (Symbol 55) is a top-level field, not inside the MD group.
     expect(message.fields[55]?.name).toBe('Symbol');

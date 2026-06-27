@@ -18,7 +18,8 @@
   "files": [
     "dist",
     "LICENSE",
-    "NOTICE"
+    "NOTICE",
+    "THIRD-PARTY-NOTICES.txt"
   ],
   "scripts": {
     "build": "tsup",

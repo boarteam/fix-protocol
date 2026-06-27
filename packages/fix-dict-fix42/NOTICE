@@ -3,16 +3,17 @@ Copyright 2026 Boar Team
 
 This product includes software developed at Boar Team.
 
-The FIX 4.2 dictionary data shipped in @boarteam/fix-dict-fix42 is derived
-from the official FIX 4.2 specification as published in the FIX Repository
-(2010 Edition) by FIX Protocol Limited (factual protocol-reference data: tag
-numbers, field names, datatypes, message structures, and enumerated values).
+The FIX 4.2 dictionary structure shipped in @boarteam/fix-dict-fix42 (tag
+numbers, field and enum names, datatypes, message and component structure, and
+required-ness) is generated from the official FIX 4.2 specification as published
+in the FIX Repository (2010 Edition) by FIX Protocol Limited.
 
-Portions of the FIX specification are "Copyright FIX Protocol Limited". The
-FIX Repository is published by FIX Protocol Limited; the specification itself
-remains "Copyright FIX Protocol Limited", and FIX Protocol Limited claims no
-intellectual property over an implementation of the protocol.
+Field, enum, and datatype descriptions are derived from the FIX Orchestra
+"orchestrations" repository (OrchestraFIX42.xml), © Copyright FIX Protocol
+Limited, licensed under the Apache License, Version 2.0, and reshaped into this
+dictionary's JSON form. See https://github.com/FIXTradingCommunity/orchestrations.
 
-"FIX" and "Financial Information eXchange" are trademarks of FIX Protocol
-Limited. This project is an independent open-source implementation and is not
-affiliated with, sponsored by, or endorsed by FIX Protocol Limited.
+Portions of the FIX specification are "Copyright FIX Protocol Limited". "FIX"
+and "Financial Information eXchange" are trademarks of FIX Protocol Limited.
+This project is an independent open-source implementation and is not affiliated
+with, sponsored by, or endorsed by FIX Protocol Limited.

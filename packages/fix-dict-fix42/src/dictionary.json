@@ -10,7 +10,7 @@
     "int": {
       "name": "int",
       "base": "int",
-      "description": "Sequence of digits without commas or decimals and optional sign character (ASCII characters \"-\" and \"0\" - \"9\" ). The sign character utilizes one byte (i.e. positive int is \"99999\" while negative int is \"-99999\"). Note that int values may contain leading zeros (e.g. \"00023\" = \"23\").\nExamples:\n723 in field 21 would be mapped int as |21=723|.\n-723 in field 12 would be mapped int as |12=-723|\nThe following data types are based on int."
+      "description": "Sequence of digits without commas or decimals and optional sign character (ASCII characters \"-\" and \"0\" - \"9\" ). The sign character utilizes one byte (i.e. positive int is \"99999\" while negative int is \"-99999\"). Note that int values may contain leading zeros (e.g. \"00023\" = \"23\"). Examples: 723 in field 21 would be mapped int as |21=723|. -723 in field 12 would be mapped int as |12=-723| The following data types are based on int."
     },
     "float": {
       "name": "float",
@@ -50,19 +50,18 @@
       "name": "Boolean",
       "base": "char",
       "parent": "char",
-      "description": "char field containing one of two values:\n'Y' = True/Yes\n'N' = False/No"
+      "description": "char field containing one of two values: 'Y' = True/Yes 'N' = False/No"
     },
     "String": {
       "name": "String",
       "base": "String",
-      "description": "Alpha-numeric free format strings, can include any character or punctuation except the delimiter. All String fields are case sensitive."
+      "description": "Alpha-numeric free format strings, can include any character or punctuation except the delimiter. All String fields are case-sensitive."
     },
     "MultipleStringValue": {
       "name": "MultipleStringValue",
       "base": "String",
       "parent": "String",
-      "multiValueDelimiter": " ",
-      "description": "String field containing one or more space delimited multiple character values."
+      "multiValueDelimiter": " "
     },
     "Currency": {
       "name": "Currency",
@@ -81,14 +80,14 @@
       "base": "String",
       "parent": "String",
       "formatPattern": "YYYYMMDD-HH:MM:SS[.sss]",
-      "description": "Time/date combination represented in UTC (Universal Time Coordinated, also known as \"GMT\") in either YYYYMMDD-HH:MM:SS (whole seconds) or YYYYMMDD-HH:MM:SS.sss (milliseconds) format, colons, dash, and period required.\nValid values:\n* YYYY = 0000-9999, MM = 01-12, DD = 01-31, HH = 00-23, MM = 00-59, SS = 00-59 (without milliseconds).\n* YYYY = 0000-9999, MM = 01-12, DD = 01-31, HH = 00-23, MM = 00-59, SS = 00-59. sss=000-999 (indicating milliseconds)."
+      "description": "Time/date combination represented in UTC (Universal Time Coordinated, also known as \"GMT\") in either YYYYMMDD-HH:MM:SS (whole seconds) or YYYYMMDD-HH:MM:SS.sss (milliseconds) format, colons, dash, and period required. Valid values: * YYYY = 0000-9999, MM = 01-12, DD = 01-31, HH = 00-23, MM = 00-59, SS = 00-59 (without milliseconds). * YYYY = 0000-9999, MM = 01-12, DD = 01-31, HH = 00-23, MM = 00-59, SS = 00-59. sss=000-999 (indicating milliseconds)."
     },
     "UTCTimeOnly": {
       "name": "UTCTimeOnly",
       "base": "String",
       "parent": "String",
       "formatPattern": "HH:MM:SS[.sss]",
-      "description": "Time-only represented in UTC (Universal Time Coordinated, also known as \"GMT\") in either HH:MM:SS (whole seconds) or HH:MM:SS.sss (milliseconds) format, colons, and period required.\nValid values:\n* HH = 00-23, MM = 00-59, SS = 00-59. (without milliseconds)\n* HH = 00-23, MM = 00-59, SS = 00-59. sss=000-999 (indicating milliseconds)."
+      "description": "Time-only represented in UTC (Universal Time Coordinated, also known as \"GMT\") in either HH:MM:SS (whole seconds) or HH:MM:SS.sss (milliseconds) format, colons, and period required. Valid values: * HH = 00-23, MM = 00-59, SS = 00-59. (without milliseconds) * HH = 00-23, MM = 00-59, SS = 00-59. sss=000-999 (indicating milliseconds)."
     },
     "LocalMktDate": {
       "name": "LocalMktDate",
@@ -121,12 +120,13 @@
       "name": "DayOfMonth",
       "base": "int",
       "parent": "int",
-      "description": "int field representing a day during a particular monthy (values 1 to 31)."
+      "description": "int field representing a day during a particular month (values 1 to 31)."
     },
     "MultipleValueString": {
       "name": "MultipleValueString",
       "base": "String",
-      "multiValueDelimiter": " "
+      "multiValueDelimiter": " ",
+      "description": "String field containing one or more space delimited multiple character values."
     },
     "Length": {
       "name": "Length",
@@ -144,19 +144,18 @@
       "tag": 2,
       "name": "AdvId",
       "type": "String",
-      "description": "Unique identifier of advertisement message.\n(Prior to FIX 4.1 this field was of type int)"
+      "description": "Unique identifier of advertisement message. (Prior to FIX 4.1 this field was of type int)"
     },
     "3": {
       "tag": 3,
       "name": "AdvRefID",
       "type": "String",
-      "description": "Reference identifier used with CANCEL and REPLACE transaction types.\n(Prior to FIX 4.1 this field was of type int)"
+      "description": "Reference identifier used with CANCEL and REPLACE transaction types. (Prior to FIX 4.1 this field was of type int)"
     },
     "4": {
       "tag": 4,
       "name": "AdvSide",
       "type": "char",
-      "description": "Broker's side of advertised trade",
       "enumValues": [
         {
           "value": "B",
@@ -178,13 +177,13 @@
           "name": "Cross",
           "description": "Cross"
         }
-      ]
+      ],
+      "description": "Broker's side of advertised trade"
     },
     "5": {
       "tag": 5,
       "name": "AdvTransType",
       "type": "String",
-      "description": "Identifies advertisement message transaction type",
       "enumValues": [
         {
           "value": "C",
@@ -201,7 +200,8 @@
           "name": "Replace",
           "description": "Replace"
         }
-      ]
+      ],
+      "description": "Identifies advertisement message transaction type"
     },
     "6": {
       "tag": 6,
@@ -249,7 +249,6 @@
       "tag": 13,
       "name": "CommType",
       "type": "char",
-      "description": "Commission type",
       "enumValues": [
         {
           "value": "1",
@@ -266,13 +265,14 @@
           "name": "Absolute",
           "description": "absolute"
         }
-      ]
+      ],
+      "description": "Commission type"
     },
     "14": {
       "tag": 14,
       "name": "CumQty",
       "type": "Qty",
-      "description": "Total number of shares filled.\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Total number of shares filled. (Prior to FIX 4.2 this field was of type int)"
     },
     "15": {
       "tag": 15,
@@ -290,13 +290,12 @@
       "tag": 17,
       "name": "ExecID",
       "type": "String",
-      "description": "Unique identifier of execution message as assigned by broker (will be 0 (zero) for ExecTransType=3 (Status)).\nUniqueness must be guaranteed within a single trading day or the life of a multi-day order. Firms which accept multi-day orders should consider embedding a date within the ExecID field to assure uniqueness across days.\n(Prior to FIX 4.1 this field was of type int)"
+      "description": "Unique identifier of execution message as assigned by broker (will be 0 (zero) for ExecTransType=3 (Status)). Uniqueness must be guaranteed within a single trading day or the life of a multi-day order. Firms which accept multi-day orders should consider embedding a date within the ExecID field to assure uniqueness across days. (Prior to FIX 4.1 this field was of type int)"
     },
     "18": {
       "tag": 18,
       "name": "ExecInst",
       "type": "MultipleValueString",
-      "description": "Instructions for order handling on exchange trading floor. If more than one instruction is applicable to an order, this field can contain multiple instructions separated by space.",
       "enumValues": [
         {
           "value": "0",
@@ -366,7 +365,7 @@
         {
           "value": "D",
           "name": "PercentOfVolume",
-          "description": "Percent of volume (indicates that the sender does not want to be all of the volume on the floor vs. a specific percentage)"
+          "description": "Percent of volume (indicates that the sender does not want to be all the volume on the floor vs. a specific percentage)"
         },
         {
           "value": "E",
@@ -443,19 +442,19 @@
           "name": "PegToVWAP",
           "description": "Peg to VWAP"
         }
-      ]
+      ],
+      "description": "Instructions for order handling on exchange trading floor. If more than one instruction is applicable to an order, this field can contain multiple instructions separated by space."
     },
     "19": {
       "tag": 19,
       "name": "ExecRefID",
       "type": "String",
-      "description": "Reference identifier used with Cancel and Correct transaction types.\n(Prior to FIX 4.1 this field was of type int)"
+      "description": "Reference identifier used with Cancel and Correct transaction types. (Prior to FIX 4.1 this field was of type int)"
     },
     "20": {
       "tag": 20,
       "name": "ExecTransType",
       "type": "char",
-      "description": "Identifies transaction type",
       "enumValues": [
         {
           "value": "0",
@@ -477,13 +476,13 @@
           "name": "Status",
           "description": "Status"
         }
-      ]
+      ],
+      "description": "Identifies transaction type"
     },
     "21": {
       "tag": 21,
       "name": "HandlInst",
       "type": "char",
-      "description": "Instructions for order handling on Broker trading floor",
       "enumValues": [
         {
           "value": "1",
@@ -500,13 +499,13 @@
           "name": "ManualOrder",
           "description": "Manual order, best execution"
         }
-      ]
+      ],
+      "description": "Instructions for order handling on Broker trading floor"
     },
     "22": {
       "tag": 22,
       "name": "IDSource",
       "type": "String",
-      "description": "Identifies class of alternative SecurityID",
       "enumValues": [
         {
           "value": "1",
@@ -553,13 +552,14 @@
           "name": "ConsolidatedTapeAssociation",
           "description": "Consolidated Tape Association (CTA) Symbol (SIAC CTS/CQS line format)"
         }
-      ]
+      ],
+      "description": "Identifies class of alternative SecurityID"
     },
     "23": {
       "tag": 23,
       "name": "IOIid",
       "type": "String",
-      "description": "Unique identifier of IOI message.\n(Prior to FIX 4.1 this field was of type int)"
+      "description": "Unique identifier of IOI message. (Prior to FIX 4.1 this field was of type int)"
     },
     "24": {
       "tag": 24,
@@ -570,7 +570,6 @@
       "tag": 25,
       "name": "IOIQltyInd",
       "type": "char",
-      "description": "Relative quality of indication",
       "enumValues": [
         {
           "value": "H",
@@ -587,19 +586,19 @@
           "name": "Medium",
           "description": "Medium"
         }
-      ]
+      ],
+      "description": "Relative quality of indication"
     },
     "26": {
       "tag": 26,
       "name": "IOIRefID",
       "type": "String",
-      "description": "Reference identifier used with CANCEL and REPLACE, transaction types.\n(Prior to FIX 4.1 this field was of type int)"
+      "description": "Reference identifier used with CANCEL and REPLACE, transaction types. (Prior to FIX 4.1 this field was of type int)"
     },
     "27": {
       "tag": 27,
       "name": "IOIShares",
       "type": "String",
-      "description": "Number of shares in numeric or relative size.",
       "enumValues": [
         {
           "value": "L",
@@ -616,13 +615,13 @@
           "name": "Small",
           "description": "Small"
         }
-      ]
+      ],
+      "description": "Number of shares in numeric or relative size."
     },
     "28": {
       "tag": 28,
       "name": "IOITransType",
       "type": "char",
-      "description": "Identifies IOI message transaction type",
       "enumValues": [
         {
           "value": "C",
@@ -639,13 +638,13 @@
           "name": "Replace",
           "description": "Replace"
         }
-      ]
+      ],
+      "description": "Identifies IOI message transaction type"
     },
     "29": {
       "tag": 29,
       "name": "LastCapacity",
       "type": "char",
-      "description": "Broker capacity in order execution",
       "enumValues": [
         {
           "value": "1",
@@ -667,7 +666,8 @@
           "name": "Principal",
           "description": "Principal"
         }
-      ]
+      ],
+      "description": "Broker capacity in order execution"
     },
     "30": {
       "tag": 30,
@@ -685,14 +685,14 @@
       "tag": 32,
       "name": "LastShares",
       "type": "Qty",
-      "description": "Quantity of shares bought/sold on this (last) fill. Field not required for ExecTransType = 3 (Status)\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Quantity of shares bought/sold on this (last) fill. Field not required for ExecTransType = 3 (Status) (Prior to FIX 4.2 this field was of type int)"
     },
     "33": {
       "tag": 33,
       "name": "LinesOfText",
       "type": "int",
-      "description": "Identifies number of lines of text body",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Identifies number of lines of text body"
     },
     "34": {
       "tag": 34,
@@ -704,7 +704,6 @@
       "tag": 35,
       "name": "MsgType",
       "type": "String",
-      "description": "Defines message type. ALWAYS THIRD FIELD IN MESSAGE. (Always unencrypted)\nNote: A \"U\" as the first character in the MsgType field (i.e. U1, U2, etc) indicates that the message format is privately defined between the sender and receiver.",
       "enumValues": [
         {
           "value": "0",
@@ -936,7 +935,8 @@
           "name": "QuoteCancel",
           "description": "Quote Cancel"
         }
-      ]
+      ],
+      "description": "Defines message type. ALWAYS THIRD FIELD IN MESSAGE. (Always unencrypted) Note: A \"U\" as the first character in the MsgType field (i.e. U1, U2, etc) indicates that the message format is privately defined between the sender and receiver."
     },
     "36": {
       "tag": 36,
@@ -954,13 +954,12 @@
       "tag": 38,
       "name": "OrderQty",
       "type": "Qty",
-      "description": "Number of shares ordered. This represents the number of shares for equities or based on normal convention the number of contracts for options, futures, convertible bonds, etc.\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Number of shares ordered. This represents the number of shares for equities or based on normal convention the number of contracts for options, futures, convertible bonds, etc. (Prior to FIX 4.2 this field was of type int)"
     },
     "39": {
       "tag": 39,
       "name": "OrdStatus",
       "type": "char",
-      "description": "Identifies current status of order.",
       "enumValues": [
         {
           "value": "0",
@@ -1037,13 +1036,13 @@
           "name": "PendingReplace",
           "description": "Pending Replace (e.g. result of Order Cancel/Replace Request)"
         }
-      ]
+      ],
+      "description": "Identifies current status of order."
     },
     "40": {
       "tag": 40,
       "name": "OrdType",
       "type": "char",
-      "description": "Order type.",
       "enumValues": [
         {
           "value": "1",
@@ -1140,7 +1139,8 @@
           "name": "Pegged",
           "description": "Pegged"
         }
-      ]
+      ],
+      "description": "Order type."
     },
     "41": {
       "tag": 41,
@@ -1158,7 +1158,6 @@
       "tag": 43,
       "name": "PossDupFlag",
       "type": "Boolean",
-      "description": "Indicates possible retransmission of message with this sequence number",
       "enumValues": [
         {
           "value": "N",
@@ -1170,7 +1169,8 @@
           "name": "PossibleDuplicate",
           "description": "Possible duplicate"
         }
-      ]
+      ],
+      "description": "Indicates possible retransmission of message with this sequence number"
     },
     "44": {
       "tag": 44,
@@ -1194,7 +1194,6 @@
       "tag": 47,
       "name": "Rule80A",
       "type": "char",
-      "description": "Note that the name of this field is changing to \"OrderCapacity\" as Rule80A is a very US market-specific term. Other world markets need to convey similar information, however, often a subset of the US values. . See the \"Rule80A (aka OrderCapacity) Usage by Market\" appendix for market-specific usage of this field.",
       "enumValues": [
         {
           "value": "A",
@@ -1311,7 +1310,8 @@
           "name": "ShortExemptTransactionNonMember",
           "description": "Short exempt transaction for non-member competing market-maker (refer to A and R types)"
         }
-      ]
+      ],
+      "description": "Note that the name of this field is changing to \"OrderCapacity\" as Rule80A is a very US market-specific term. Other world markets need to convey similar information, however, often a subset of the US values. . See the \"Rule80A (aka OrderCapacity) Usage by Market\" appendix for market-specific usage of this field."
     },
     "48": {
       "tag": 48,
@@ -1347,13 +1347,12 @@
       "tag": 53,
       "name": "Shares",
       "type": "Qty",
-      "description": "Number of shares\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Number of shares (Prior to FIX 4.2 this field was of type int)"
     },
     "54": {
       "tag": 54,
       "name": "Side",
       "type": "char",
-      "description": "Side of order",
       "enumValues": [
         {
           "value": "1",
@@ -1400,7 +1399,8 @@
           "name": "CrossShort",
           "description": "Cross short"
         }
-      ]
+      ],
+      "description": "Side of order"
     },
     "55": {
       "tag": 55,
@@ -1424,13 +1424,12 @@
       "tag": 58,
       "name": "Text",
       "type": "String",
-      "description": "Free format text string\n(Note: this field does not have a specified maximum length)"
+      "description": "Free format text string (Note: this field does not have a specified maximum length)"
     },
     "59": {
       "tag": 59,
       "name": "TimeInForce",
       "type": "char",
-      "description": "Specifies how long the order remains in effect. Absence of this field is interpreted as DAY.",
       "enumValues": [
         {
           "value": "0",
@@ -1467,7 +1466,8 @@
           "name": "GoodTillDate",
           "description": "Good Till Date"
         }
-      ]
+      ],
+      "description": "Specifies how long the order remains in effect. Absence of this field is interpreted as DAY."
     },
     "60": {
       "tag": 60,
@@ -1479,7 +1479,6 @@
       "tag": 61,
       "name": "Urgency",
       "type": "char",
-      "description": "Urgency flag",
       "enumValues": [
         {
           "value": "0",
@@ -1496,7 +1495,8 @@
           "name": "Background",
           "description": "Background"
         }
-      ]
+      ],
+      "description": "Urgency flag"
     },
     "62": {
       "tag": 62,
@@ -1508,7 +1508,6 @@
       "tag": 63,
       "name": "SettlmntTyp",
       "type": "char",
-      "description": "Indicates order settlement period. Absence of this field is interpreted as Regular. Regular is defined as the default settlement period for the particular security on the exchange of execution.",
       "enumValues": [
         {
           "value": "0",
@@ -1560,7 +1559,8 @@
           "name": "TPlus5",
           "description": "T+ 5"
         }
-      ]
+      ],
+      "description": "Indicates order settlement period. Absence of this field is interpreted as Regular. Regular is defined as the default settlement period for the particular security on the exchange of execution."
     },
     "64": {
       "tag": 64,
@@ -1572,7 +1572,7 @@
       "tag": 65,
       "name": "SymbolSfx",
       "type": "String",
-      "description": "Additional information about the security (e.g. preferred, warrants, etc.). Note also see SecurityType.\nValid values:\nAs defined in the NYSE Stock and bond Symbol Directory and in the AMEX Fitch Directory"
+      "description": "Additional information about the security (e.g. preferred, warrants, etc.). Note also see SecurityType. Valid values: As defined in the NYSE Stock and bond Symbol Directory and in the AMEX Fitch Directory"
     },
     "66": {
       "tag": 66,
@@ -1590,7 +1590,7 @@
       "tag": 68,
       "name": "TotNoOrders",
       "type": "int",
-      "description": "Total number of list order entries across all messages. Should be the sum of all NoOrders in each message that has repeating list order entries related to the same ListID. Used to support fragmentation.\n(Prior to FIX 4.2 this field was named \"ListNoOrds\")"
+      "description": "Total number of list order entries across all messages. Should be the sum of all NoOrders in each message that has repeating list order entries related to the same ListID. Used to support fragmentation. (Prior to FIX 4.2 this field was named \"ListNoOrds\")"
     },
     "69": {
       "tag": 69,
@@ -1602,13 +1602,12 @@
       "tag": 70,
       "name": "AllocID",
       "type": "String",
-      "description": "Unique identifier for allocation message.\n(Prior to FIX 4.1 this field was of type int)"
+      "description": "Unique identifier for allocation message. (Prior to FIX 4.1 this field was of type int)"
     },
     "71": {
       "tag": 71,
       "name": "AllocTransType",
       "type": "char",
-      "description": "Identifies allocation transaction type",
       "enumValues": [
         {
           "value": "0",
@@ -1640,20 +1639,21 @@
           "name": "CalculatedWithoutPreliminary",
           "description": "Calculated without Preliminary (sent unsolicited by broker, includes MiscFees and NetMoney)"
         }
-      ]
+      ],
+      "description": "Identifies allocation transaction type"
     },
     "72": {
       "tag": 72,
       "name": "RefAllocID",
       "type": "String",
-      "description": "Reference identifier to be used with Replace, Cancel, and Calculated AllocTransType messages.\n(Prior to FIX 4.1 this field was of type int)"
+      "description": "Reference identifier to be used with Replace, Cancel, and Calculated AllocTransType messages. (Prior to FIX 4.1 this field was of type int)"
     },
     "73": {
       "tag": 73,
       "name": "NoOrders",
       "type": "int",
-      "description": "Indicates number of orders to be combined for average pricing and allocation.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Indicates number of orders to be combined for average pricing and allocation."
     },
     "74": {
       "tag": 74,
@@ -1677,7 +1677,6 @@
       "tag": 77,
       "name": "OpenClose",
       "type": "char",
-      "description": "Indicates whether the resulting position after a trade should be an opening position or closing position. Used for omnibus accounting - where accounts are held on a gross basis instead of being netted together.",
       "enumValues": [
         {
           "value": "C",
@@ -1689,14 +1688,15 @@
           "name": "Open",
           "description": "Open"
         }
-      ]
+      ],
+      "description": "Indicates whether the resulting position after a trade should be an opening position or closing position. Used for omnibus accounting - where accounts are held on a gross basis instead of being netted together."
     },
     "78": {
       "tag": 78,
       "name": "NoAllocs",
       "type": "int",
-      "description": "Number of repeating AllocAccount/AllocPrice entries.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Number of repeating AllocAccount/AllocPrice entries."
     },
     "79": {
       "tag": 79,
@@ -1708,13 +1708,12 @@
       "tag": 80,
       "name": "AllocShares",
       "type": "Qty",
-      "description": "Number of shares to be allocated to specific sub-account\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Number of shares to be allocated to specific sub-account (Prior to FIX 4.2 this field was of type int)"
     },
     "81": {
       "tag": 81,
       "name": "ProcessCode",
       "type": "char",
-      "description": "Processing code for sub-account. Absence of this field in AllocAccount / AllocPrice/AllocShares / ProcessCode instance indicates regular trade.",
       "enumValues": [
         {
           "value": "0",
@@ -1751,7 +1750,8 @@
           "name": "PlanSponsor",
           "description": "plan sponsor"
         }
-      ]
+      ],
+      "description": "Processing code for sub-account. Absence of this field in AllocAccount / AllocPrice/AllocShares / ProcessCode instance indicates regular trade."
     },
     "82": {
       "tag": 82,
@@ -1769,25 +1769,24 @@
       "tag": 84,
       "name": "CxlQty",
       "type": "Qty",
-      "description": "Total number of shares canceled for this order.\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Total number of shares canceled for this order. (Prior to FIX 4.2 this field was of type int)"
     },
     "85": {
       "tag": 85,
       "name": "NoDlvyInst",
       "type": "int",
-      "description": "Number of delivery instruction fields to follow\nNo longer used. Included here for reference to prior versions."
+      "description": "Number of delivery instruction fields to follow No longer used. Included here for reference to prior versions."
     },
     "86": {
       "tag": 86,
       "name": "DlvyInst",
       "type": "String",
-      "description": "Free format text field to indicate delivery instructions\nNo longer used. Included here for reference to prior versions."
+      "description": "Free format text field to indicate delivery instructions No longer used. Included here for reference to prior versions."
     },
     "87": {
       "tag": 87,
       "name": "AllocStatus",
       "type": "int",
-      "description": "Identifies status of allocation.",
       "enumValues": [
         {
           "value": "0",
@@ -1809,13 +1808,13 @@
           "name": "Received",
           "description": "received (received, not yet processed)"
         }
-      ]
+      ],
+      "description": "Identifies status of allocation."
     },
     "88": {
       "tag": 88,
       "name": "AllocRejCode",
       "type": "int",
-      "description": "Identifies reason for rejection.",
       "enumValues": [
         {
           "value": "0",
@@ -1857,14 +1856,15 @@
           "name": "OtherSeeText",
           "description": "other"
         }
-      ]
+      ],
+      "description": "Identifies reason for rejection."
     },
     "89": {
       "tag": 89,
       "name": "Signature",
       "type": "data",
-      "description": "Electronic signature",
-      "lengthField": 93
+      "lengthField": 93,
+      "description": "Electronic signature"
     },
     "90": {
       "tag": 90,
@@ -1876,8 +1876,8 @@
       "tag": 91,
       "name": "SecureData",
       "type": "data",
-      "description": "Actual encrypted data stream",
-      "lengthField": 90
+      "lengthField": 90,
+      "description": "Actual encrypted data stream"
     },
     "92": {
       "tag": 92,
@@ -1895,7 +1895,6 @@
       "tag": 94,
       "name": "EmailType",
       "type": "char",
-      "description": "Email message type.",
       "enumValues": [
         {
           "value": "0",
@@ -1912,7 +1911,8 @@
           "name": "AdminReply",
           "description": "Admin Reply"
         }
-      ]
+      ],
+      "description": "Email message type."
     },
     "95": {
       "tag": 95,
@@ -1924,14 +1924,13 @@
       "tag": 96,
       "name": "RawData",
       "type": "data",
-      "description": "Unformatted raw data, can include bitmaps, word processor documents, etc.",
-      "lengthField": 95
+      "lengthField": 95,
+      "description": "Unformatted raw data, can include bitmaps, word processor documents, etc."
     },
     "97": {
       "tag": 97,
       "name": "PossResend",
       "type": "Boolean",
-      "description": "Indicates that message may contain information that has been sent under another sequence number.",
       "enumValues": [
         {
           "value": "N",
@@ -1943,13 +1942,13 @@
           "name": "PossibleResend",
           "description": "Possible resend"
         }
-      ]
+      ],
+      "description": "Indicates that message may contain information that has been sent under another sequence number."
     },
     "98": {
       "tag": 98,
       "name": "EncryptMethod",
       "type": "int",
-      "description": "Method of encryption.",
       "enumValues": [
         {
           "value": "0",
@@ -1979,14 +1978,15 @@
         {
           "value": "5",
           "name": "PGPDESMD5",
-          "description": "PGP/DES-MD5 (see app note on FIX web site)"
+          "description": "PGP/DES-MD5 (see app note on FIX website)"
         },
         {
           "value": "6",
           "name": "PEM",
-          "description": "PEM/DES-MD5 (see app note on FIX web site)"
+          "description": "PEM/DES-MD5 (see app note on FIX website)"
         }
-      ]
+      ],
+      "description": "Method of encryption."
     },
     "99": {
       "tag": 99,
@@ -1998,13 +1998,12 @@
       "tag": 100,
       "name": "ExDestination",
       "type": "Exchange",
-      "description": "Execution destination as defined by institution when order is entered.\nValid values:\nSee Appendix C"
+      "description": "Execution destination as defined by institution when order is entered. Valid values: See Appendix C"
     },
     "102": {
       "tag": 102,
       "name": "CxlRejReason",
       "type": "int",
-      "description": "Code to identify reason for cancel rejection.",
       "enumValues": [
         {
           "value": "0",
@@ -2026,13 +2025,13 @@
           "name": "OrderAlreadyInPendingStatus",
           "description": "Order already in Pending Cancel or Pending Replace status"
         }
-      ]
+      ],
+      "description": "Code to identify reason for cancel rejection."
     },
     "103": {
       "tag": 103,
       "name": "OrdRejReason",
       "type": "int",
-      "description": "Code to identify reason for order rejection.",
       "enumValues": [
         {
           "value": "0",
@@ -2079,13 +2078,13 @@
           "name": "StaleOrder",
           "description": "Stale Order"
         }
-      ]
+      ],
+      "description": "Code to identify reason for order rejection."
     },
     "104": {
       "tag": 104,
       "name": "IOIQualifier",
       "type": "char",
-      "description": "Code to qualify IOI use.",
       "enumValues": [
         {
           "value": "A",
@@ -2167,7 +2166,8 @@
           "name": "PreOpen",
           "description": "Pre-open"
         }
-      ]
+      ],
+      "description": "Code to qualify IOI use."
     },
     "105": {
       "tag": 105,
@@ -2203,13 +2203,13 @@
       "tag": 110,
       "name": "MinQty",
       "type": "Qty",
-      "description": "Minimum quantity of an order to be executed.\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Minimum quantity of an order to be executed. (Prior to FIX 4.2 this field was of type int)"
     },
     "111": {
       "tag": 111,
       "name": "MaxFloor",
       "type": "Qty",
-      "description": "Maximum number of shares within an order to be shown on the exchange floor at any given time.\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Maximum number of shares within an order to be shown on the exchange floor at any given time. (Prior to FIX 4.2 this field was of type int)"
     },
     "112": {
       "tag": 112,
@@ -2221,7 +2221,6 @@
       "tag": 113,
       "name": "ReportToExch",
       "type": "Boolean",
-      "description": "Identifies party of trade responsible for exchange reporting.",
       "enumValues": [
         {
           "value": "N",
@@ -2233,13 +2232,13 @@
           "name": "ReceiverReports",
           "description": "Indicates that party receiving message must report trade"
         }
-      ]
+      ],
+      "description": "Identifies party of trade responsible for exchange reporting."
     },
     "114": {
       "tag": 114,
       "name": "LocateReqd",
       "type": "Boolean",
-      "description": "Indicates whether the broker is to locate the stock in conjunction with a short sell order.",
       "enumValues": [
         {
           "value": "N",
@@ -2251,7 +2250,8 @@
           "name": "Yes",
           "description": "Indicates the broker is responsible for locating the stock"
         }
-      ]
+      ],
+      "description": "Indicates whether the broker is to locate the stock in conjunction with a short sell order."
     },
     "115": {
       "tag": 115,
@@ -2293,7 +2293,6 @@
       "tag": 121,
       "name": "ForexReq",
       "type": "Boolean",
-      "description": "Indicates request for forex accommodation trade to be executed along with security transaction.",
       "enumValues": [
         {
           "value": "N",
@@ -2305,7 +2304,8 @@
           "name": "ExecuteForexAfterSecurityTrade",
           "description": "Execute Forex after security trade"
         }
-      ]
+      ],
+      "description": "Indicates request for forex accommodation trade to be executed along with security transaction."
     },
     "122": {
       "tag": 122,
@@ -2317,7 +2317,6 @@
       "tag": 123,
       "name": "GapFillFlag",
       "type": "Boolean",
-      "description": "Indicates that the Sequence Reset message is replacing administrative or application messages which will not be resent.",
       "enumValues": [
         {
           "value": "N",
@@ -2329,14 +2328,15 @@
           "name": "GapFillMessage",
           "description": "Gap Fill message, MsgSeqNum field valid"
         }
-      ]
+      ],
+      "description": "Indicates that the Sequence Reset message is replacing administrative or application messages which will not be resent."
     },
     "124": {
       "tag": 124,
       "name": "NoExecs",
       "type": "int",
-      "description": "No of execution repeating group entries to follow.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "No of execution repeating group entries to follow."
     },
     "125": {
       "tag": 125,
@@ -2354,7 +2354,6 @@
       "tag": 127,
       "name": "DKReason",
       "type": "char",
-      "description": "Reason for execution rejection.",
       "enumValues": [
         {
           "value": "A",
@@ -2386,7 +2385,8 @@
           "name": "Other",
           "description": "Other"
         }
-      ]
+      ],
+      "description": "Reason for execution rejection."
     },
     "128": {
       "tag": 128,
@@ -2404,7 +2404,6 @@
       "tag": 130,
       "name": "IOINaturalFlag",
       "type": "Boolean",
-      "description": "Indicates that IOI is the result of an existing agency order or a facilitation position resulting from an agency order, not from principal trading or order solicitation activity.",
       "enumValues": [
         {
           "value": "N",
@@ -2416,7 +2415,8 @@
           "name": "Natural",
           "description": "Natural"
         }
-      ]
+      ],
+      "description": "Indicates that IOI is the result of an existing agency order or a facilitation position resulting from an agency order, not from principal trading or order solicitation activity."
     },
     "131": {
       "tag": 131,
@@ -2440,20 +2440,20 @@
       "tag": 134,
       "name": "BidSize",
       "type": "Qty",
-      "description": "Quantity of bid\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Quantity of bid (Prior to FIX 4.2 this field was of type int)"
     },
     "135": {
       "tag": 135,
       "name": "OfferSize",
       "type": "Qty",
-      "description": "Quantity of offer\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Quantity of offer (Prior to FIX 4.2 this field was of type int)"
     },
     "136": {
       "tag": 136,
       "name": "NoMiscFees",
       "type": "int",
-      "description": "Number of repeating groups of miscellaneous fees",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Number of repeating groups of miscellaneous fees"
     },
     "137": {
       "tag": 137,
@@ -2471,7 +2471,6 @@
       "tag": 139,
       "name": "MiscFeeType",
       "type": "char",
-      "description": "Indicates type of miscellaneous fee.",
       "enumValues": [
         {
           "value": "1",
@@ -2518,7 +2517,8 @@
           "name": "ConsumptionTax",
           "description": "Consumption Tax"
         }
-      ]
+      ],
+      "description": "Indicates type of miscellaneous fee."
     },
     "140": {
       "tag": 140,
@@ -2530,7 +2530,6 @@
       "tag": 141,
       "name": "ResetSeqNumFlag",
       "type": "Boolean",
-      "description": "Indicates that the both sides of the FIX session should reset sequence numbers.",
       "enumValues": [
         {
           "value": "N",
@@ -2542,7 +2541,8 @@
           "name": "Yes",
           "description": "Yes, reset sequence numbers"
         }
-      ]
+      ],
+      "description": "Indicates that the both sides of the FIX session should reset sequence numbers."
     },
     "142": {
       "tag": 142,
@@ -2572,8 +2572,8 @@
       "tag": 146,
       "name": "NoRelatedSym",
       "type": "int",
-      "description": "Specifies the number of repeating symbols specified.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Specifies the number of repeating symbols specified."
     },
     "147": {
       "tag": 147,
@@ -2597,7 +2597,6 @@
       "tag": 150,
       "name": "ExecType",
       "type": "char",
-      "description": "Describes the specific ExecutionRpt (i.e. Pending Cancel) while OrdStatus will always identify the current order status (i.e. Partially Filled)",
       "enumValues": [
         {
           "value": "0",
@@ -2674,13 +2673,14 @@
           "name": "PendingReplace",
           "description": "Pending Replace (e.g. result of Order Cancel/Replace Request)"
         }
-      ]
+      ],
+      "description": "Describes the specific ExecutionRpt (i.e. Pending Cancel) while OrdStatus will always identify the current order status (i.e. Partially Filled)"
     },
     "151": {
       "tag": 151,
       "name": "LeavesQty",
       "type": "Qty",
-      "description": "Amount of shares open for further execution. If the OrdStatus is Canceled, DoneForTheDay, Expired, Calculated, or Rejected (in which case the order is no longer active) then LeavesQty could be 0, otherwise LeavesQty = OrderQty - CumQty.\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Amount of shares open for further execution. If the OrdStatus is Canceled, DoneForTheDay, Expired, Calculated, or Rejected (in which case the order is no longer active) then LeavesQty could be 0, otherwise LeavesQty = OrderQty - CumQty. (Prior to FIX 4.2 this field was of type int)"
     },
     "152": {
       "tag": 152,
@@ -2734,7 +2734,6 @@
       "tag": 160,
       "name": "SettlInstMode",
       "type": "char",
-      "description": "Indicates mode used for Settlement Instructions",
       "enumValues": [
         {
           "value": "0",
@@ -2756,7 +2755,8 @@
           "name": "SpecificAllocationAccountStanding",
           "description": "Specific Allocation Account Standing"
         }
-      ]
+      ],
+      "description": "Indicates mode used for Settlement Instructions"
     },
     "161": {
       "tag": 161,
@@ -2774,7 +2774,6 @@
       "tag": 163,
       "name": "SettlInstTransType",
       "type": "char",
-      "description": "Settlement Instructions message transaction type",
       "enumValues": [
         {
           "value": "C",
@@ -2791,7 +2790,8 @@
           "name": "Replace",
           "description": "Replace"
         }
-      ]
+      ],
+      "description": "Settlement Instructions message transaction type"
     },
     "164": {
       "tag": 164,
@@ -2803,7 +2803,6 @@
       "tag": 165,
       "name": "SettlInstSource",
       "type": "char",
-      "description": "Indicates source of Settlement Instructions",
       "enumValues": [
         {
           "value": "1",
@@ -2815,13 +2814,13 @@
           "name": "Institution",
           "description": "Institutions Instructions"
         }
-      ]
+      ],
+      "description": "Indicates source of Settlement Instructions"
     },
     "166": {
       "tag": 166,
       "name": "SettlLocation",
       "type": "String",
-      "description": "Identifies Settlement Depository or Country Code (ISITC spec)",
       "enumValues": [
         {
           "value": "CED",
@@ -2858,13 +2857,13 @@
           "name": "ParticipantTrustCompany",
           "description": "Participant Trust Company"
         }
-      ]
+      ],
+      "description": "Identifies Settlement Depository or Country Code (ISITC spec) using ISO 3166 (2 character) representing the country of settlement."
     },
     "167": {
       "tag": 167,
       "name": "SecurityType",
       "type": "String",
-      "description": "Indicates type of security (ISITC spec)",
       "enumValues": [
         {
           "value": "?",
@@ -3031,7 +3030,8 @@
           "name": "CatsTigersAndLions",
           "description": "Cats, Tigers & Lions (a real code: US Treasury Receipts)"
         }
-      ]
+      ],
+      "description": "Indicates type of security (ISITC spec)"
     },
     "168": {
       "tag": 168,
@@ -3043,7 +3043,6 @@
       "tag": 169,
       "name": "StandInstDbType",
       "type": "int",
-      "description": "Identifies the Standing Instruction database used",
       "enumValues": [
         {
           "value": "0",
@@ -3065,7 +3064,8 @@
           "name": "AGlobalCustodian",
           "description": "A Global Custodian (StandInstDbName must be provided)"
         }
-      ]
+      ],
+      "description": "Identifies the Standing Instruction database used"
     },
     "170": {
       "tag": 170,
@@ -3203,13 +3203,13 @@
       "tag": 192,
       "name": "OrderQty2",
       "type": "Qty",
-      "description": "OrderQty of the future part of a F/X swap order."
+      "description": "OrderQty of the future part of an F/X swap order."
     },
     "193": {
       "tag": 193,
       "name": "FutSettDate2",
       "type": "LocalMktDate",
-      "description": "FutSettDate of the future part of a F/X swap order."
+      "description": "FutSettDate of the future part of an F/X swap order."
     },
     "194": {
       "tag": 194,
@@ -3233,7 +3233,6 @@
       "tag": 197,
       "name": "AllocLinkType",
       "type": "int",
-      "description": "Identifies the type of Allocation linkage when AllocLinkID is used.",
       "enumValues": [
         {
           "value": "0",
@@ -3245,7 +3244,8 @@
           "name": "FXSwap",
           "description": "F/X Swap"
         }
-      ]
+      ],
+      "description": "Identifies the type of Allocation linkage when AllocLinkID is used."
     },
     "198": {
       "tag": 198,
@@ -3257,20 +3257,19 @@
       "tag": 199,
       "name": "NoIOIQualifiers",
       "type": "int",
-      "description": "Number of repeating groups of IOIQualifiers.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Number of repeating groups of IOIQualifiers."
     },
     "200": {
       "tag": 200,
       "name": "MaturityMonthYear",
       "type": "MonthYear",
-      "description": "Month and Year of the maturity for SecurityType=FUT or SecurityType=OPT. Required if MaturityDay is specified.\nFormat: YYYYMM\n(i.e. 199903)"
+      "description": "Month and Year of the maturity for SecurityType=FUT or SecurityType=OPT. Required if MaturityDay is specified. Format: YYYYMM (i.e. 199903)"
     },
     "201": {
       "tag": 201,
       "name": "PutOrCall",
       "type": "int",
-      "description": "Indicates whether an Option is for a put or call.",
       "enumValues": [
         {
           "value": "0",
@@ -3282,7 +3281,8 @@
           "name": "Call",
           "description": "Call"
         }
-      ]
+      ],
+      "description": "Indicates whether an Option is for a put or call."
     },
     "202": {
       "tag": 202,
@@ -3294,7 +3294,6 @@
       "tag": 203,
       "name": "CoveredOrUncovered",
       "type": "int",
-      "description": "Used for options",
       "enumValues": [
         {
           "value": "0",
@@ -3306,13 +3305,13 @@
           "name": "Uncovered",
           "description": "Uncovered"
         }
-      ]
+      ],
+      "description": "Used for options"
     },
     "204": {
       "tag": 204,
       "name": "CustomerOrFirm",
       "type": "int",
-      "description": "Used for options when delivering the order to an execution system/exchange to specify if the order is for a customer or the firm placing the order itself.",
       "enumValues": [
         {
           "value": "0",
@@ -3324,7 +3323,8 @@
           "name": "Firm",
           "description": "Firm"
         }
-      ]
+      ],
+      "description": "Used for options when delivering the order to an execution system/exchange to specify if the order is for a customer or the firm placing the order itself."
     },
     "205": {
       "tag": 205,
@@ -3348,7 +3348,6 @@
       "tag": 208,
       "name": "NotifyBrokerOfCredit",
       "type": "Boolean",
-      "description": "Indicates whether or not details should be communicated to BrokerOfCredit (i.e. step-in broker).",
       "enumValues": [
         {
           "value": "N",
@@ -3360,13 +3359,13 @@
           "name": "DetailsShouldBeCommunicated",
           "description": "Details should be communicated"
         }
-      ]
+      ],
+      "description": "Indicates whether or not details should be communicated to BrokerOfCredit (i.e. step-in broker)."
     },
     "209": {
       "tag": 209,
       "name": "AllocHandlInst",
       "type": "int",
-      "description": "Indicates how the receiver (i.e. third party) of Allocation message should handle/process the account details.",
       "enumValues": [
         {
           "value": "1",
@@ -3383,13 +3382,14 @@
           "name": "ForwardAndMatch",
           "description": "Forward and Match"
         }
-      ]
+      ],
+      "description": "Indicates how the receiver (i.e. third party) of Allocation message should handle/process the account details."
     },
     "210": {
       "tag": 210,
       "name": "MaxShow",
       "type": "Qty",
-      "description": "Maximum number of shares within an order to be shown to other customers (i.e. sent via an IOI).\n(Prior to FIX 4.2 this field was of type int)"
+      "description": "Maximum number of shares within an order to be shown to other customers (i.e. sent via an IOI). (Prior to FIX 4.2 this field was of type int)"
     },
     "211": {
       "tag": 211,
@@ -3407,8 +3407,8 @@
       "tag": 213,
       "name": "XmlData",
       "type": "data",
-      "description": "Actual XML data stream (e.g. FIXML). See approriate XML reference (e.g. FIXML). Note: may contain embedded SOH characters.",
-      "lengthField": 212
+      "lengthField": 212,
+      "description": "Actual XML data stream (e.g. FIXML). See appropriate XML reference (e.g. FIXML). Note: may contain embedded SOH characters."
     },
     "214": {
       "tag": 214,
@@ -3420,14 +3420,13 @@
       "tag": 215,
       "name": "NoRoutingIDs",
       "type": "int",
-      "description": "Number of repeating groups of RoutingID and RoutingType values.\nSee Appendix L – Pre-Trade Message Targeting/Routing",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Number of repeating groups of RoutingID and RoutingType values. See Appendix L – Pre-Trade Message Targeting/Routing"
     },
     "216": {
       "tag": 216,
       "name": "RoutingType",
       "type": "int",
-      "description": "Indicates the type of RoutingID specified.",
       "enumValues": [
         {
           "value": "1",
@@ -3449,7 +3448,8 @@
           "name": "BlockList",
           "description": "Block List"
         }
-      ]
+      ],
+      "description": "Indicates the type of RoutingID specified."
     },
     "217": {
       "tag": 217,
@@ -3467,7 +3467,6 @@
       "tag": 219,
       "name": "Benchmark",
       "type": "char",
-      "description": "For Fixed Income. Identifies the benchmark (e.g. used in conjunction with the SpreadToBenchmark field).",
       "enumValues": [
         {
           "value": "1",
@@ -3514,7 +3513,8 @@
           "name": "SixMOLIBOR",
           "description": "6-MO-LIBOR"
         }
-      ]
+      ],
+      "description": "For Fixed Income. Identifies the benchmark (e.g. used in conjunction with the SpreadToBenchmark field)."
     },
     "223": {
       "tag": 223,
@@ -3538,7 +3538,6 @@
       "tag": 263,
       "name": "SubscriptionRequestType",
       "type": "char",
-      "description": "Subscription Request Type",
       "enumValues": [
         {
           "value": "0",
@@ -3555,7 +3554,8 @@
           "name": "DisablePreviousSnapshot",
           "description": "Disable previous Snapshot + Update Request (Unsubscribe)"
         }
-      ]
+      ],
+      "description": "Subscription Request Type"
     },
     "264": {
       "tag": 264,
@@ -3567,7 +3567,6 @@
       "tag": 265,
       "name": "MDUpdateType",
       "type": "int",
-      "description": "Specifies the type of Market Data update.",
       "enumValues": [
         {
           "value": "0",
@@ -3579,13 +3578,13 @@
           "name": "IncrementalRefresh",
           "description": "Incremental Refresh"
         }
-      ]
+      ],
+      "description": "Specifies the type of Market Data update."
     },
     "266": {
       "tag": 266,
       "name": "AggregatedBook",
       "type": "Boolean",
-      "description": "Specifies whether or not book entries should be aggregated.",
       "enumValues": [
         {
           "value": "N",
@@ -3597,27 +3596,27 @@
           "name": "BookEntriesToBeAggregated",
           "description": "one book entry per side per price"
         }
-      ]
+      ],
+      "description": "Specifies whether or not book entries should be aggregated."
     },
     "267": {
       "tag": 267,
       "name": "NoMDEntryTypes",
       "type": "int",
-      "description": "Number of MDEntryType fields requested.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Number of MDEntryType fields requested."
     },
     "268": {
       "tag": 268,
       "name": "NoMDEntries",
       "type": "int",
-      "description": "Number of entries in Market Data message.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Number of entries in Market Data message."
     },
     "269": {
       "tag": 269,
       "name": "MDEntryType",
       "type": "char",
-      "description": "Type Market Data entry.",
       "enumValues": [
         {
           "value": "0",
@@ -3669,7 +3668,8 @@
           "name": "TradingSessionVWAPPrice",
           "description": "Trading Session VWAP Price"
         }
-      ]
+      ],
+      "description": "Type Market Data entry."
     },
     "270": {
       "tag": 270,
@@ -3699,7 +3699,6 @@
       "tag": 274,
       "name": "TickDirection",
       "type": "char",
-      "description": "Direction of the \"tick\".",
       "enumValues": [
         {
           "value": "0",
@@ -3721,19 +3720,19 @@
           "name": "ZeroMinusTick",
           "description": "Zero-Minus Tick"
         }
-      ]
+      ],
+      "description": "Direction of the \"tick\"."
     },
     "275": {
       "tag": 275,
       "name": "MDMkt",
       "type": "Exchange",
-      "description": "Market posting quote / trade.\nValid values:\nSee Appendix C"
+      "description": "Market posting quote / trade. Valid values: See Appendix C"
     },
     "276": {
       "tag": 276,
       "name": "QuoteCondition",
       "type": "MultipleValueString",
-      "description": "Space-delimited list of conditions describing a quote.",
       "enumValues": [
         {
           "value": "A",
@@ -3780,13 +3779,13 @@
           "name": "NonFirm",
           "description": "Non-Firm"
         }
-      ]
+      ],
+      "description": "Space-delimited list of conditions describing a quote."
     },
     "277": {
       "tag": 277,
       "name": "TradeCondition",
       "type": "MultipleValueString",
-      "description": "Space-delimited list of conditions describing a trade",
       "enumValues": [
         {
           "value": "A",
@@ -3858,7 +3857,8 @@
           "name": "StoppedStock",
           "description": "Stopped Stock (guarantee of price but does not execute the order)"
         }
-      ]
+      ],
+      "description": "Space-delimited list of conditions describing a trade"
     },
     "278": {
       "tag": 278,
@@ -3870,7 +3870,6 @@
       "tag": 279,
       "name": "MDUpdateAction",
       "type": "char",
-      "description": "Type of Market Data update action.",
       "enumValues": [
         {
           "value": "0",
@@ -3887,7 +3886,8 @@
           "name": "Delete",
           "description": "Delete"
         }
-      ]
+      ],
+      "description": "Type of Market Data update action."
     },
     "280": {
       "tag": 280,
@@ -3899,7 +3899,6 @@
       "tag": 281,
       "name": "MDReqRejReason",
       "type": "char",
-      "description": "Reason for the rejection of a Market Data request.",
       "enumValues": [
         {
           "value": "0",
@@ -3946,7 +3945,8 @@
           "name": "UnsupportedMDEntryType",
           "description": "Unsupported MDEntryType"
         }
-      ]
+      ],
+      "description": "Reason for the rejection of a Market Data request."
     },
     "282": {
       "tag": 282,
@@ -3970,7 +3970,6 @@
       "tag": 285,
       "name": "DeleteReason",
       "type": "char",
-      "description": "Reason for deletion.",
       "enumValues": [
         {
           "value": "0",
@@ -3982,13 +3981,13 @@
           "name": "Error",
           "description": "Error"
         }
-      ]
+      ],
+      "description": "Reason for deletion."
     },
     "286": {
       "tag": 286,
       "name": "OpenCloseSettleFlag",
       "type": "char",
-      "description": "Flag that identifies a price.",
       "enumValues": [
         {
           "value": "0",
@@ -4005,7 +4004,8 @@
           "name": "DeliverySettlementEntry",
           "description": "Delivery Settlement price"
         }
-      ]
+      ],
+      "description": "Flag that identifies a price."
     },
     "287": {
       "tag": 287,
@@ -4035,20 +4035,19 @@
       "tag": 291,
       "name": "FinancialStatus",
       "type": "char",
-      "description": "Identifies a firm’s financial status.",
       "enumValues": [
         {
           "value": "1",
           "name": "Bankrupt",
           "description": "Bankrupt"
         }
-      ]
+      ],
+      "description": "Identifies a firm’s financial status."
     },
     "292": {
       "tag": 292,
       "name": "CorporateAction",
       "type": "char",
-      "description": "Identifies the type of Corporate Action.",
       "enumValues": [
         {
           "value": "A",
@@ -4075,7 +4074,8 @@
           "name": "ExInterest",
           "description": "Ex-Interest"
         }
-      ]
+      ],
+      "description": "Identifies the type of Corporate Action."
     },
     "293": {
       "tag": 293,
@@ -4093,21 +4093,20 @@
       "tag": 295,
       "name": "NoQuoteEntries",
       "type": "int",
-      "description": "The number of quote entries for a QuoteSet.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "The number of quote entries for a QuoteSet."
     },
     "296": {
       "tag": 296,
       "name": "NoQuoteSets",
       "type": "int",
-      "description": "The number of sets of quotes in the message.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "The number of sets of quotes in the message."
     },
     "297": {
       "tag": 297,
       "name": "QuoteAckStatus",
       "type": "int",
-      "description": "Identifies the status of the quote acknowledgement.",
       "enumValues": [
         {
           "value": "0",
@@ -4139,13 +4138,13 @@
           "name": "Rejected",
           "description": "Rejected"
         }
-      ]
+      ],
+      "description": "Identifies the status of the quote acknowledgement."
     },
     "298": {
       "tag": 298,
       "name": "QuoteCancelType",
       "type": "int",
-      "description": "Identifies the type of quote cancel.",
       "enumValues": [
         {
           "value": "1",
@@ -4167,7 +4166,8 @@
           "name": "CancelAllQuotes",
           "description": "Cancel for All Quotes"
         }
-      ]
+      ],
+      "description": "Identifies the type of quote cancel."
     },
     "299": {
       "tag": 299,
@@ -4179,7 +4179,6 @@
       "tag": 300,
       "name": "QuoteRejectReason",
       "type": "int",
-      "description": "Reason Quote was rejected:",
       "enumValues": [
         {
           "value": "1",
@@ -4226,13 +4225,13 @@
           "name": "NotAuthorizedToQuoteSecurity",
           "description": "Not authorized to quote security"
         }
-      ]
+      ],
+      "description": "Reason Quote was rejected:"
     },
     "301": {
       "tag": 301,
       "name": "QuoteResponseLevel",
       "type": "int",
-      "description": "Level of Response requested from receiver of quote messages.",
       "enumValues": [
         {
           "value": "0",
@@ -4249,7 +4248,8 @@
           "name": "AcknowledgeEachQuoteMessage",
           "description": "Acknowledge each quote messages"
         }
-      ]
+      ],
+      "description": "Level of Response requested from receiver of quote messages."
     },
     "302": {
       "tag": 302,
@@ -4261,7 +4261,6 @@
       "tag": 303,
       "name": "QuoteRequestType",
       "type": "int",
-      "description": "Indicates the type of Quote Request being generated",
       "enumValues": [
         {
           "value": "1",
@@ -4273,7 +4272,8 @@
           "name": "Automatic",
           "description": "Automatic"
         }
-      ]
+      ],
+      "description": "Indicates the type of Quote Request being generated"
     },
     "304": {
       "tag": 304,
@@ -4291,13 +4291,13 @@
       "tag": 306,
       "name": "UnderlyingIssuer",
       "type": "String",
-      "description": "Underlying security’s Issuer.\nSee Issuer field for description"
+      "description": "Underlying security’s Issuer. See Issuer field for description"
     },
     "307": {
       "tag": 307,
       "name": "UnderlyingSecurityDesc",
       "type": "String",
-      "description": "Underlying security’s SecurityDesc.\nSee SecurityDesc field for description"
+      "description": "Underlying security’s SecurityDesc. See SecurityDesc field for description"
     },
     "308": {
       "tag": 308,
@@ -4309,7 +4309,7 @@
       "tag": 309,
       "name": "UnderlyingSecurityID",
       "type": "String",
-      "description": "Underlying security’s SecurityID.\nSee SecurityID field for description"
+      "description": "Underlying security’s SecurityID. See SecurityID field for description"
     },
     "310": {
       "tag": 310,
@@ -4321,49 +4321,49 @@
       "tag": 311,
       "name": "UnderlyingSymbol",
       "type": "String",
-      "description": "Underlying security’s Symbol.\nSee Symbol field for description"
+      "description": "Underlying security’s Symbol. See Symbol field for description"
     },
     "312": {
       "tag": 312,
       "name": "UnderlyingSymbolSfx",
       "type": "String",
-      "description": "Underlying security’s SymbolSfx.\nSee SymbolSfx field for description"
+      "description": "Underlying security’s SymbolSfx. See SymbolSfx field for description"
     },
     "313": {
       "tag": 313,
       "name": "UnderlyingMaturityMonthYear",
       "type": "MonthYear",
-      "description": "Underlying security’s MaturityMonthYear. Required if UnderlyingMaturityDay is specified.\nSee MaturityMonthYear field for description"
+      "description": "Underlying security’s MaturityMonthYear. Required if UnderlyingMaturityDay is specified. See MaturityMonthYear field for description"
     },
     "314": {
       "tag": 314,
       "name": "UnderlyingMaturityDay",
       "type": "DayOfMonth",
-      "description": "Underlying security’s MaturityDay.\nSee MaturityDay field for description"
+      "description": "Underlying security’s MaturityDay. See MaturityDay field for description"
     },
     "315": {
       "tag": 315,
       "name": "UnderlyingPutOrCall",
       "type": "int",
-      "description": "Underlying security’s PutOrCall.\nSee PutOrCall field for description"
+      "description": "Underlying security’s PutOrCall. See PutOrCall field for description"
     },
     "316": {
       "tag": 316,
       "name": "UnderlyingStrikePrice",
       "type": "Price",
-      "description": "Underlying security’s StrikePrice.\nSee StrikePrice field for description"
+      "description": "Underlying security’s StrikePrice. See StrikePrice field for description"
     },
     "317": {
       "tag": 317,
       "name": "UnderlyingOptAttribute",
       "type": "char",
-      "description": "Underlying security’s OptAttribute.\nSee OptAttribute field for description"
+      "description": "Underlying security’s OptAttribute. See OptAttribute field for description"
     },
     "318": {
       "tag": 318,
       "name": "UnderlyingCurrency",
       "type": "Currency",
-      "description": "Underlying security’s Currency.\nSee Currency field for description and valid values"
+      "description": "Underlying security’s Currency. See Currency field for description and valid values"
     },
     "319": {
       "tag": 319,
@@ -4381,7 +4381,6 @@
       "tag": 321,
       "name": "SecurityRequestType",
       "type": "int",
-      "description": "Type of Security Definition Request.",
       "enumValues": [
         {
           "value": "0",
@@ -4403,7 +4402,8 @@
           "name": "RequestListSecurities",
           "description": "Request List Securities (Can be qualified with Symbol, SecurityType, TradingSessionID, SecurityExchange is provided then only list Securities for the specific type)"
         }
-      ]
+      ],
+      "description": "Type of Security Definition Request."
     },
     "322": {
       "tag": 322,
@@ -4415,7 +4415,6 @@
       "tag": 323,
       "name": "SecurityResponseType",
       "type": "int",
-      "description": "Type of Security Definition message response.",
       "enumValues": [
         {
           "value": "1",
@@ -4447,7 +4446,8 @@
           "name": "CannotMatchSelectionCriteria",
           "description": "Can not match selection criteria"
         }
-      ]
+      ],
+      "description": "Type of Security Definition message response."
     },
     "324": {
       "tag": 324,
@@ -4459,7 +4459,6 @@
       "tag": 325,
       "name": "UnsolicitedIndicator",
       "type": "Boolean",
-      "description": "Indicates whether or not message is being sent as a result of a subscription request or not.",
       "enumValues": [
         {
           "value": "N",
@@ -4471,13 +4470,13 @@
           "name": "MessageIsBeingSentUnsolicited",
           "description": "Message is being sent unsolicited"
         }
-      ]
+      ],
+      "description": "Indicates whether or not message is being sent as a result of a subscription request or not."
     },
     "326": {
       "tag": 326,
       "name": "SecurityTradingStatus",
       "type": "int",
-      "description": "Identifies the trading status applicable to the transaction.",
       "enumValues": [
         {
           "value": "1",
@@ -4574,13 +4573,13 @@
           "name": "MarketOnCloseImbalanceBuy",
           "description": "Market On Close Imbalance Buy"
         }
-      ]
+      ],
+      "description": "Identifies the trading status applicable to the transaction."
     },
     "327": {
       "tag": 327,
       "name": "HaltReason",
       "type": "char",
-      "description": "Denotes the reason for the Opening Delay or Trading Halt.",
       "enumValues": [
         {
           "value": "D",
@@ -4612,13 +4611,13 @@
           "name": "EquipmentChangeover",
           "description": "Equipment Changeover"
         }
-      ]
+      ],
+      "description": "Denotes the reason for the Opening Delay or Trading Halt."
     },
     "328": {
       "tag": 328,
       "name": "InViewOfCommon",
       "type": "Boolean",
-      "description": "Indicates whether or not the halt was due to Common Stock trading being halted.",
       "enumValues": [
         {
           "value": "N",
@@ -4630,13 +4629,13 @@
           "name": "HaltWasDueToCommonStockBeingHalted",
           "description": "Halt was due to common stock being halted"
         }
-      ]
+      ],
+      "description": "Indicates whether or not the halt was due to Common Stock trading being halted."
     },
     "329": {
       "tag": 329,
       "name": "DueToRelated",
       "type": "Boolean",
-      "description": "Indicates whether or not the halt was due to the Related Security being halted.",
       "enumValues": [
         {
           "value": "N",
@@ -4648,7 +4647,8 @@
           "name": "RelatedToSecurityHalt",
           "description": "Halt was due to related security being halted"
         }
-      ]
+      ],
+      "description": "Indicates whether or not the halt was due to the Related Security being halted."
     },
     "330": {
       "tag": 330,
@@ -4678,7 +4678,6 @@
       "tag": 334,
       "name": "Adjustment",
       "type": "int",
-      "description": "Identifies the type of adjustment.",
       "enumValues": [
         {
           "value": "1",
@@ -4695,7 +4694,8 @@
           "name": "Correction",
           "description": "Correction"
         }
-      ]
+      ],
+      "description": "Identifies the type of adjustment."
     },
     "335": {
       "tag": 335,
@@ -4707,7 +4707,7 @@
       "tag": 336,
       "name": "TradingSessionID",
       "type": "String",
-      "description": "Identifier for Trading Session\nCan be used to represent a specific market trading session (e.g. \"PRE-OPEN\", \"CROSS_2\", \"AFTER-HOURS\", \"TOSTNET1\", \"TOSTNET2\", etc).\nValues should be bi-laterally agreed to between counterparties."
+      "description": "Identifier for Trading Session Can be used to represent a specific market trading session (e.g. \"PRE-OPEN\", \"CROSS_2\", \"AFTER-HOURS\", \"TOSTNET1\", \"TOSTNET2\", etc). Values should be bi-laterally agreed to between counterparties."
     },
     "337": {
       "tag": 337,
@@ -4719,7 +4719,6 @@
       "tag": 338,
       "name": "TradSesMethod",
       "type": "int",
-      "description": "Method of trading",
       "enumValues": [
         {
           "value": "1",
@@ -4736,13 +4735,13 @@
           "name": "TwoParty",
           "description": "Two Party"
         }
-      ]
+      ],
+      "description": "Method of trading"
     },
     "339": {
       "tag": 339,
       "name": "TradSesMode",
       "type": "int",
-      "description": "Trading Session Mode",
       "enumValues": [
         {
           "value": "1",
@@ -4759,13 +4758,13 @@
           "name": "Production",
           "description": "Production"
         }
-      ]
+      ],
+      "description": "Trading Session Mode"
     },
     "340": {
       "tag": 340,
       "name": "TradSesStatus",
       "type": "int",
-      "description": "State of the trading session.",
       "enumValues": [
         {
           "value": "1",
@@ -4792,7 +4791,8 @@
           "name": "PreClose",
           "description": "Pre-Close"
         }
-      ]
+      ],
+      "description": "State of the trading session."
     },
     "341": {
       "tag": 341,
@@ -4834,7 +4834,6 @@
       "tag": 347,
       "name": "MessageEncoding",
       "type": "String",
-      "description": "Type of message encoding (non-ASCII (non-English) characters) used in a message’s \"Encoded\" fields.",
       "enumValues": [
         {
           "value": "EUC-JP",
@@ -4856,7 +4855,8 @@
           "name": "UTF8",
           "description": "(for using Unicode)"
         }
-      ]
+      ],
+      "description": "Type of message encoding (non-ASCII (non-English) characters) used in a message’s \"Encoded\" fields."
     },
     "348": {
       "tag": 348,
@@ -4868,8 +4868,8 @@
       "tag": 349,
       "name": "EncodedIssuer",
       "type": "data",
-      "description": "Encoded (non-ASCII characters) representation of the Issuer field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the Issuer field.",
-      "lengthField": 348
+      "lengthField": 348,
+      "description": "Encoded (non-ASCII characters) representation of the Issuer field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the Issuer field."
     },
     "350": {
       "tag": 350,
@@ -4881,8 +4881,8 @@
       "tag": 351,
       "name": "EncodedSecurityDesc",
       "type": "data",
-      "description": "Encoded (non-ASCII characters) representation of the SecurityDesc field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the SecurityDesc field.",
-      "lengthField": 350
+      "lengthField": 350,
+      "description": "Encoded (non-ASCII characters) representation of the SecurityDesc field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the SecurityDesc field."
     },
     "352": {
       "tag": 352,
@@ -4894,8 +4894,8 @@
       "tag": 353,
       "name": "EncodedListExecInst",
       "type": "data",
-      "description": "Encoded (non-ASCII characters) representation of the ListExecInst field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the ListExecInst field.",
-      "lengthField": 352
+      "lengthField": 352,
+      "description": "Encoded (non-ASCII characters) representation of the ListExecInst field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the ListExecInst field."
     },
     "354": {
       "tag": 354,
@@ -4907,8 +4907,8 @@
       "tag": 355,
       "name": "EncodedText",
       "type": "data",
-      "description": "Encoded (non-ASCII characters) representation of the Text field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the Text field.",
-      "lengthField": 354
+      "lengthField": 354,
+      "description": "Encoded (non-ASCII characters) representation of the Text field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the Text field."
     },
     "356": {
       "tag": 356,
@@ -4920,8 +4920,8 @@
       "tag": 357,
       "name": "EncodedSubject",
       "type": "data",
-      "description": "Encoded (non-ASCII characters) representation of the Subject field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the Subject field.",
-      "lengthField": 356
+      "lengthField": 356,
+      "description": "Encoded (non-ASCII characters) representation of the Subject field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the Subject field."
     },
     "358": {
       "tag": 358,
@@ -4933,8 +4933,8 @@
       "tag": 359,
       "name": "EncodedHeadline",
       "type": "data",
-      "description": "Encoded (non-ASCII characters) representation of the Headline field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the Headline field.",
-      "lengthField": 358
+      "lengthField": 358,
+      "description": "Encoded (non-ASCII characters) representation of the Headline field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the Headline field."
     },
     "360": {
       "tag": 360,
@@ -4946,8 +4946,8 @@
       "tag": 361,
       "name": "EncodedAllocText",
       "type": "data",
-      "description": "Encoded (non-ASCII characters) representation of the AllocText field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the AllocText field.",
-      "lengthField": 360
+      "lengthField": 360,
+      "description": "Encoded (non-ASCII characters) representation of the AllocText field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the AllocText field."
     },
     "362": {
       "tag": 362,
@@ -4959,8 +4959,8 @@
       "tag": 363,
       "name": "EncodedUnderlyingIssuer",
       "type": "data",
-      "description": "Encoded (non-ASCII characters) representation of the UnderlyingIssuer field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the UnderlyingIssuer field.",
-      "lengthField": 362
+      "lengthField": 362,
+      "description": "Encoded (non-ASCII characters) representation of the UnderlyingIssuer field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the UnderlyingIssuer field."
     },
     "364": {
       "tag": 364,
@@ -4972,8 +4972,8 @@
       "tag": 365,
       "name": "EncodedUnderlyingSecurityDesc",
       "type": "data",
-      "description": "Encoded (non-ASCII characters) representation of the UnderlyingSecurityDesc field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the UnderlyingSecurityeDesc field.",
-      "lengthField": 364
+      "lengthField": 364,
+      "description": "Encoded (non-ASCII characters) representation of the UnderlyingSecurityDesc field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the UnderlyingSecurityeDesc field."
     },
     "366": {
       "tag": 366,
@@ -4991,7 +4991,6 @@
       "tag": 368,
       "name": "QuoteEntryRejectReason",
       "type": "int",
-      "description": "Reason Quote Entry was rejected:",
       "enumValues": [
         {
           "value": "1",
@@ -5038,7 +5037,8 @@
           "name": "NotAuthorizedToQuoteSecurity",
           "description": "Not authorized to quote security"
         }
-      ]
+      ],
+      "description": "Reason Quote Entry was rejected:"
     },
     "369": {
       "tag": 369,
@@ -5068,7 +5068,6 @@
       "tag": 373,
       "name": "SessionRejectReason",
       "type": "int",
-      "description": "Code to identify reason for a session-level Reject message.",
       "enumValues": [
         {
           "value": "0",
@@ -5130,13 +5129,13 @@
           "name": "CompIDProblem",
           "description": "CompID problem"
         }
-      ]
+      ],
+      "description": "Code to identify reason for a session-level Reject message."
     },
     "374": {
       "tag": 374,
       "name": "BidRequestTransType",
       "type": "char",
-      "description": "Identifies the Bid Request message type.",
       "enumValues": [
         {
           "value": "C",
@@ -5148,7 +5147,8 @@
           "name": "New",
           "description": "New"
         }
-      ]
+      ],
+      "description": "Identifies the Bid Request message type."
     },
     "375": {
       "tag": 375,
@@ -5166,7 +5166,6 @@
       "tag": 377,
       "name": "SolicitedFlag",
       "type": "Boolean",
-      "description": "Indicates whether or not the order was solicited.",
       "enumValues": [
         {
           "value": "N",
@@ -5176,15 +5175,15 @@
         {
           "value": "Y",
           "name": "WasSolicited",
-          "description": "Was solcitied"
+          "description": "Was solicited"
         }
-      ]
+      ],
+      "description": "Indicates whether or not the order was solicited."
     },
     "378": {
       "tag": 378,
       "name": "ExecRestatementReason",
       "type": "int",
-      "description": "Code to identify reason for an ExecutionRpt message sent with ExecType=Restated or used when communicating an unsolicited cancel.",
       "enumValues": [
         {
           "value": "0",
@@ -5216,7 +5215,8 @@
           "name": "PartialDeclineOfOrderQty",
           "description": "Partial decline of OrderQty (e.g. exchange-initiated partial cancel)"
         }
-      ]
+      ],
+      "description": "Code to identify reason for an ExecutionRpt message sent with ExecType=Restated or used when communicating an unsolicited cancel."
     },
     "379": {
       "tag": 379,
@@ -5228,7 +5228,6 @@
       "tag": 380,
       "name": "BusinessRejectReason",
       "type": "int",
-      "description": "Code to identify reason for a Business Message Reject message.",
       "enumValues": [
         {
           "value": "0",
@@ -5238,7 +5237,7 @@
         {
           "value": "1",
           "name": "UnknownID",
-          "description": "Unkown ID"
+          "description": "Unknown ID"
         },
         {
           "value": "2",
@@ -5260,7 +5259,8 @@
           "name": "ConditionallyRequiredFieldMissing",
           "description": "Conditionally Required Field Missing"
         }
-      ]
+      ],
+      "description": "Code to identify reason for a Business Message Reject message."
     },
     "381": {
       "tag": 381,
@@ -5272,8 +5272,8 @@
       "tag": 382,
       "name": "NoContraBrokers",
       "type": "int",
-      "description": "The number of ContraBroker entries.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "The number of ContraBroker entries."
     },
     "383": {
       "tag": 383,
@@ -5285,14 +5285,13 @@
       "tag": 384,
       "name": "NoMsgTypes",
       "type": "int",
-      "description": "Number of MsgTypes in repeating group.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Number of MsgTypes in repeating group."
     },
     "385": {
       "tag": 385,
       "name": "MsgDirection",
       "type": "char",
-      "description": "Specifies the direction of the messsage.",
       "enumValues": [
         {
           "value": "R",
@@ -5304,14 +5303,15 @@
           "name": "Send",
           "description": "Send"
         }
-      ]
+      ],
+      "description": "Specifies the direction of the message."
     },
     "386": {
       "tag": 386,
       "name": "NoTradingSessions",
       "type": "int",
-      "description": "Number of TradingSessionIDs in repeating group.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Number of TradingSessionIDs in repeating group."
     },
     "387": {
       "tag": 387,
@@ -5323,7 +5323,6 @@
       "tag": 388,
       "name": "DiscretionInst",
       "type": "char",
-      "description": "Code to identify the price a DiscretionOffset is related to and should be mathematically added to.",
       "enumValues": [
         {
           "value": "0",
@@ -5355,7 +5354,8 @@
           "name": "RelatedToLastTradePrice",
           "description": "Related to last trade price"
         }
-      ]
+      ],
+      "description": "Code to identify the price a DiscretionOffset is related to and should be mathematically added to."
     },
     "389": {
       "tag": 389,
@@ -5415,8 +5415,8 @@
       "tag": 398,
       "name": "NoBidDescriptors",
       "type": "int",
-      "description": "Number of BidDescriptor entries.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Number of BidDescriptor entries."
     },
     "399": {
       "tag": 399,
@@ -5482,7 +5482,6 @@
       "tag": 409,
       "name": "LiquidityIndType",
       "type": "int",
-      "description": "Code to identify the type of liquidity indicator.",
       "enumValues": [
         {
           "value": "1",
@@ -5504,7 +5503,8 @@
           "name": "Other",
           "description": "Other"
         }
-      ]
+      ],
+      "description": "Code to identify the type of liquidity indicator."
     },
     "410": {
       "tag": 410,
@@ -5516,7 +5516,6 @@
       "tag": 411,
       "name": "ExchangeForPhysical",
       "type": "Boolean",
-      "description": "Indicates whether or not to exchange for phsyical.",
       "enumValues": [
         {
           "value": "N",
@@ -5528,7 +5527,8 @@
           "name": "True",
           "description": "True"
         }
-      ]
+      ],
+      "description": "Indicates whether or not to exchange for physical."
     },
     "412": {
       "tag": 412,
@@ -5546,7 +5546,6 @@
       "tag": 414,
       "name": "ProgRptReqs",
       "type": "int",
-      "description": "Code to identify the desired frequency of progress reports.",
       "enumValues": [
         {
           "value": "1",
@@ -5563,7 +5562,8 @@
           "name": "RealTimeExecutionReports",
           "description": "Real-time execution reports (to be discouraged)"
         }
-      ]
+      ],
+      "description": "Code to identify the desired frequency of progress reports."
     },
     "415": {
       "tag": 415,
@@ -5575,7 +5575,6 @@
       "tag": 416,
       "name": "IncTaxInd",
       "type": "int",
-      "description": "Code to represent whether value is net (inclusive of tax) or gross.",
       "enumValues": [
         {
           "value": "1",
@@ -5587,7 +5586,8 @@
           "name": "Gross",
           "description": "Gross"
         }
-      ]
+      ],
+      "description": "Code to represent whether value is net (inclusive of tax) or gross."
     },
     "417": {
       "tag": 417,
@@ -5599,7 +5599,6 @@
       "tag": 418,
       "name": "TradeType",
       "type": "char",
-      "description": "Code to represent the type of trade.",
       "enumValues": [
         {
           "value": "A",
@@ -5621,13 +5620,13 @@
           "name": "RiskTrade",
           "description": "Risk Trade"
         }
-      ]
+      ],
+      "description": "Code to represent the type of trade."
     },
     "419": {
       "tag": 419,
       "name": "BasisPxType",
       "type": "char",
-      "description": "Code to represent the basis price type.",
       "enumValues": [
         {
           "value": "2",
@@ -5694,14 +5693,15 @@
           "name": "Others",
           "description": "Others"
         }
-      ]
+      ],
+      "description": "Code to represent the basis price type."
     },
     "420": {
       "tag": 420,
       "name": "NoBidComponents",
       "type": "int",
-      "description": "Indicates the number of list entries.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Indicates the number of list entries."
     },
     "421": {
       "tag": 421,
@@ -5719,7 +5719,6 @@
       "tag": 423,
       "name": "PriceType",
       "type": "int",
-      "description": "Code to represent the price type.",
       "enumValues": [
         {
           "value": "1",
@@ -5736,7 +5735,8 @@
           "name": "FixedAmount",
           "description": "Fixed Amount (absolute value)"
         }
-      ]
+      ],
+      "description": "Code to represent the price type."
     },
     "424": {
       "tag": 424,
@@ -5760,7 +5760,6 @@
       "tag": 427,
       "name": "GTBookingInst",
       "type": "int",
-      "description": "Code to identify whether to book out executions on a part-filled GT order on the day of execution or to accumulate.",
       "enumValues": [
         {
           "value": "0",
@@ -5777,14 +5776,15 @@
           "name": "AccumulateUntilVerballlyNotifiedOtherwise",
           "description": "accumulate until verbally notified otherwise"
         }
-      ]
+      ],
+      "description": "Code to identify whether to book out executions on a part-filled GT order on the day of execution or to accumulate."
     },
     "428": {
       "tag": 428,
       "name": "NoStrikes",
       "type": "int",
-      "description": "Number of list strike price entries.",
-      "isGroupCounter": true
+      "isGroupCounter": true,
+      "description": "Number of list strike price entries."
     },
     "429": {
       "tag": 429,
@@ -5796,7 +5796,6 @@
       "tag": 430,
       "name": "NetGrossInd",
       "type": "int",
-      "description": "Code to represent whether value is net (inclusive of tax) or gross.",
       "enumValues": [
         {
           "value": "1",
@@ -5808,7 +5807,8 @@
           "name": "Gross",
           "description": "Gross"
         }
-      ]
+      ],
+      "description": "Code to represent whether value is net (inclusive of tax) or gross."
     },
     "431": {
       "tag": 431,
@@ -5826,7 +5826,6 @@
       "tag": 433,
       "name": "ListExecInstType",
       "type": "char",
-      "description": "Identifies the type of ListExecInst.",
       "enumValues": [
         {
           "value": "1",
@@ -5838,13 +5837,13 @@
           "name": "WaitForInstruction",
           "description": "Wait for Execute Instruction (e.g. a List Execute message or phone call before proceeding with execution of the list)"
         }
-      ]
+      ],
+      "description": "Identifies the type of ListExecInst."
     },
     "434": {
       "tag": 434,
       "name": "CxlRejResponseTo",
       "type": "char",
-      "description": "Identifies the type of request that a Cancel Reject is in response to.",
       "enumValues": [
         {
           "value": "1",
@@ -5856,19 +5855,20 @@
           "name": "OrderCancel",
           "description": "Order Cancel/Replace Request"
         }
-      ]
+      ],
+      "description": "Identifies the type of request that a Cancel Reject is in response to."
     },
     "435": {
       "tag": 435,
       "name": "UnderlyingCouponRate",
       "type": "float",
-      "description": "Underlying security’s CouponRate.\nSee CouponRate field for description"
+      "description": "Underlying security’s CouponRate. See CouponRate field for description"
     },
     "436": {
       "tag": 436,
       "name": "UnderlyingContractMultiplier",
       "type": "float",
-      "description": "Underlying security’s ContractMultiplier.\nSee ContractMultiplier field for description"
+      "description": "Underlying security’s ContractMultiplier. See ContractMultiplier field for description"
     },
     "437": {
       "tag": 437,
@@ -5880,7 +5880,7 @@
       "tag": 438,
       "name": "ContraTradeTime",
       "type": "UTCTimestamp",
-      "description": "Identifes the time of the trade with the ContraBroker. (always expressed in UTC (Universal Time Coordinated, also known as \"GMT\")"
+      "description": "Identifies the time of the trade with the ContraBroker. (always expressed in UTC (Universal Time Coordinated, also known as \"GMT\")"
     },
     "439": {
       "tag": 439,
@@ -5892,19 +5892,18 @@
       "tag": 440,
       "name": "ClearingAccount",
       "type": "String",
-      "description": "Supplemental accounting information forwared to clearing house/firm."
+      "description": "Supplemental accounting information forwarded to clearing house/firm."
     },
     "441": {
       "tag": 441,
       "name": "LiquidityNumSecurities",
       "type": "int",
-      "description": "Number of Securites between LiquidityPctLow and LiquidityPctHigh in Currency."
+      "description": "Number of Securities between LiquidityPctLow and LiquidityPctHigh in Currency."
     },
     "442": {
       "tag": 442,
       "name": "MultiLegReportingType",
       "type": "char",
-      "description": "Used to indicate what an Execution Report represents (e.g. used with multi-leg securiteis, such as option strategies, spreads, etc.).",
       "enumValues": [
         {
           "value": "1",
@@ -5921,7 +5920,8 @@
           "name": "MultiLegSecurity",
           "description": "Multi-leg security"
         }
-      ]
+      ],
+      "description": "Used to indicate what an Execution Report represents (e.g. used with multi-leg securities, such as option strategies, spreads, etc.)."
     },
     "443": {
       "tag": 443,
@@ -5945,8 +5945,8 @@
       "tag": 446,
       "name": "EncodedListStatusText",
       "type": "data",
-      "description": "Encoded (non-ASCII characters) representation of the ListStatusText field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the ListStatusText field.",
-      "lengthField": 445
+      "lengthField": 445,
+      "description": "Encoded (non-ASCII characters) representation of the ListStatusText field in the encoded format specified via the MessageEncoding field. If used, the ASCII (English) representation should also be specified in the ListStatusText field."
     }
   },
   "components": {
