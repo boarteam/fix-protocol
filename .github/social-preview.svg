@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1117"/>
+      <stop offset="1" stop-color="#161b22"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#39d353"/>
+      <stop offset="1" stop-color="#2dba4e"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1280" height="8" fill="url(#accent)"/>
+
+  <!-- Title -->
+  <text x="80" y="150" fill="#e6edf3" font-size="72" font-weight="700" letter-spacing="-1">@boarteam/fix</text>
+  <text x="80" y="208" fill="#8b949e" font-size="30" font-weight="400">A dictionary-driven FIX protocol toolkit for TypeScript</text>
+
+  <!-- Tagline -->
+  <text x="80" y="282" fill="#e6edf3" font-size="38" font-weight="600">Paste a FIX message &#8594; decode &#183; validate &#183; encode.</text>
+  <text x="80" y="328" fill="#39d353" font-size="34" font-weight="600">No license key. No session engine. No backend.</text>
+
+  <!-- Code card: paste -> decoded output -->
+  <g transform="translate(80,380)">
+    <rect width="1120" height="180" rx="14" fill="#010409" stroke="#30363d" stroke-width="1.5"/>
+    <circle cx="28" cy="30" r="7" fill="#ff5f56"/>
+    <circle cx="52" cy="30" r="7" fill="#ffbd2e"/>
+    <circle cx="76" cy="30" r="7" fill="#27c93f"/>
+    <text x="28" y="78" fill="#8b949e" font-size="22" font-family="'SF Mono','Menlo',monospace">8=FIX.4.4|9=130|35=W|55=EUR/USD|268=2|269=0|270=1.0921|271=1000000 ...</text>
+    <text x="28" y="120" fill="#39d353" font-size="22" font-family="'SF Mono','Menlo',monospace">&#8594; MarketDataSnapshotFullRefresh</text>
+    <text x="28" y="152" fill="#79c0ff" font-size="22" font-family="'SF Mono','Menlo',monospace">  groups[268]: [ {Bid 1.0921 x1M}, {Offer 1.0923 x1M} ]   issues: []</text>
+  </g>
+
+  <!-- Feature chips -->
+  <g font-size="24" font-weight="600">
+    <g transform="translate(80,592)">
+      <rect x="0" y="0" width="190" height="40" rx="20" fill="#21262d" stroke="#30363d"/>
+      <text x="95" y="27" fill="#e6edf3" text-anchor="middle">0 dependencies</text>
+    </g>
+    <g transform="translate(286,592)">
+      <rect x="0" y="0" width="200" height="40" rx="20" fill="#21262d" stroke="#30363d"/>
+      <text x="100" y="27" fill="#e6edf3" text-anchor="middle">Browser + Node</text>
+    </g>
+    <g transform="translate(502,592)">
+      <rect x="0" y="0" width="180" height="40" rx="20" fill="#21262d" stroke="#30363d"/>
+      <text x="90" y="27" fill="#e6edf3" text-anchor="middle">Never throws</text>
+    </g>
+    <g transform="translate(698,592)">
+      <rect x="0" y="0" width="230" height="40" rx="20" fill="#21262d" stroke="#30363d"/>
+      <text x="115" y="27" fill="#e6edf3" text-anchor="middle">FIX 4.4 &#183; FIX 4.2</text>
+    </g>
+    <g transform="translate(944,592)">
+      <rect x="0" y="0" width="150" height="40" rx="20" fill="#21262d" stroke="#30363d"/>
+      <text x="75" y="27" fill="#e6edf3" text-anchor="middle">Apache-2.0</text>
+    </g>
+  </g>
+</svg>
