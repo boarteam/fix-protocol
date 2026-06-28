@@ -36,9 +36,9 @@ pnpm -r build && pnpm -r typecheck && pnpm lint && pnpm format:check && pnpm tes
 `packages/fix-dict-fix44/src/dictionary.json` and `index.ts` are **generated** from the FIX 4.4
 specification and committed here as data. Do not edit them by hand.
 
-The generator and its QuickFIX `FIX44.xml` cross-check are maintained alongside the FIX spec,
-outside this repository. To change the dictionary, regenerate it with that tooling and commit
-the reconciled result — open an issue if you need a regeneration you can't produce yourself.
+The generator is maintained alongside the FIX spec, outside this repository. To change the
+dictionary, regenerate it with that tooling and commit the reconciled result — open an issue if
+you need a regeneration you can't produce yourself.
 
 ## Changesets (versioning)
 

@@ -23,8 +23,10 @@ roadmap. Highlights so far:
 - Dictionary-driven, zero-dependency engine: tokenize, parse (with nested repeating-group
   reconstruction), validate (presence/enum/datatype/conditional), and a byte-accurate ordered
   encoder. Parse and validate return `FixIssue[]` and never throw.
-- The full FIX 4.4 dictionary (912 fields / 26 components / 93 messages / 25 datatypes),
-  generated from the specification and **cross-checked against QuickFIX `FIX44.xml`** by a CI
-  drift gate.
+- The full FIX 4.4 dictionary (912 fields / 93 messages / 105 components / 23 datatypes),
+  generated **directly from the QuickFIX `FIX44.xml`** data dictionary — so it is not
+  "cross-checked" against QuickFIX (that would be circular), and it records 36
+  `conditional-overlay-unmatched` coverage gaps. The CI drift gate instead cross-checks the FIX
+  4.2 dictionary (generated from the FIX Repository 2010 Edition) against QuickFIX `FIX42.xml`.
 - Runs in the browser and Node via `TextEncoder`/`TextDecoder`; a CI bundle check enforces the
   zero-dependency, browser-safe surface.
