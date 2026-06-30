@@ -25,7 +25,7 @@
     "format:check": "prettier --check .",
     "docs": "typedoc",
     "check:bundle": "node scripts/check-bundle.mjs",
-    "examples": "node examples/parse-and-validate.mjs && node examples/encode-a-message.mjs",
+    "examples": "node examples/parse-and-validate.mjs && node examples/encode-a-message.mjs && node examples/demo-decode.mjs snapshot && node examples/demo-decode.mjs broken",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "pnpm -r build && changeset publish"
