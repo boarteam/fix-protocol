@@ -7,7 +7,8 @@
   "type": "module",
   "scripts": {
     "start:parse": "node parse-and-validate.mjs",
-    "start:encode": "node encode-a-message.mjs"
+    "start:encode": "node encode-a-message.mjs",
+    "start:demo": "node demo-decode.mjs"
   },
   "dependencies": {
     "@boarteam/fix": "workspace:*",

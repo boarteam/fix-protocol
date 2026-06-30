@@ -7,6 +7,12 @@
 [![dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](#why-zero-dependencies-matters)
 [![license](https://img.shields.io/npm/l/@boarteam/fix.svg)](LICENSE)
 
+<p align="center">
+  <img src=".github/demo.gif" width="900" alt="Terminal recording: a raw FIX 4.4 log line is piped into @boarteam/fix and decoded in narrated stages — named, typed fields, the NoMDEntries repeating group expanded into nested Bid/Offer objects, then a clean parse + validate verdict. Next a corrupted Execution Report is piped in and still parses without throwing: the bad float, wrong checksum, and invalid OrdStatus enum all come back as structured diagnostics from parse() and validate(). The same pure engine runs unchanged in a browser tab or in Node.">
+</p>
+
+> A raw FIX log line is piped into [`examples/demo-decode.mjs`](examples/demo-decode.mjs) and decoded **in stages** — raw blob → named, typed fields → the `NoMDEntries` repeating group expanding into nested Bid/Offer objects → a clean verdict. Then a deliberately-corrupted message is piped in: it **parses anyway**, every defect returned as data instead of an exception. It's a small example script calling the library (not a bundled CLI); **the same pure engine runs unchanged in a browser tab** — no Node-only APIs in the core. Generated from [`.github/demo.tape`](.github/demo.tape) via [`scripts/render-demo.sh`](scripts/render-demo.sh), so it stays correct by construction.
+
 ```ts
 import { createFixEngine } from '@boarteam/fix';
 import { dictionary } from '@boarteam/fix-dict-fix44';
