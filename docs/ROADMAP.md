@@ -12,8 +12,8 @@ A zero-dependency FIX toolkit that runs in the browser and in Node:
   reconstruction), validate (pure and non-throwing), and encode (dictionary-ordered, with
   byte-accurate `BodyLength`/`CheckSum`).
 - **`@boarteam/fix-dict-fix44`** — the complete FIX 4.4 dictionary as data (912 fields /
-  26 components / 93 messages / 25 datatypes), generated from the specification and
-  cross-checked against the QuickFIX `FIX44.xml` dictionary.
+  93 messages / 105 components / 23 datatypes), generated directly from the QuickFIX
+  `FIX44.xml` data dictionary (so not "cross-checked" against it — that would be circular).
 - **`@boarteam/fix-dict-fix42`** — the complete FIX 4.2 dictionary as data (405 fields /
   46 messages / 21 datatypes), generated from the official FIX 4.2 specification (FIX
   Repository, 2010 Edition) and cross-checked against the QuickFIX `FIX42.xml` dictionary.

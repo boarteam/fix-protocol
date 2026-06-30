@@ -1,13 +1,12 @@
 # @boarteam/fix-dict-fix44
 
-The **complete FIX 4.4 dictionary as data** (912 fields / 26 components / 93 messages / 25
+The **complete FIX 4.4 dictionary as data** (912 fields / 93 messages / 105 components / 23
 datatypes) for the [`@boarteam/fix`](https://www.npmjs.com/package/@boarteam/fix) engine.
-Generated from the FIX 4.4 specification and cross-checked against the QuickFIX `FIX44.xml`
-dictionary by a CI drift gate — never hand-maintained.
+Generated directly from the QuickFIX `FIX44.xml` data dictionary — never hand-maintained.
 
 On a 0.x line and actively developed. See the
-[project README](https://github.com/boarteam/fix-protocol#readme) for coverage, the cross-check
-report, and declared coverage gaps.
+[project README](https://github.com/boarteam/fix-protocol#readme) for coverage and declared
+coverage gaps.
 
 ```ts
 import { createFixEngine } from '@boarteam/fix';
