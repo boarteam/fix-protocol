@@ -16,8 +16,9 @@ const fix = createFixEngine(dictionary);
 const wire = fix.encode({ msgType: MsgType.NewOrderSingle, fields: { [Tags.ClOrdID]: 'A1' } });
 ```
 
-Exports: `dictionary` (the data), `Tags` (field name → tag), `MsgType` (message name →
-MsgType value), and `DICTIONARY_VERSION`.
+Exports: `dictionary` (the data), `Tags` (field name → tag), `TagNames` (tag → field
+name), `MsgType` (message name → MsgType value), `MsgTypeNames` (MsgType value →
+message name), and `DICTIONARY_VERSION`.
 
 Requires `@boarteam/fix` as a peer dependency.
 
