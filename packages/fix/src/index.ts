@@ -69,5 +69,24 @@ export type {
   InvertMsgTypes,
 } from './dictionary/extendTags';
 
+// Dictionary extension (runtime merge + one-declaration bridge).
+export { extendDictionary } from './dictionary/extendDictionary';
+export type { ExtendResult } from './dictionary/extendDictionary';
+export { defineExtension, tagsOf, msgTypesOf } from './dictionary/extension';
+export type {
+  DictionaryExtension,
+  ExtensionFieldDef,
+  ExtensionEnumValue,
+  MemberSpec,
+  GroupExtension,
+  MessageExtension,
+  NewMessageSpec,
+  ComponentExtension,
+  TagsOf,
+  MsgTypesOf,
+  GuardWidening,
+  WidenedExtensionError,
+} from './dictionary/extension';
+
 // Diagnostics.
 export type { FixIssue, FixSeverity, KnownIssueCode } from './errors';

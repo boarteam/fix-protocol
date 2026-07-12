@@ -186,4 +186,10 @@ export interface DictionaryJSON {
   messages: MessageDef[];
   /** Known limitations of this generated dictionary. */
   coverageGaps?: CoverageGap[];
+  /**
+   * Provenance of applied extensions: the `id` of every extension declaration merged
+   * into this dictionary by `extendDictionary`, in application order. Absent on
+   * pristine generated dictionaries.
+   */
+  extensions?: string[];
 }
