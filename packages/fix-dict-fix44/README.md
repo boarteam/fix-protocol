@@ -18,7 +18,13 @@ const wire = fix.encode({ msgType: MsgType.NewOrderSingle, fields: { [Tags.ClOrd
 
 Exports: `dictionary` (the data), `Tags` (field name → tag), `TagNames` (tag → field
 name), `MsgType` (message name → MsgType value), `MsgTypeNames` (MsgType value →
-message name), and `DICTIONARY_VERSION`.
+message name), `Enums` (field name → spec value name → wire string, e.g.
+`Enums.MDEntryType.BID === '0'`), a top-level const per enumerated field (`Side`,
+`OrdType`, `MDEntryType`, ...), and `DICTIONARY_VERSION`. `MsgType` and every
+per-field const are also same-name types — unions of their wire values — so
+`msgType: MsgType` and `side: Side` work in type positions. The one enumerated
+field without a top-level const is `MsgType` (tag 35), whose name belongs to the
+message-type map: use `Enums.MsgType`.
 
 Requires `@boarteam/fix` as a peer dependency.
 
