@@ -3,11 +3,17 @@ name: Release
 # When commits land on main:
 #   - if there are pending changesets, open/refresh a "Version Packages" PR;
 #   - once that PR is merged (no changesets left), build and publish to npm.
-# Requires an NPM_TOKEN repository secret (an npm automation/granular token with publish
-# rights to the @boarteam scope — automation tokens bypass 2FA, so no OTP is needed).
+# Auth is npm OIDC trusted publishing (no NPM_TOKEN secret needed).
+#
+# The paths filter keeps this job off docs/CI-only merges: adding a changeset touches
+# .changeset/, and merging the Version Packages PR deletes the consumed changesets (also
+# under .changeset/), so both the version and publish phases still trigger.
 on:
   push:
     branches: [main]
+    paths: ['.changeset/**']
+  # Manual re-run, e.g. after a transient failure, without waiting for the next changeset.
+  workflow_dispatch: {}
 
 concurrency: release
 
@@ -26,16 +32,15 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
-      - name: Use Node 20
+      # Node 24 ships npm >= 11.5.1, which OIDC trusted publishing requires. (Node 20's
+      # npm 10 is too old, and upgrading via `npm install -g npm@latest` broke when npm 12
+      # dropped Node 20 support.)
+      - name: Use Node 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
-
-      # npm OIDC trusted publishing requires npm >= 11.5.1; Node 20 ships npm 10.x.
-      - name: Upgrade npm for OIDC trusted publishing
-        run: npm install -g npm@latest
 
       - run: pnpm install --frozen-lockfile
 
