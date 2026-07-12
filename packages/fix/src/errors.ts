@@ -11,7 +11,11 @@ export type FixSeverity = 'error' | 'warning' | 'info';
  * and exhaustiveness — while {@link FixIssue.code} stays open (`KnownIssueCode | string`)
  * so a custom dictionary or future milestone can introduce new codes without a type break.
  * The `dict/*` family is raised by `validateDictionary`, the `parse/*` family by `parse`,
- * and the `validate/*` family (presence/enum/datatype/conditional) by `validate`.
+ * the `validate/*` family (presence/enum/datatype/conditional) by `validate`, and the
+ * `extend/*` family by `extendDictionary`. For `extend/*` codes the severity encodes the
+ * outcome: `error` = the operation was skipped or reverted, `warning` = applied — or, for
+ * `extend/duplicate-member`, already satisfied (the redundant member was not added again)
+ * — but worth review, `info` = advisory.
  */
 export type KnownIssueCode =
   // --- dictionary integrity (validateDictionary) ---
@@ -84,7 +88,96 @@ export type KnownIssueCode =
   // A field that a conditional rule makes required given the message's state is absent
   // (e.g. the `Length` companion of a present `data` field, or `OrigSendingTime` when
   // `PossDupFlag` = `Y`).
-  | 'validate/conditional-required';
+  | 'validate/conditional-required'
+  // --- dictionary extension (extendDictionary) ---
+  // fields
+  // An extension field's tag already exists; the extension definition replaces it.
+  // Suppressed when the redefinition is identical (idempotent re-application).
+  | 'extend/field-tag-collision'
+  // An extension field's name is already bound to a DIFFERENT tag; the field is skipped
+  // (applying it would make the merged dictionary fail `dict/duplicate-field-name`).
+  | 'extend/field-name-collision'
+  // An extension field's tag is not a positive integer; the field is skipped.
+  | 'extend/field-bad-tag'
+  // An extension field's `type` names no datatype in the dictionary; the field is skipped.
+  | 'extend/field-unknown-type'
+  // A new field's tag lies outside the FIX user-defined ranges (5000-9999, 20000+).
+  // Advisory only — venues do this in practice (e.g. cTrader's 1007/1008).
+  | 'extend/tag-outside-user-range'
+  // A new `data`-based field has no `lengthField`, so a value embedding the separator
+  // cannot be scanned safely. Applied, but flagged.
+  | 'extend/data-length-unwired'
+  // enums
+  // An `enums` entry names a field absent from the merged dictionary; the entry is skipped.
+  | 'extend/enum-unknown-field'
+  // An added enum value re-declares an existing wire value under a different name; the
+  // extension entry replaces the base one. Identical value+name pairs dedupe silently.
+  | 'extend/enum-value-conflict'
+  // components & messages
+  // A new component's name already exists; the definition is skipped (extend the existing
+  // component with the append form instead).
+  | 'extend/component-collision'
+  // A component definition or placement would create a component reference cycle (which
+  // the runtime cannot expand); the definition is deleted or the member reverted.
+  | 'extend/component-cycle'
+  // A new message re-uses an existing `MsgType`; the extension message REPLACES the base
+  // message in place (an appended duplicate would be unreachable behind first-wins lookup).
+  | 'extend/msgtype-collision'
+  // A new message's name duplicates another message's name on a different `MsgType`
+  // (mirrors the warning-level `dict/duplicate-message-name`). Applied.
+  | 'extend/message-name-collision'
+  // The base dictionary's Standard Message Header/Trailer refs were injected into a new
+  // message that did not list them.
+  | 'extend/header-trailer-injected'
+  // No header/trailer component could be detected in the base dictionary; the new message
+  // is applied without them (encode would silently drop session fields — review).
+  | 'extend/header-trailer-missing'
+  // placements
+  // A placement target could not be resolved: unknown message/component name, ambiguous
+  // message name, or a group path not reachable — including a group that lives behind a
+  // shared component (the message carries a "reachable via component 'X'" hint).
+  | 'extend/target-not-found'
+  // A placed MemberSpec references a field/component name defined neither in the base
+  // dictionary nor in the extension; the whole placement is skipped.
+  | 'extend/unknown-member'
+  // An `after` anchor matches no member of the resolved target body; the placement is skipped.
+  | 'extend/member-not-found'
+  // A placed member's identity (field tag / component name / group counter) already exists
+  // in the target body; that member is skipped. This is the idempotency/overlap guard that
+  // keeps re-applied or overlapping extensions from double-emitting tags on the wire.
+  | 'extend/duplicate-member'
+  // A new group's counter field's datatype does not derive from `NumInGroup` (mirrors
+  // `dict/non-counter-group-head`). Applied — fix the field's type.
+  | 'extend/counter-not-marked'
+  // Post-condition check: the placement would change some group's resolved entry delimiter
+  // (its first wire tag), breaking entry detection; the placement is reverted.
+  | 'extend/group-delimiter-shift'
+  // A placed member's tag also belongs to the scope (or is the delimiter) of a repeating
+  // group that could be open on the wire right at the insertion point — either a group
+  // before it (looking through optional members, which may be absent at runtime) or, for a
+  // placed group, members that follow it. On re-parse the value would land in the wrong
+  // entry. The member is skipped; anchor it with `after` elsewhere, or place it inside the
+  // conflicting group instead.
+  | 'extend/ambiguous-boundary'
+  // A NEW repeating group's body resolves to no leading wire field, so the parser would
+  // have no entry delimiter; the placement is skipped.
+  | 'extend/unresolvable-group-delimiter'
+  // A placed `data` field's Length companion (its FieldDef.lengthField) is not a member
+  // positioned before it in the same body — encode would drop the caller-supplied length
+  // and an SOH-embedding value would corrupt the frame. Applied; place the length field.
+  | 'extend/data-length-not-placed'
+  // A NumInGroup-derived field was placed as a plain scalar member; on the wire it heads
+  // a repeating group, so real traffic would mis-parse. Applied — use the {group, members}
+  // member form instead.
+  | 'extend/counter-as-field'
+  // An extension entry is structurally malformed (not an object, a message spec without a
+  // members array, a non-array enum list, …); the entry is skipped.
+  | 'extend/invalid-spec'
+  // A placement gave a previously delimiter-less group body its first resolvable wire tag.
+  | 'extend/delimiter-defined'
+  // A placement touched a shared component; reports every message the addition now
+  // reaches. Advisory — component reuse is the FIX model, but the fan-out should be known.
+  | 'extend/component-fanout';
 
 /**
  * A single diagnostic, returned as data — never thrown — by every analysis entry point
