@@ -1027,6 +1027,13 @@ export const MsgType = {
 export type MsgTypeName = keyof typeof MsgType;
 
 /**
+ * Union of the on-the-wire `MsgType` values (`"A" | "0" | ...`) — the value-side
+ * counterpart of `MsgTypeName` (which is the union of message *names*). Lets
+ * consumers write `msgType: MsgType` in type positions.
+ */
+export type MsgType = (typeof MsgType)[keyof typeof MsgType];
+
+/**
  * Field names keyed by tag number — the reverse of `Tags`. Useful for log lines
  * and session-level `Reject` construction without loading the full dictionary:
  * `TagNames[55] === 'Symbol'`. `undefined` for tags outside the dictionary.
@@ -2045,3 +2052,3192 @@ export const MsgTypeNames: { readonly [msgType: string]: MsgTypeName | undefined
   "BF": "UserResponse",
   "n": "XMLnonFIX",
 };
+
+/** `AccountType` (tag 581) values keyed by spec value name. */
+export const AccountType = {
+  "ACCOUNT_IS_CARRIED_ON_CUSTOMER_SIDE_OF_BOOKS": "1",
+  "ACCOUNT_IS_CARRIED_ON_NON_CUSTOMER_SIDE_OF_BOOKS": "2",
+  "HOUSE_TRADER": "3",
+  "FLOOR_TRADER": "4",
+  "ACCOUNT_IS_CARRIED_ON_NON_CUSTOMER_SIDE_OF_BOOKS_AND_IS_CROSS_MARGINED": "6",
+  "ACCOUNT_IS_HOUSE_TRADER_AND_IS_CROSS_MARGINED": "7",
+  "JOINT_BACKOFFICE_ACCOUNT": "8",
+} as const;
+export type AccountType = (typeof AccountType)[keyof typeof AccountType];
+
+/** `AcctIDSource` (tag 660) values keyed by spec value name. */
+export const AcctIDSource = {
+  "BIC": "1",
+  "SID_CODE": "2",
+  "TFM": "3",
+  "OMGEO": "4",
+  "DTCC_CODE": "5",
+  "OTHER": "99",
+} as const;
+export type AcctIDSource = (typeof AcctIDSource)[keyof typeof AcctIDSource];
+
+/** `Adjustment` (tag 334) values keyed by spec value name. */
+export const Adjustment = {
+  "CANCEL": "1",
+  "ERROR": "2",
+  "CORRECTION": "3",
+} as const;
+export type Adjustment = (typeof Adjustment)[keyof typeof Adjustment];
+
+/** `AdjustmentType` (tag 718) values keyed by spec value name. */
+export const AdjustmentType = {
+  "PROCESS_REQUEST_AS_MARGIN_DISPOSITION": "0",
+  "DELTA_PLUS": "1",
+  "DELTA_MINUS": "2",
+  "FINAL": "3",
+} as const;
+export type AdjustmentType = (typeof AdjustmentType)[keyof typeof AdjustmentType];
+
+/** `AdvSide` (tag 4) values keyed by spec value name. */
+export const AdvSide = {
+  "BUY": "B",
+  "SELL": "S",
+  "CROSS": "X",
+  "TRADE": "T",
+} as const;
+export type AdvSide = (typeof AdvSide)[keyof typeof AdvSide];
+
+/** `AdvTransType` (tag 5) values keyed by spec value name. */
+export const AdvTransType = {
+  "NEW": "N",
+  "CANCEL": "C",
+  "REPLACE": "R",
+} as const;
+export type AdvTransType = (typeof AdvTransType)[keyof typeof AdvTransType];
+
+/** `AffirmStatus` (tag 940) values keyed by spec value name. */
+export const AffirmStatus = {
+  "RECEIVED": "1",
+  "CONFIRM_REJECTED_IE_NOT_AFFIRMED": "2",
+  "AFFIRMED": "3",
+} as const;
+export type AffirmStatus = (typeof AffirmStatus)[keyof typeof AffirmStatus];
+
+/** `AggregatedBook` (tag 266) values keyed by spec value name. */
+export const AggregatedBook = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type AggregatedBook = (typeof AggregatedBook)[keyof typeof AggregatedBook];
+
+/** `AllocAccountType` (tag 798) values keyed by spec value name. */
+export const AllocAccountType = {
+  "ACCOUNT_IS_CARRIED_ON_CUSTOMER_SIDE_OF_BOOKS": "1",
+  "ACCOUNT_IS_CARRIED_ON_NON_CUSTOMER_SIDE_OF_BOOKS": "2",
+  "HOUSE_TRADER": "3",
+  "FLOOR_TRADER": "4",
+  "ACCOUNT_IS_CARRIED_ON_NON_CUSTOMER_SIDE_OF_BOOKS_AND_IS_CROSS_MARGINED": "6",
+  "ACCOUNT_IS_HOUSE_TRADER_AND_IS_CROSS_MARGINED": "7",
+  "JOINT_BACKOFFICE_ACCOUNT": "8",
+} as const;
+export type AllocAccountType = (typeof AllocAccountType)[keyof typeof AllocAccountType];
+
+/** `AllocCancReplaceReason` (tag 796) values keyed by spec value name. */
+export const AllocCancReplaceReason = {
+  "ORIGINAL_DETAILS_INCOMPLETE_INCORRECT": "1",
+  "CHANGE_IN_UNDERLYING_ORDER_DETAILS": "2",
+  "OTHER": "99",
+} as const;
+export type AllocCancReplaceReason = (typeof AllocCancReplaceReason)[keyof typeof AllocCancReplaceReason];
+
+/** `AllocHandlInst` (tag 209) values keyed by spec value name. */
+export const AllocHandlInst = {
+  "MATCH": "1",
+  "FORWARD": "2",
+  "FORWARD_AND_MATCH": "3",
+} as const;
+export type AllocHandlInst = (typeof AllocHandlInst)[keyof typeof AllocHandlInst];
+
+/** `AllocIntermedReqType` (tag 808) values keyed by spec value name. */
+export const AllocIntermedReqType = {
+  "PENDING_ACCEPT": "1",
+  "PENDING_RELEASE": "2",
+  "PENDING_REVERSAL": "3",
+  "ACCEPT": "4",
+  "BLOCK_LEVEL_REJECT": "5",
+  "ACCOUNT_LEVEL_REJECT": "6",
+} as const;
+export type AllocIntermedReqType = (typeof AllocIntermedReqType)[keyof typeof AllocIntermedReqType];
+
+/** `AllocLinkType` (tag 197) values keyed by spec value name. */
+export const AllocLinkType = {
+  "F_X_NETTING": "0",
+  "F_X_SWAP": "1",
+} as const;
+export type AllocLinkType = (typeof AllocLinkType)[keyof typeof AllocLinkType];
+
+/** `AllocNoOrdersType` (tag 857) values keyed by spec value name. */
+export const AllocNoOrdersType = {
+  "NOT_SPECIFIED": "0",
+  "EXPLICIT_LIST_PROVIDED": "1",
+} as const;
+export type AllocNoOrdersType = (typeof AllocNoOrdersType)[keyof typeof AllocNoOrdersType];
+
+/** `AllocRejCode` (tag 88) values keyed by spec value name. */
+export const AllocRejCode = {
+  "UNKNOWN_ACCOUNT": "0",
+  "INCORRECT_QUANTITY": "1",
+  "INCORRECT_AVERAGE_PRICE": "2",
+  "UNKNOWN_EXECUTING_BROKER_MNEMONIC": "3",
+  "COMMISSION_DIFFERENCE": "4",
+  "UNKNOWN_ORDERID": "5",
+  "UNKNOWN_LISTID": "6",
+  "OTHER": "7",
+  "INCORRECT_ALLOCATED_QUANTITY": "8",
+  "CALCULATION_DIFFERENCE": "9",
+  "UNKNOWN_OR_STALE_EXECID": "10",
+  "MISMATCHED_DATA_VALUE": "11",
+  "UNKNOWN_CLORDID": "12",
+  "WAREHOUSE_REQUEST_REJECTED": "13",
+} as const;
+export type AllocRejCode = (typeof AllocRejCode)[keyof typeof AllocRejCode];
+
+/** `AllocReportType` (tag 794) values keyed by spec value name. */
+export const AllocReportType = {
+  "SELLSIDE_CALCULATED_USING_PRELIMINARY": "3",
+  "SELLSIDE_CALCULATED_WITHOUT_PRELIMINARY": "4",
+  "WAREHOUSE_RECAP": "5",
+  "REQUEST_TO_INTERMEDIARY": "8",
+} as const;
+export type AllocReportType = (typeof AllocReportType)[keyof typeof AllocReportType];
+
+/** `AllocSettlInstType` (tag 780) values keyed by spec value name. */
+export const AllocSettlInstType = {
+  "USE_DEFAULT_INSTRUCTIONS": "0",
+  "DERIVE_FROM_PARAMETERS_PROVIDED": "1",
+  "FULL_DETAILS_PROVIDED": "2",
+  "SSI_DB_IDS_PROVIDED": "3",
+  "PHONE_FOR_INSTRUCTIONS": "4",
+} as const;
+export type AllocSettlInstType = (typeof AllocSettlInstType)[keyof typeof AllocSettlInstType];
+
+/** `AllocStatus` (tag 87) values keyed by spec value name. */
+export const AllocStatus = {
+  "ACCEPTED": "0",
+  "BLOCK_LEVEL_REJECT": "1",
+  "ACCOUNT_LEVEL_REJECT": "2",
+  "RECEIVED": "3",
+  "INCOMPLETE": "4",
+  "REJECTED_BY_INTERMEDIARY": "5",
+} as const;
+export type AllocStatus = (typeof AllocStatus)[keyof typeof AllocStatus];
+
+/** `AllocTransType` (tag 71) values keyed by spec value name. */
+export const AllocTransType = {
+  "NEW": "0",
+  "REPLACE": "1",
+  "CANCEL": "2",
+} as const;
+export type AllocTransType = (typeof AllocTransType)[keyof typeof AllocTransType];
+
+/** `AllocType` (tag 626) values keyed by spec value name. */
+export const AllocType = {
+  "CALCULATED": "1",
+  "PRELIMINARY": "2",
+  "READY_TO_BOOK": "5",
+  "WAREHOUSE_INSTRUCTION": "7",
+  "REQUEST_TO_INTERMEDIARY": "8",
+} as const;
+export type AllocType = (typeof AllocType)[keyof typeof AllocType];
+
+/** `ApplQueueAction` (tag 815) values keyed by spec value name. */
+export const ApplQueueAction = {
+  "NO_ACTION_TAKEN": "0",
+  "QUEUE_FLUSHED": "1",
+  "OVERLAY_LAST": "2",
+  "END_SESSION": "3",
+} as const;
+export type ApplQueueAction = (typeof ApplQueueAction)[keyof typeof ApplQueueAction];
+
+/** `ApplQueueResolution` (tag 814) values keyed by spec value name. */
+export const ApplQueueResolution = {
+  "NO_ACTION_TAKEN": "0",
+  "QUEUE_FLUSHED": "1",
+  "OVERLAY_LAST": "2",
+  "END_SESSION": "3",
+} as const;
+export type ApplQueueResolution = (typeof ApplQueueResolution)[keyof typeof ApplQueueResolution];
+
+/** `AssignmentMethod` (tag 744) values keyed by spec value name. */
+export const AssignmentMethod = {
+  "RANDOM": "R",
+  "PRORATA": "P",
+} as const;
+export type AssignmentMethod = (typeof AssignmentMethod)[keyof typeof AssignmentMethod];
+
+/** `AvgPxIndicator` (tag 819) values keyed by spec value name. */
+export const AvgPxIndicator = {
+  "NO_AVERAGE_PRICING": "0",
+  "TRADE_IS_PART_OF_AN_AVERAGE_PRICE_GROUP_IDENTIFIED_BY_THE_TRADELINKID": "1",
+  "LAST_TRADE_IN_THE_AVERAGE_PRICE_GROUP_IDENTIFIED_BY_THE_TRADELINKID": "2",
+} as const;
+export type AvgPxIndicator = (typeof AvgPxIndicator)[keyof typeof AvgPxIndicator];
+
+/** `BasisPxType` (tag 419) values keyed by spec value name. */
+export const BasisPxType = {
+  "CLOSING_PRICE_AT_MORNING_SESSION": "2",
+  "CLOSING_PRICE": "3",
+  "CURRENT_PRICE": "4",
+  "SQ": "5",
+  "VWAP_THROUGH_A_DAY": "6",
+  "VWAP_THROUGH_A_MORNING_SESSION": "7",
+  "VWAP_THROUGH_AN_AFTERNOON_SESSION": "8",
+  "VWAP_THROUGH_A_DAY_EXCEPT_YORI": "9",
+  "VWAP_THROUGH_A_MORNING_SESSION_EXCEPT_YORI": "A",
+  "VWAP_THROUGH_AN_AFTERNOON_SESSION_EXCEPT_YORI": "B",
+  "STRIKE": "C",
+  "OPEN": "D",
+  "OTHERS": "Z",
+} as const;
+export type BasisPxType = (typeof BasisPxType)[keyof typeof BasisPxType];
+
+/** `BidDescriptorType` (tag 399) values keyed by spec value name. */
+export const BidDescriptorType = {
+  "SECTOR": "1",
+  "COUNTRY": "2",
+  "INDEX": "3",
+} as const;
+export type BidDescriptorType = (typeof BidDescriptorType)[keyof typeof BidDescriptorType];
+
+/** `BidRequestTransType` (tag 374) values keyed by spec value name. */
+export const BidRequestTransType = {
+  "NEW": "N",
+  "CANCEL": "C",
+} as const;
+export type BidRequestTransType = (typeof BidRequestTransType)[keyof typeof BidRequestTransType];
+
+/** `BidTradeType` (tag 418) values keyed by spec value name. */
+export const BidTradeType = {
+  "RISK_TRADE": "R",
+  "VWAP_GUARANTEE": "G",
+  "AGENCY": "A",
+  "GUARANTEED_CLOSE": "J",
+} as const;
+export type BidTradeType = (typeof BidTradeType)[keyof typeof BidTradeType];
+
+/** `BidType` (tag 394) values keyed by spec value name. */
+export const BidType = {
+  "NON_DISCLOSED_STYLE": "1",
+  "DISCLOSED_STYLE": "2",
+  "NO_BIDDING_PROCESS": "3",
+} as const;
+export type BidType = (typeof BidType)[keyof typeof BidType];
+
+/** `BookingType` (tag 775) values keyed by spec value name. */
+export const BookingType = {
+  "REGULAR_BOOKING": "0",
+  "CFD": "1",
+  "TOTAL_RETURN_SWAP": "2",
+} as const;
+export type BookingType = (typeof BookingType)[keyof typeof BookingType];
+
+/** `BookingUnit` (tag 590) values keyed by spec value name. */
+export const BookingUnit = {
+  "EACH_PARTIAL_EXECUTION_IS_A_BOOKABLE_UNIT": "0",
+  "AGGREGATE_PARTIAL_EXECUTIONS_ON_THIS_ORDER_AND_BOOK_ONE_TRADE_PER_ORDER": "1",
+  "AGGREGATE_EXECUTIONS_FOR_THIS_SYMBOL_SIDE_AND_SETTLEMENT_DATE": "2",
+} as const;
+export type BookingUnit = (typeof BookingUnit)[keyof typeof BookingUnit];
+
+/** `BusinessRejectReason` (tag 380) values keyed by spec value name. */
+export const BusinessRejectReason = {
+  "OTHER": "0",
+  "UNKOWN_ID": "1",
+  "UNKNOWN_SECURITY": "2",
+  "UNSUPPORTED_MESSAGE_TYPE": "3",
+  "APPLICATION_NOT_AVAILABLE": "4",
+  "CONDITIONALLY_REQUIRED_FIELD_MISSING": "5",
+  "NOT_AUTHORIZED": "6",
+  "DELIVERTO_FIRM_NOT_AVAILABLE_AT_THIS_TIME": "7",
+} as const;
+export type BusinessRejectReason = (typeof BusinessRejectReason)[keyof typeof BusinessRejectReason];
+
+/** `CancellationRights` (tag 480) values keyed by spec value name. */
+export const CancellationRights = {
+  "YES": "Y",
+  "NO_EXECUTION_ONLY": "N",
+  "NO_WAIVER_AGREEMENT": "M",
+  "NO_INSTITUTIONAL": "O",
+} as const;
+export type CancellationRights = (typeof CancellationRights)[keyof typeof CancellationRights];
+
+/** `CashMargin` (tag 544) values keyed by spec value name. */
+export const CashMargin = {
+  "CASH": "1",
+  "MARGIN_OPEN": "2",
+  "MARGIN_CLOSE": "3",
+} as const;
+export type CashMargin = (typeof CashMargin)[keyof typeof CashMargin];
+
+/** `ClearingFeeIndicator` (tag 635) values keyed by spec value name. */
+export const ClearingFeeIndicator = {
+  "CBOE_MEMBER": "B",
+  "NON_MEMBER_AND_CUSTOMER": "C",
+  "EQUITY_MEMBER_AND_CLEARING_MEMBER": "E",
+  "FULL_AND_ASSOCIATE_MEMBER_TRADING_FOR_OWN_ACCOUNT_AND_AS_FLOOR_BROKERS": "F",
+  "106H_AND_106J_FIRMS": "H",
+  "GIM_IDEM_AND_COM_MEMBERSHIP_INTEREST_HOLDERS": "I",
+  "LESSEE_AND_106F_EMPLOYEES": "L",
+  "ALL_OTHER_OWNERSHIP_TYPES": "M",
+  "1ST_YEAR_DELEGATE_TRADING_FOR_HIS_OWN_ACCOUNT": "1",
+  "2ND_YEAR_DELEGATE_TRADING_FOR_HIS_OWN_ACCOUNT": "2",
+  "3RD_YEAR_DELEGATE_TRADING_FOR_HIS_OWN_ACCOUNT": "3",
+  "4TH_YEAR_DELEGATE_TRADING_FOR_HIS_OWN_ACCOUNT": "4",
+  "5TH_YEAR_DELEGATE_TRADING_FOR_HIS_OWN_ACCOUNT": "5",
+  "6TH_YEAR_AND_BEYOND_DELEGATE_TRADING_FOR_HIS_OWN_ACCOUNT": "9",
+} as const;
+export type ClearingFeeIndicator = (typeof ClearingFeeIndicator)[keyof typeof ClearingFeeIndicator];
+
+/** `ClearingInstruction` (tag 577) values keyed by spec value name. */
+export const ClearingInstruction = {
+  "PROCESS_NORMALLY": "0",
+  "EXCLUDE_FROM_ALL_NETTING": "1",
+  "BILATERAL_NETTING_ONLY": "2",
+  "EX_CLEARING": "3",
+  "SPECIAL_TRADE": "4",
+  "MULTILATERAL_NETTING": "5",
+  "CLEAR_AGAINST_CENTRAL_COUNTERPARTY": "6",
+  "EXCLUDE_FROM_CENTRAL_COUNTERPARTY": "7",
+  "MANUAL_MODE": "8",
+  "AUTOMATIC_POSTING_MODE": "9",
+  "AUTOMATIC_GIVE_UP_MODE": "10",
+  "QUALIFIED_SERVICE_REPRESENTATIVE": "11",
+  "CUSTOMER_TRADE": "12",
+  "SELF_CLEARING": "13",
+} as const;
+export type ClearingInstruction = (typeof ClearingInstruction)[keyof typeof ClearingInstruction];
+
+/** `CollAction` (tag 944) values keyed by spec value name. */
+export const CollAction = {
+  "RETAIN": "0",
+  "ADD": "1",
+  "REMOVE": "2",
+} as const;
+export type CollAction = (typeof CollAction)[keyof typeof CollAction];
+
+/** `CollAsgnReason` (tag 895) values keyed by spec value name. */
+export const CollAsgnReason = {
+  "INITIAL": "0",
+  "SCHEDULED": "1",
+  "TIME_WARNING": "2",
+  "MARGIN_DEFICIENCY": "3",
+  "MARGIN_EXCESS": "4",
+  "FORWARD_COLLATERAL_DEMAND": "5",
+  "EVENT_OF_DEFAULT": "6",
+  "ADVERSE_TAX_EVENT": "7",
+} as const;
+export type CollAsgnReason = (typeof CollAsgnReason)[keyof typeof CollAsgnReason];
+
+/** `CollAsgnRejectReason` (tag 906) values keyed by spec value name. */
+export const CollAsgnRejectReason = {
+  "UNKNOWN_DEAL": "0",
+  "UNKNOWN_OR_INVALID_INSTRUMENT": "1",
+  "UNAUTHORIZED_TRANSACTION": "2",
+  "INSUFFICIENT_COLLATERAL": "3",
+  "INVALID_TYPE_OF_COLLATERAL": "4",
+  "EXCESSIVE_SUBSTITUTION": "5",
+  "OTHER": "99",
+} as const;
+export type CollAsgnRejectReason = (typeof CollAsgnRejectReason)[keyof typeof CollAsgnRejectReason];
+
+/** `CollAsgnRespType` (tag 905) values keyed by spec value name. */
+export const CollAsgnRespType = {
+  "RECEIVED": "0",
+  "ACCEPTED": "1",
+  "DECLINED": "2",
+  "REJECTED": "3",
+} as const;
+export type CollAsgnRespType = (typeof CollAsgnRespType)[keyof typeof CollAsgnRespType];
+
+/** `CollAsgnTransType` (tag 903) values keyed by spec value name. */
+export const CollAsgnTransType = {
+  "NEW": "0",
+  "REPLACE": "1",
+  "CANCEL": "2",
+  "RELEASE": "3",
+  "REVERSE": "4",
+} as const;
+export type CollAsgnTransType = (typeof CollAsgnTransType)[keyof typeof CollAsgnTransType];
+
+/** `CollInquiryQualifier` (tag 896) values keyed by spec value name. */
+export const CollInquiryQualifier = {
+  "TRADEDATE": "0",
+  "GC_INSTRUMENT": "1",
+  "COLLATERALINSTRUMENT": "2",
+  "SUBSTITUTION_ELIGIBLE": "3",
+  "NOT_ASSIGNED": "4",
+  "PARTIALLY_ASSIGNED": "5",
+  "FULLY_ASSIGNED": "6",
+  "OUTSTANDING_TRADES": "7",
+} as const;
+export type CollInquiryQualifier = (typeof CollInquiryQualifier)[keyof typeof CollInquiryQualifier];
+
+/** `CollInquiryResult` (tag 946) values keyed by spec value name. */
+export const CollInquiryResult = {
+  "SUCCESSFUL": "0",
+  "INVALID_OR_UNKNOWN_INSTRUMENT": "1",
+  "INVALID_OR_UNKNOWN_COLLATERAL_TYPE": "2",
+  "INVALID_PARTIES": "3",
+  "INVALID_TRANSPORT_TYPE_REQUESTED": "4",
+  "INVALID_DESTINATION_REQUESTED": "5",
+  "NO_COLLATERAL_FOUND_FOR_THE_TRADE_SPECIFIED": "6",
+  "NO_COLLATERAL_FOUND_FOR_THE_ORDER_SPECIFIED": "7",
+  "COLLATERAL_INQUIRY_TYPE_NOT_SUPPORTED": "8",
+  "UNAUTHORIZED_FOR_COLLATERAL_INQUIRY": "9",
+  "OTHER": "99",
+} as const;
+export type CollInquiryResult = (typeof CollInquiryResult)[keyof typeof CollInquiryResult];
+
+/** `CollInquiryStatus` (tag 945) values keyed by spec value name. */
+export const CollInquiryStatus = {
+  "ACCEPTED": "0",
+  "ACCEPTED_WITH_WARNINGS": "1",
+  "COMPLETED": "2",
+  "COMPLETED_WITH_WARNINGS": "3",
+  "REJECTED": "4",
+} as const;
+export type CollInquiryStatus = (typeof CollInquiryStatus)[keyof typeof CollInquiryStatus];
+
+/** `CollStatus` (tag 910) values keyed by spec value name. */
+export const CollStatus = {
+  "UNASSIGNED": "0",
+  "PARTIALLY_ASSIGNED": "1",
+  "ASSIGNMENT_PROPOSED": "2",
+  "ASSIGNED": "3",
+  "CHALLENGED": "4",
+} as const;
+export type CollStatus = (typeof CollStatus)[keyof typeof CollStatus];
+
+/** `CommType` (tag 13) values keyed by spec value name. */
+export const CommType = {
+  "PER_UNIT": "1",
+  "PERCENTAGE": "2",
+  "ABSOLUTE": "3",
+  "4": "4",
+  "5": "5",
+  "POINTS_PER_BOND_OR_CONTRACT_SUPPLY_CONTRACTMULTIPLIER": "6",
+} as const;
+export type CommType = (typeof CommType)[keyof typeof CommType];
+
+/** `ConfirmRejReason` (tag 774) values keyed by spec value name. */
+export const ConfirmRejReason = {
+  "MISMATCHED_ACCOUNT": "1",
+  "MISSING_SETTLEMENT_INSTRUCTIONS": "2",
+  "OTHER": "99",
+} as const;
+export type ConfirmRejReason = (typeof ConfirmRejReason)[keyof typeof ConfirmRejReason];
+
+/** `ConfirmStatus` (tag 665) values keyed by spec value name. */
+export const ConfirmStatus = {
+  "RECEIVED": "1",
+  "MISMATCHED_ACCOUNT": "2",
+  "MISSING_SETTLEMENT_INSTRUCTIONS": "3",
+  "CONFIRMED": "4",
+  "REQUEST_REJECTED": "5",
+} as const;
+export type ConfirmStatus = (typeof ConfirmStatus)[keyof typeof ConfirmStatus];
+
+/** `ConfirmTransType` (tag 666) values keyed by spec value name. */
+export const ConfirmTransType = {
+  "NEW": "0",
+  "REPLACE": "1",
+  "CANCEL": "2",
+} as const;
+export type ConfirmTransType = (typeof ConfirmTransType)[keyof typeof ConfirmTransType];
+
+/** `ConfirmType` (tag 773) values keyed by spec value name. */
+export const ConfirmType = {
+  "STATUS": "1",
+  "CONFIRMATION": "2",
+  "CONFIRMATION_REQUEST_REJECTED": "3",
+} as const;
+export type ConfirmType = (typeof ConfirmType)[keyof typeof ConfirmType];
+
+/** `ContAmtType` (tag 519) values keyed by spec value name. */
+export const ContAmtType = {
+  "COMMISSION_AMOUNT": "1",
+  "COMMISSION": "2",
+  "INITIAL_CHARGE_AMOUNT": "3",
+  "INITIAL_CHARGE": "4",
+  "DISCOUNT_AMOUNT": "5",
+  "DISCOUNT": "6",
+  "DILUTION_LEVY_AMOUNT": "7",
+  "DILUTION_LEVY": "8",
+  "EXIT_CHARGE_AMOUNT": "9",
+  "EXIT_CHARGE": "10",
+  "FUND_BASED_RENEWAL_COMMISSION": "11",
+  "PROJECTED_FUND_VALUE": "12",
+  "FUND_BASED_RENEWAL_COMMISSION_AMOUNT_13": "13",
+  "FUND_BASED_RENEWAL_COMMISSION_AMOUNT_14": "14",
+  "NET_SETTLEMENT_AMOUNT": "15",
+} as const;
+export type ContAmtType = (typeof ContAmtType)[keyof typeof ContAmtType];
+
+/** `CorporateAction` (tag 292) values keyed by spec value name. */
+export const CorporateAction = {
+  "EX_DIVIDEND": "A",
+  "EX_DISTRIBUTION": "B",
+  "EX_RIGHTS": "C",
+  "NEW": "D",
+  "EX_INTEREST": "E",
+} as const;
+export type CorporateAction = (typeof CorporateAction)[keyof typeof CorporateAction];
+
+/** `CoveredOrUncovered` (tag 203) values keyed by spec value name. */
+export const CoveredOrUncovered = {
+  "COVERED": "0",
+  "UNCOVERED": "1",
+} as const;
+export type CoveredOrUncovered = (typeof CoveredOrUncovered)[keyof typeof CoveredOrUncovered];
+
+/** `CPProgram` (tag 875) values keyed by spec value name. */
+export const CPProgram = {
+  "3": "1",
+  "4": "2",
+  "OTHER": "99",
+} as const;
+export type CPProgram = (typeof CPProgram)[keyof typeof CPProgram];
+
+/** `CrossPrioritization` (tag 550) values keyed by spec value name. */
+export const CrossPrioritization = {
+  "NONE": "0",
+  "BUY_SIDE_IS_PRIORITIZED": "1",
+  "SELL_SIDE_IS_PRIORITIZED": "2",
+} as const;
+export type CrossPrioritization = (typeof CrossPrioritization)[keyof typeof CrossPrioritization];
+
+/** `CrossType` (tag 549) values keyed by spec value name. */
+export const CrossType = {
+  "CROSS_TRADE_WHICH_IS_EXECUTED_COMPLETELY_OR_NOT_BOTH_SIDES_ARE_TREATED_IN_THE_SAME_MANNER_THIS_IS_EQUIVALENT_TO_AN_ALL_OR_NONE": "1",
+  "CROSS_TRADE_WHICH_IS_EXECUTED_PARTIALLY_AND_THE_REST_IS_CANCELLED_ONE_SIDE_IS_FULLY_EXECUTED_THE_OTHER_SIDE_IS_PARTIALLY_EXECUTED_WITH_THE_REMAINDER_BEING_CANCELLED_THIS_IS_EQUIVALENT_TO_AN_IMMEDIATE_OR_CANCEL_ON_THE_OTHER_SIDE_NOTE_THE_CROSSPRIORITZATION": "2",
+  "CROSS_TRADE_WHICH_IS_PARTIALLY_EXECUTED_WITH_THE_UNFILLED_PORTIONS_REMAINING_ACTIVE_ONE_SIDE_OF_THE_CROSS_IS_FULLY_EXECUTED": "3",
+  "CROSS_TRADE_IS_EXECUTED_WITH_EXISTING_ORDERS_WITH_THE_SAME_PRICE_IN_THE_CASE_OTHER_ORDERS_EXIST_WITH_THE_SAME_PRICE_THE_QUANTITY_OF_THE_CROSS_IS_EXECUTED_AGAINST_THE_EXISTING_ORDERS_AND_QUOTES_THE_REMAINDER_OF_THE_CROSS_IS_EXECUTED_AGAINST_THE_OTHER_SIDE_OF_THE_CROSS_THE_TWO_SIDES_POTENTIALLY_HAVE_DIFFERENT_QUANTITIES": "4",
+} as const;
+export type CrossType = (typeof CrossType)[keyof typeof CrossType];
+
+/** `CustOrderCapacity` (tag 582) values keyed by spec value name. */
+export const CustOrderCapacity = {
+  "MEMBER_TRADING_FOR_THEIR_OWN_ACCOUNT": "1",
+  "CLEARING_FIRM_TRADING_FOR_ITS_PROPRIETARY_ACCOUNT": "2",
+  "MEMBER_TRADING_FOR_ANOTHER_MEMBER": "3",
+  "ALL_OTHER": "4",
+} as const;
+export type CustOrderCapacity = (typeof CustOrderCapacity)[keyof typeof CustOrderCapacity];
+
+/** `CxlRejReason` (tag 102) values keyed by spec value name. */
+export const CxlRejReason = {
+  "TOO_LATE_TO_CANCEL": "0",
+  "UNKNOWN_ORDER": "1",
+  "BROKER": "2",
+  "ORDER_ALREADY_IN_PENDING_CANCEL_OR_PENDING_REPLACE_STATUS": "3",
+  "UNABLE_TO_PROCESS_ORDER_MASS_CANCEL_REQUEST": "4",
+  "ORIGORDMODTIME": "5",
+  "DUPLICATE_CLORDID": "6",
+  "OTHER": "99",
+} as const;
+export type CxlRejReason = (typeof CxlRejReason)[keyof typeof CxlRejReason];
+
+/** `CxlRejResponseTo` (tag 434) values keyed by spec value name. */
+export const CxlRejResponseTo = {
+  "ORDER_CANCEL_REQUEST": "1",
+  "ORDER_CANCEL_REPLACE_REQUEST": "2",
+} as const;
+export type CxlRejResponseTo = (typeof CxlRejResponseTo)[keyof typeof CxlRejResponseTo];
+
+/** `DayBookingInst` (tag 589) values keyed by spec value name. */
+export const DayBookingInst = {
+  "CAN_TRIGGER_BOOKING_WITHOUT_REFERENCE_TO_THE_ORDER_INITIATOR": "0",
+  "SPEAK_WITH_ORDER_INITIATOR_BEFORE_BOOKING": "1",
+  "ACCUMULATE": "2",
+} as const;
+export type DayBookingInst = (typeof DayBookingInst)[keyof typeof DayBookingInst];
+
+/** `DeleteReason` (tag 285) values keyed by spec value name. */
+export const DeleteReason = {
+  "CANCELATION": "0",
+  "ERROR": "1",
+} as const;
+export type DeleteReason = (typeof DeleteReason)[keyof typeof DeleteReason];
+
+/** `DeliveryForm` (tag 668) values keyed by spec value name. */
+export const DeliveryForm = {
+  "BOOKENTRY": "1",
+  "BEARER": "2",
+} as const;
+export type DeliveryForm = (typeof DeliveryForm)[keyof typeof DeliveryForm];
+
+/** `DeliveryType` (tag 919) values keyed by spec value name. */
+export const DeliveryType = {
+  "VERSUS_PAYMENT_DELIVER": "0",
+  "FREE_DELIVER": "1",
+  "TRI_PARTY": "2",
+  "HOLD_IN_CUSTODY": "3",
+} as const;
+export type DeliveryType = (typeof DeliveryType)[keyof typeof DeliveryType];
+
+/** `DiscretionInst` (tag 388) values keyed by spec value name. */
+export const DiscretionInst = {
+  "RELATED_TO_DISPLAYED_PRICE": "0",
+  "RELATED_TO_MARKET_PRICE": "1",
+  "RELATED_TO_PRIMARY_PRICE": "2",
+  "RELATED_TO_LOCAL_PRIMARY_PRICE": "3",
+  "RELATED_TO_MIDPOINT_PRICE": "4",
+  "RELATED_TO_LAST_TRADE_PRICE": "5",
+  "RELATED_TO_VWAP": "6",
+} as const;
+export type DiscretionInst = (typeof DiscretionInst)[keyof typeof DiscretionInst];
+
+/** `DiscretionLimitType` (tag 843) values keyed by spec value name. */
+export const DiscretionLimitType = {
+  "OR_BETTER": "0",
+  "STRICT_LIMIT_IS_A_STRICT_LIMIT": "1",
+  "OR_WORSE_FOR_A_BUY_THE_DISCRETION_PRICE_IS_A_MINIMUM_AND_FOR_A_SELL_THE_DISCRETION_PRICE_IS_A_MAXIMUM": "2",
+} as const;
+export type DiscretionLimitType = (typeof DiscretionLimitType)[keyof typeof DiscretionLimitType];
+
+/** `DiscretionMoveType` (tag 841) values keyed by spec value name. */
+export const DiscretionMoveType = {
+  "FLOATING": "0",
+  "FIXED": "1",
+} as const;
+export type DiscretionMoveType = (typeof DiscretionMoveType)[keyof typeof DiscretionMoveType];
+
+/** `DiscretionOffsetType` (tag 842) values keyed by spec value name. */
+export const DiscretionOffsetType = {
+  "PRICE": "0",
+  "BASIS_POINTS": "1",
+  "TICKS": "2",
+  "PRICE_TIER": "3",
+} as const;
+export type DiscretionOffsetType = (typeof DiscretionOffsetType)[keyof typeof DiscretionOffsetType];
+
+/** `DiscretionRoundDirection` (tag 844) values keyed by spec value name. */
+export const DiscretionRoundDirection = {
+  "MORE_AGGRESSIVE_ON_A_BUY_ORDER_ROUND_THE_PRICE_UP_ROUND_UP_TO_THE_NEAREST_TICK_ON_A_SELL_ROUND_DOWN_TO_THE_NEAREST_TICK": "1",
+  "MORE_PASSIVE_ON_A_BUY_ORDER_ROUND_DOWN_TO_NEAREST_TICK_ON_A_SELL_ORDER_ROUND_UP_TO_NEAREST_TICK": "2",
+} as const;
+export type DiscretionRoundDirection = (typeof DiscretionRoundDirection)[keyof typeof DiscretionRoundDirection];
+
+/** `DiscretionScope` (tag 846) values keyed by spec value name. */
+export const DiscretionScope = {
+  "LOCAL": "1",
+  "NATIONAL": "2",
+  "GLOBAL": "3",
+  "NATIONAL_EXCLUDING_LOCAL": "4",
+} as const;
+export type DiscretionScope = (typeof DiscretionScope)[keyof typeof DiscretionScope];
+
+/** `DistribPaymentMethod` (tag 477) values keyed by spec value name. */
+export const DistribPaymentMethod = {
+  "CREST": "1",
+  "NSCC": "2",
+  "EUROCLEAR": "3",
+  "CLEARSTREAM": "4",
+  "CHEQUE": "5",
+  "TELEGRAPHIC_TRANSFER": "6",
+  "FEDWIRE": "7",
+  "DIRECT_CREDIT": "8",
+  "ACH_CREDIT": "9",
+  "BPAY": "10",
+  "HIGH_VALUE_CLEARING_SYSTEM": "11",
+  "REINVEST_IN_FUND": "12",
+} as const;
+export type DistribPaymentMethod = (typeof DistribPaymentMethod)[keyof typeof DistribPaymentMethod];
+
+/** `DKReason` (tag 127) values keyed by spec value name. */
+export const DKReason = {
+  "UNKNOWN_SYMBOL": "A",
+  "WRONG_SIDE": "B",
+  "QUANTITY_EXCEEDS_ORDER": "C",
+  "NO_MATCHING_ORDER": "D",
+  "PRICE_EXCEEDS_LIMIT": "E",
+  "CALCULATION_DIFFERENCE": "F",
+  "OTHER": "Z",
+} as const;
+export type DKReason = (typeof DKReason)[keyof typeof DKReason];
+
+/** `DlvyInstType` (tag 787) values keyed by spec value name. */
+export const DlvyInstType = {
+  "SECURITIES": "S",
+  "CASH": "C",
+} as const;
+export type DlvyInstType = (typeof DlvyInstType)[keyof typeof DlvyInstType];
+
+/** `DueToRelated` (tag 329) values keyed by spec value name. */
+export const DueToRelated = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type DueToRelated = (typeof DueToRelated)[keyof typeof DueToRelated];
+
+/** `EmailType` (tag 94) values keyed by spec value name. */
+export const EmailType = {
+  "NEW": "0",
+  "REPLY": "1",
+  "ADMIN_REPLY": "2",
+} as const;
+export type EmailType = (typeof EmailType)[keyof typeof EmailType];
+
+/** `EncryptMethod` (tag 98) values keyed by spec value name. */
+export const EncryptMethod = {
+  "NONE": "0",
+  "PKCS": "1",
+  "DES": "2",
+  "PKCS_DES": "3",
+  "PGP_DES": "4",
+  "PGP_DES_MD5": "5",
+  "PEM_DES_MD5": "6",
+} as const;
+export type EncryptMethod = (typeof EncryptMethod)[keyof typeof EncryptMethod];
+
+/** `EventType` (tag 865) values keyed by spec value name. */
+export const EventType = {
+  "PUT": "1",
+  "CALL": "2",
+  "TENDER": "3",
+  "SINKING_FUND_CALL": "4",
+  "OTHER": "99",
+} as const;
+export type EventType = (typeof EventType)[keyof typeof EventType];
+
+/** `ExchangeForPhysical` (tag 411) values keyed by spec value name. */
+export const ExchangeForPhysical = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type ExchangeForPhysical = (typeof ExchangeForPhysical)[keyof typeof ExchangeForPhysical];
+
+/** `ExecInst` (tag 18) values keyed by spec value name. */
+export const ExecInst = {
+  "NOT_HELD": "1",
+  "WORK": "2",
+  "GO_ALONG": "3",
+  "OVER_THE_DAY": "4",
+  "HELD": "5",
+  "PARTICIPATE_DONT_INITIATE": "6",
+  "STRICT_SCALE": "7",
+  "TRY_TO_SCALE": "8",
+  "STAY_ON_BIDSIDE": "9",
+  "STAY_ON_OFFERSIDE": "0",
+  "NO_CROSS": "A",
+  "OK_TO_CROSS": "B",
+  "CALL_FIRST": "C",
+  "PERCENT_OF_VOLUME": "D",
+  "DO_NOT_INCREASE": "E",
+  "DO_NOT_REDUCE": "F",
+  "ALL_OR_NONE": "G",
+  "REINSTATE_ON_SYSTEM_FAILURE": "H",
+  "INSTITUTIONS_ONLY": "I",
+  "REINSTATE_ON_TRADING_HALT": "J",
+  "CANCEL_ON_TRADING_HALT": "K",
+  "LAST_PEG": "L",
+  "MID_PRICE_PEG": "M",
+  "NON_NEGOTIABLE": "N",
+  "OPENING_PEG": "O",
+  "MARKET_PEG": "P",
+  "CANCEL_ON_SYSTEM_FAILURE": "Q",
+  "PRIMARY_PEG": "R",
+  "SUSPEND": "S",
+  "CUSTOMER_DISPLAY_INSTRUCTION": "U",
+  "NETTING": "V",
+  "PEG_TO_VWAP": "W",
+  "TRADE_ALONG": "X",
+  "TRY_TO_STOP": "Y",
+  "CANCEL_IF_NOT_BEST": "Z",
+  "TRAILING_STOP_PEG": "a",
+  "STRICT_LIMIT": "b",
+  "IGNORE_PRICE_VALIDITY_CHECKS": "c",
+  "PEG_TO_LIMIT_PRICE": "d",
+  "WORK_TO_TARGET_STRATEGY": "e",
+} as const;
+export type ExecInst = (typeof ExecInst)[keyof typeof ExecInst];
+
+/** `ExecPriceType` (tag 484) values keyed by spec value name. */
+export const ExecPriceType = {
+  "BID_PRICE": "B",
+  "CREATION_PRICE": "C",
+  "CREATION_PRICE_PLUS_ADJUSTMENT": "D",
+  "CREATION_PRICE_PLUS_ADJUSTMENT_AMOUNT": "E",
+  "OFFER_PRICE": "O",
+  "OFFER_PRICE_MINUS_ADJUSTMENT": "P",
+  "OFFER_PRICE_MINUS_ADJUSTMENT_AMOUNT": "Q",
+  "SINGLE_PRICE": "S",
+} as const;
+export type ExecPriceType = (typeof ExecPriceType)[keyof typeof ExecPriceType];
+
+/** `ExecRestatementReason` (tag 378) values keyed by spec value name. */
+export const ExecRestatementReason = {
+  "GT_CORPORATE_ACTION": "0",
+  "GT_RENEWAL": "1",
+  "VERBAL_CHANGE": "2",
+  "REPRICING_OF_ORDER": "3",
+  "BROKER_OPTION": "4",
+  "PARTIAL_DECLINE_OF_ORDERQTY": "5",
+  "CANCEL_ON_TRADING_HALT": "6",
+  "CANCEL_ON_SYSTEM_FAILURE": "7",
+  "MARKET": "8",
+  "CANCELED_NOT_BEST": "9",
+  "WAREHOUSE_RECAP": "10",
+  "OTHER": "99",
+} as const;
+export type ExecRestatementReason = (typeof ExecRestatementReason)[keyof typeof ExecRestatementReason];
+
+/** `ExecType` (tag 150) values keyed by spec value name. */
+export const ExecType = {
+  "NEW": "0",
+  "DONE_FOR_DAY": "3",
+  "CANCELED": "4",
+  "REPLACE": "5",
+  "PENDING_CANCEL": "6",
+  "STOPPED": "7",
+  "REJECTED": "8",
+  "SUSPENDED": "9",
+  "PENDING_NEW": "A",
+  "CALCULATED": "B",
+  "EXPIRED": "C",
+  "RESTATED": "D",
+  "PENDING_REPLACE": "E",
+  "TRADE": "F",
+  "TRADE_CORRECT": "G",
+  "TRADE_CANCEL": "H",
+  "ORDER_STATUS": "I",
+} as const;
+export type ExecType = (typeof ExecType)[keyof typeof ExecType];
+
+/** `ExerciseMethod` (tag 747) values keyed by spec value name. */
+export const ExerciseMethod = {
+  "AUTOMATIC": "A",
+  "MANUAL": "M",
+} as const;
+export type ExerciseMethod = (typeof ExerciseMethod)[keyof typeof ExerciseMethod];
+
+/** `ExpirationCycle` (tag 827) values keyed by spec value name. */
+export const ExpirationCycle = {
+  "EXPIRE_ON_TRADING_SESSION_CLOSE": "0",
+  "EXPIRE_ON_TRADING_SESSION_OPEN": "1",
+} as const;
+export type ExpirationCycle = (typeof ExpirationCycle)[keyof typeof ExpirationCycle];
+
+/** `FinancialStatus` (tag 291) values keyed by spec value name. */
+export const FinancialStatus = {
+  "BANKRUPT": "1",
+  "PENDING_DELISTING": "2",
+} as const;
+export type FinancialStatus = (typeof FinancialStatus)[keyof typeof FinancialStatus];
+
+/** `ForexReq` (tag 121) values keyed by spec value name. */
+export const ForexReq = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type ForexReq = (typeof ForexReq)[keyof typeof ForexReq];
+
+/** `FundRenewWaiv` (tag 497) values keyed by spec value name. */
+export const FundRenewWaiv = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type FundRenewWaiv = (typeof FundRenewWaiv)[keyof typeof FundRenewWaiv];
+
+/** `GapFillFlag` (tag 123) values keyed by spec value name. */
+export const GapFillFlag = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type GapFillFlag = (typeof GapFillFlag)[keyof typeof GapFillFlag];
+
+/** `GTBookingInst` (tag 427) values keyed by spec value name. */
+export const GTBookingInst = {
+  "BOOK_OUT_ALL_TRADES_ON_DAY_OF_EXECUTION": "0",
+  "ACCUMULATE_EXECUTIONS_UNTIL_ORDER_IS_FILLED_OR_EXPIRES": "1",
+  "ACCUMULATE_UNTIL_VERBALLY_NOTIFIED_OTHERWISE": "2",
+} as const;
+export type GTBookingInst = (typeof GTBookingInst)[keyof typeof GTBookingInst];
+
+/** `HaltReasonChar` (tag 327) values keyed by spec value name. */
+export const HaltReasonChar = {
+  "ORDER_IMBALANCE": "I",
+  "EQUIPMENT_CHANGEOVER": "X",
+  "NEWS_PENDING": "P",
+  "NEWS_DISSEMINATION": "D",
+  "ORDER_INFLUX": "E",
+  "ADDITIONAL_INFORMATION": "M",
+} as const;
+export type HaltReasonChar = (typeof HaltReasonChar)[keyof typeof HaltReasonChar];
+
+/** `HandlInst` (tag 21) values keyed by spec value name. */
+export const HandlInst = {
+  "AUTOMATED_EXECUTION_ORDER_PRIVATE_NO_BROKER_INTERVENTION": "1",
+  "AUTOMATED_EXECUTION_ORDER_PUBLIC_BROKER_INTERVENTION_OK": "2",
+  "MANUAL_ORDER_BEST_EXECUTION": "3",
+} as const;
+export type HandlInst = (typeof HandlInst)[keyof typeof HandlInst];
+
+/** `IncTaxInd` (tag 416) values keyed by spec value name. */
+export const IncTaxInd = {
+  "NET": "1",
+  "GROSS": "2",
+} as const;
+export type IncTaxInd = (typeof IncTaxInd)[keyof typeof IncTaxInd];
+
+/** `InstrAttribType` (tag 871) values keyed by spec value name. */
+export const InstrAttribType = {
+  "FLAT": "1",
+  "ZERO_COUPON": "2",
+  "INTEREST_BEARING": "3",
+  "NO_PERIODIC_PAYMENTS": "4",
+  "VARIABLE_RATE": "5",
+  "LESS_FEE_FOR_PUT": "6",
+  "STEPPED_COUPON": "7",
+  "COUPON_PERIOD": "8",
+  "WHEN_AND_IF_ISSUED": "9",
+  "ORIGINAL_ISSUE_DISCOUNT": "10",
+  "CALLABLE_PUTTABLE": "11",
+  "ESCROWED_TO_MATURITY": "12",
+  "ESCROWED_TO_REDEMPTION_DATE_CALLABLE_SUPPLY_REDEMPTION_DATE_IN_THE_INSTRATTRIBVALUE": "13",
+  "PREREFUNDED": "14",
+  "IN_DEFAULT": "15",
+  "UNRATED": "16",
+  "TAXABLE": "17",
+  "INDEXED": "18",
+  "SUBJECT_TO_ALTERNATIVE_MINIMUM_TAX": "19",
+  "ORIGINAL_ISSUE_DISCOUNT_PRICE_SUPPLY_PRICE_IN_THE_INSTRATTRIBVALUE": "20",
+  "CALLABLE_BELOW_MATURITY_VALUE": "21",
+  "CALLABLE_WITHOUT_NOTICE_BY_MAIL_TO_HOLDER_UNLESS_REGISTERED": "22",
+  "TEXT_SUPPLY_THE_TEXT_OF_THE_ATTRIBUTE_OR_DISCLAIMER_IN_THE_INSTRATTRIBVALUE": "99",
+} as const;
+export type InstrAttribType = (typeof InstrAttribType)[keyof typeof InstrAttribType];
+
+/** `InViewOfCommon` (tag 328) values keyed by spec value name. */
+export const InViewOfCommon = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type InViewOfCommon = (typeof InViewOfCommon)[keyof typeof InViewOfCommon];
+
+/** `IOINaturalFlag` (tag 130) values keyed by spec value name. */
+export const IOINaturalFlag = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type IOINaturalFlag = (typeof IOINaturalFlag)[keyof typeof IOINaturalFlag];
+
+/** `IOIQltyInd` (tag 25) values keyed by spec value name. */
+export const IOIQltyInd = {
+  "LOW": "L",
+  "MEDIUM": "M",
+  "HIGH": "H",
+} as const;
+export type IOIQltyInd = (typeof IOIQltyInd)[keyof typeof IOIQltyInd];
+
+/** `IOIQty` (tag 27) values keyed by spec value name. */
+export const IOIQty = {
+  "SMALL": "S",
+  "MEDIUM": "M",
+  "LARGE": "L",
+} as const;
+export type IOIQty = (typeof IOIQty)[keyof typeof IOIQty];
+
+/** `IOIQualifier` (tag 104) values keyed by spec value name. */
+export const IOIQualifier = {
+  "ALL_OR_NONE": "A",
+  "MARKET_ON_CLOSE": "B",
+  "AT_THE_CLOSE": "C",
+  "VWAP": "D",
+  "IN_TOUCH_WITH": "I",
+  "LIMIT": "L",
+  "MORE_BEHIND": "M",
+  "AT_THE_OPEN": "O",
+  "TAKING_A_POSITION": "P",
+  "AT_THE_MARKET": "Q",
+  "READY_TO_TRADE": "R",
+  "PORTFOLIO_SHOWN": "S",
+  "THROUGH_THE_DAY": "T",
+  "VERSUS": "V",
+  "INDICATION": "W",
+  "CROSSING_OPPORTUNITY": "X",
+  "AT_THE_MIDPOINT": "Y",
+  "PRE_OPEN": "Z",
+} as const;
+export type IOIQualifier = (typeof IOIQualifier)[keyof typeof IOIQualifier];
+
+/** `IOITransType` (tag 28) values keyed by spec value name. */
+export const IOITransType = {
+  "NEW": "N",
+  "CANCEL": "C",
+  "REPLACE": "R",
+} as const;
+export type IOITransType = (typeof IOITransType)[keyof typeof IOITransType];
+
+/** `LastCapacity` (tag 29) values keyed by spec value name. */
+export const LastCapacity = {
+  "AGENT": "1",
+  "CROSS_AS_AGENT": "2",
+  "CROSS_AS_PRINCIPAL": "3",
+  "PRINCIPAL": "4",
+} as const;
+export type LastCapacity = (typeof LastCapacity)[keyof typeof LastCapacity];
+
+/** `LastFragment` (tag 893) values keyed by spec value name. */
+export const LastFragment = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type LastFragment = (typeof LastFragment)[keyof typeof LastFragment];
+
+/** `LastLiquidityInd` (tag 851) values keyed by spec value name. */
+export const LastLiquidityInd = {
+  "ADDED_LIQUIDITY": "1",
+  "REMOVED_LIQUIDITY": "2",
+  "LIQUIDITY_ROUTED_OUT": "3",
+} as const;
+export type LastLiquidityInd = (typeof LastLiquidityInd)[keyof typeof LastLiquidityInd];
+
+/** `LegalConfirm` (tag 650) values keyed by spec value name. */
+export const LegalConfirm = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type LegalConfirm = (typeof LegalConfirm)[keyof typeof LegalConfirm];
+
+/** `LegSwapType` (tag 690) values keyed by spec value name. */
+export const LegSwapType = {
+  "PAR_FOR_PAR": "1",
+  "MODIFIED_DURATION": "2",
+  "RISK": "4",
+  "PROCEEDS": "5",
+} as const;
+export type LegSwapType = (typeof LegSwapType)[keyof typeof LegSwapType];
+
+/** `LiquidityIndType` (tag 409) values keyed by spec value name. */
+export const LiquidityIndType = {
+  "5DAY_MOVING_AVERAGE": "1",
+  "20_DAY_MOVING_AVERAGE": "2",
+  "NORMAL_MARKET_SIZE": "3",
+  "OTHER": "4",
+} as const;
+export type LiquidityIndType = (typeof LiquidityIndType)[keyof typeof LiquidityIndType];
+
+/** `ListExecInstType` (tag 433) values keyed by spec value name. */
+export const ListExecInstType = {
+  "IMMEDIATE": "1",
+  "WAIT_FOR_EXECUTE_INSTRUCTION": "2",
+  "EXCHANGE_SWITCH_CIV_ORDER_SELL_DRIVEN": "3",
+  "EXCHANGE_SWITCH_CIV_ORDER_BUY_DRIVEN_CASH_TOP_UP": "4",
+  "EXCHANGE_SWITCH_CIV_ORDER_BUY_DRIVEN_CASH_WITHDRAW": "5",
+} as const;
+export type ListExecInstType = (typeof ListExecInstType)[keyof typeof ListExecInstType];
+
+/** `ListOrderStatus` (tag 431) values keyed by spec value name. */
+export const ListOrderStatus = {
+  "INBIDDINGPROCESS": "1",
+  "RECEIVEDFOREXECUTION": "2",
+  "EXECUTING": "3",
+  "CANCELING": "4",
+  "ALERT": "5",
+  "ALL_DONE": "6",
+  "REJECT": "7",
+} as const;
+export type ListOrderStatus = (typeof ListOrderStatus)[keyof typeof ListOrderStatus];
+
+/** `ListStatusType` (tag 429) values keyed by spec value name. */
+export const ListStatusType = {
+  "ACK": "1",
+  "RESPONSE": "2",
+  "TIMED": "3",
+  "EXECSTARTED": "4",
+  "ALLDONE": "5",
+  "ALERT": "6",
+} as const;
+export type ListStatusType = (typeof ListStatusType)[keyof typeof ListStatusType];
+
+/** `LocateReqd` (tag 114) values keyed by spec value name. */
+export const LocateReqd = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type LocateReqd = (typeof LocateReqd)[keyof typeof LocateReqd];
+
+/** `MassCancelRejectReason` (tag 532) values keyed by spec value name. */
+export const MassCancelRejectReason = {
+  "MASS_CANCEL_NOT_SUPPORTED": "0",
+  "INVALID_OR_UNKNOWN_SECURITY": "1",
+  "INVALID_OR_UNKNOWN_UNDERLYING": "2",
+  "INVALID_OR_UNKNOWN_PRODUCT": "3",
+  "INVALID_OR_UNKNOWN_CFICODE": "4",
+  "INVALID_OR_UNKNOWN_SECURITY_TYPE": "5",
+  "INVALID_OR_UNKNOWN_TRADING_SESSION": "6",
+  "OTHER": "99",
+} as const;
+export type MassCancelRejectReason = (typeof MassCancelRejectReason)[keyof typeof MassCancelRejectReason];
+
+/** `MassCancelRequestType` (tag 530) values keyed by spec value name. */
+export const MassCancelRequestType = {
+  "CANCEL_ORDERS_FOR_A_SECURITY": "1",
+  "CANCEL_ORDERS_FOR_AN_UNDERLYING_SECURITY": "2",
+  "CANCEL_ORDERS_FOR_A_PRODUCT": "3",
+  "CANCEL_ORDERS_FOR_A_CFICODE": "4",
+  "CANCEL_ORDERS_FOR_A_SECURITYTYPE": "5",
+  "CANCEL_ORDERS_FOR_A_TRADING_SESSION": "6",
+  "CANCEL_ALL_ORDERS": "7",
+} as const;
+export type MassCancelRequestType = (typeof MassCancelRequestType)[keyof typeof MassCancelRequestType];
+
+/** `MassCancelResponse` (tag 531) values keyed by spec value name. */
+export const MassCancelResponse = {
+  "CANCEL_REQUEST_REJECTED": "0",
+  "CANCEL_ORDERS_FOR_A_SECURITY": "1",
+  "CANCEL_ORDERS_FOR_AN_UNDERLYING_SECURITY": "2",
+  "CANCEL_ORDERS_FOR_A_PRODUCT": "3",
+  "CANCEL_ORDERS_FOR_A_CFICODE": "4",
+  "CANCEL_ORDERS_FOR_A_SECURITYTYPE": "5",
+  "CANCEL_ORDERS_FOR_A_TRADING_SESSION": "6",
+  "CANCEL_ALL_ORDERS": "7",
+} as const;
+export type MassCancelResponse = (typeof MassCancelResponse)[keyof typeof MassCancelResponse];
+
+/** `MassStatusReqType` (tag 585) values keyed by spec value name. */
+export const MassStatusReqType = {
+  "STATUS_FOR_ORDERS_FOR_A_SECURITY": "1",
+  "STATUS_FOR_ORDERS_FOR_AN_UNDERLYING_SECURITY": "2",
+  "STATUS_FOR_ORDERS_FOR_A_PRODUCT": "3",
+  "STATUS_FOR_ORDERS_FOR_A_CFICODE": "4",
+  "STATUS_FOR_ORDERS_FOR_A_SECURITYTYPE": "5",
+  "STATUS_FOR_ORDERS_FOR_A_TRADING_SESSION": "6",
+  "STATUS_FOR_ALL_ORDERS": "7",
+  "STATUS_FOR_ORDERS_FOR_A_PARTYID": "8",
+} as const;
+export type MassStatusReqType = (typeof MassStatusReqType)[keyof typeof MassStatusReqType];
+
+/** `MatchStatus` (tag 573) values keyed by spec value name. */
+export const MatchStatus = {
+  "COMPARED_MATCHED_OR_AFFIRMED": "0",
+  "UNCOMPARED_UNMATCHED_OR_UNAFFIRMED": "1",
+  "ADVISORY_OR_ALERT": "2",
+} as const;
+export type MatchStatus = (typeof MatchStatus)[keyof typeof MatchStatus];
+
+/** `MatchType` (tag 574) values keyed by spec value name. */
+export const MatchType = {
+  "EXACT_MATCH_ON_TRADE_DATE_STOCK_SYMBOL_QUANTITY_PRICE_TRADE_TYPE_AND_SPECIAL_TRADE_INDICATOR_PLUS_FOUR_BADGES_AND_EXECUTION_TIME": "A1",
+  "EXACT_MATCH_ON_TRADE_DATE_STOCK_SYMBOL_QUANTITY_PRICE_TRADE_TYPE_AND_SPECIAL_TRADE_INDICATOR_PLUS_FOUR_BADGES": "A2",
+  "EXACT_MATCH_ON_TRADE_DATE_STOCK_SYMBOL_QUANTITY_PRICE_TRADE_TYPE_AND_SPECIAL_TRADE_INDICATOR_PLUS_TWO_BADGES_AND_EXECUTION_TIME": "A3",
+  "EXACT_MATCH_ON_TRADE_DATE_STOCK_SYMBOL_QUANTITY_PRICE_TRADE_TYPE_AND_SPECIAL_TRADE_INDICATOR_PLUS_TWO_BADGES": "A4",
+  "EXACT_MATCH_ON_TRADE_DATE_STOCK_SYMBOL_QUANTITY_PRICE_TRADE_TYPE_AND_SPECIAL_TRADE_INDICATOR_PLUS_EXECUTION_TIME": "A5",
+  "COMPARED_RECORDS_RESULTING_FROM_STAMPED_ADVISORIES_OR_SPECIALIST_ACCEPTS_PAIR_OFFS": "AQ",
+  "SUMMARIZED_MATCH_USING_A1_EXACT_MATCH_CRITERIA_EXCEPT_QUANTITY_IS_SUMMARIZED": "S1",
+  "SUMMARIZED_MATCH_USING_A2_EXACT_MATCH_CRITERIA_EXCEPT_QUANTITY_IS_SUMMARIZED": "S2",
+  "SUMMARIZED_MATCH_USING_A3_EXACT_MATCH_CRITERIA_EXCEPT_QUANTITY_IS_SUMMARIZED": "S3",
+  "SUMMARIZED_MATCH_USING_A4_EXACT_MATCH_CRITERIA_EXCEPT_QUANTITY_IS_SUMMARIZED": "S4",
+  "SUMMARIZED_MATCH_USING_A5_EXACT_MATCH_CRITERIA_EXCEPT_QUANTITY_IS_SUMMARIZED": "S5",
+  "EXACT_MATCH_ON_TRADE_DATE_STOCK_SYMBOL_QUANTITY_PRICE_TRADE_TYPE_AND_SPECIAL_TRADE_INDICATOR_MINUS_BADGES_AND_TIMES_ACT_M1_MATCH": "M1",
+  "SUMMARIZED_MATCH_MINUS_BADGES_AND_TIMES_ACT_M2_MATCH": "M2",
+  "OCS_LOCKED_IN_NON_ACT": "MT",
+  "ACT_ACCEPTED_TRADE": "M3",
+  "ACT_DEFAULT_TRADE": "M4",
+  "ACT_DEFAULT_AFTER_M2": "M5",
+  "ACT_M6_MATCH": "M6",
+} as const;
+export type MatchType = (typeof MatchType)[keyof typeof MatchType];
+
+/** `MDEntryType` (tag 269) values keyed by spec value name. */
+export const MDEntryType = {
+  "BID": "0",
+  "OFFER": "1",
+  "TRADE": "2",
+  "INDEX_VALUE": "3",
+  "OPENING_PRICE": "4",
+  "CLOSING_PRICE": "5",
+  "SETTLEMENT_PRICE": "6",
+  "TRADING_SESSION_HIGH_PRICE": "7",
+  "TRADING_SESSION_LOW_PRICE": "8",
+  "TRADING_SESSION_VWAP_PRICE": "9",
+  "IMBALANCE": "A",
+  "TRADE_VOLUME": "B",
+  "OPEN_INTEREST": "C",
+} as const;
+export type MDEntryType = (typeof MDEntryType)[keyof typeof MDEntryType];
+
+/** `MDImplicitDelete` (tag 547) values keyed by spec value name. */
+export const MDImplicitDelete = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type MDImplicitDelete = (typeof MDImplicitDelete)[keyof typeof MDImplicitDelete];
+
+/** `MDReqRejReason` (tag 281) values keyed by spec value name. */
+export const MDReqRejReason = {
+  "UNKNOWN_SYMBOL": "0",
+  "DUPLICATE_MDREQID": "1",
+  "INSUFFICIENT_BANDWIDTH": "2",
+  "INSUFFICIENT_PERMISSIONS": "3",
+  "UNSUPPORTED_SUBSCRIPTIONREQUESTTYPE": "4",
+  "UNSUPPORTED_MARKETDEPTH": "5",
+  "UNSUPPORTED_MDUPDATETYPE": "6",
+  "UNSUPPORTED_AGGREGATEDBOOK": "7",
+  "UNSUPPORTED_MDENTRYTYPE": "8",
+  "UNSUPPORTED_TRADINGSESSIONID": "9",
+  "UNSUPPORTED_SCOPE": "A",
+  "UNSUPPORTED_OPENCLOSESETTLEFLAG": "B",
+  "UNSUPPORTED_MDIMPLICITDELETE": "C",
+} as const;
+export type MDReqRejReason = (typeof MDReqRejReason)[keyof typeof MDReqRejReason];
+
+/** `MDUpdateAction` (tag 279) values keyed by spec value name. */
+export const MDUpdateAction = {
+  "NEW": "0",
+  "CHANGE": "1",
+  "DELETE": "2",
+} as const;
+export type MDUpdateAction = (typeof MDUpdateAction)[keyof typeof MDUpdateAction];
+
+/** `MDUpdateType` (tag 265) values keyed by spec value name. */
+export const MDUpdateType = {
+  "FULL_REFRESH": "0",
+  "INCREMENTAL_REFRESH": "1",
+} as const;
+export type MDUpdateType = (typeof MDUpdateType)[keyof typeof MDUpdateType];
+
+/** `MessageEncoding` (tag 347) values keyed by spec value name. */
+export const MessageEncoding = {
+  "JIS": "ISO-2022-JP",
+  "EUC": "EUC-JP",
+  "FOR_USING_SJIS": "Shift_JIS",
+  "UNICODE": "UTF-8",
+} as const;
+export type MessageEncoding = (typeof MessageEncoding)[keyof typeof MessageEncoding];
+
+/** `MiscFeeBasis` (tag 891) values keyed by spec value name. */
+export const MiscFeeBasis = {
+  "ABSOLUTE": "0",
+  "PER_UNIT": "1",
+  "PERCENTAGE": "2",
+} as const;
+export type MiscFeeBasis = (typeof MiscFeeBasis)[keyof typeof MiscFeeBasis];
+
+/** `MiscFeeType` (tag 139) values keyed by spec value name. */
+export const MiscFeeType = {
+  "REGULATORY": "1",
+  "TAX": "2",
+  "LOCAL_COMMISSION": "3",
+  "EXCHANGE_FEES": "4",
+  "STAMP": "5",
+  "LEVY": "6",
+  "OTHER": "7",
+  "MARKUP": "8",
+  "CONSUMPTION_TAX": "9",
+  "PER_TRANSACTION": "10",
+  "CONVERSION": "11",
+  "AGENT": "12",
+} as const;
+export type MiscFeeType = (typeof MiscFeeType)[keyof typeof MiscFeeType];
+
+/** `MoneyLaunderingStatus` (tag 481) values keyed by spec value name. */
+export const MoneyLaunderingStatus = {
+  "PASSED": "Y",
+  "NOT_CHECKED": "N",
+  "EXEMPT_BELOW_THE_LIMIT": "1",
+  "EXEMPT_CLIENT_MONEY_TYPE_EXEMPTION": "2",
+  "EXEMPT_AUTHORISED_CREDIT_OR_FINANCIAL_INSTITUTION": "3",
+} as const;
+export type MoneyLaunderingStatus = (typeof MoneyLaunderingStatus)[keyof typeof MoneyLaunderingStatus];
+
+/** `MsgDirection` (tag 385) values keyed by spec value name. */
+export const MsgDirection = {
+  "SEND": "S",
+  "RECEIVE": "R",
+} as const;
+export type MsgDirection = (typeof MsgDirection)[keyof typeof MsgDirection];
+
+/** `MultiLegReportingType` (tag 442) values keyed by spec value name. */
+export const MultiLegReportingType = {
+  "SINGLE_SECURITY": "1",
+  "INDIVIDUAL_LEG_OF_A_MULTI_LEG_SECURITY": "2",
+  "MULTI_LEG_SECURITY": "3",
+} as const;
+export type MultiLegReportingType = (typeof MultiLegReportingType)[keyof typeof MultiLegReportingType];
+
+/** `MultiLegRptTypeReq` (tag 563) values keyed by spec value name. */
+export const MultiLegRptTypeReq = {
+  "REPORT_BY_MULITLEG_SECURITY_ONLY": "0",
+  "REPORT_BY_MULTILEG_SECURITY_AND_BY_INSTRUMENT_LEGS_BELONGING_TO_THE_MULTILEG_SECURITY": "1",
+  "REPORT_BY_INSTRUMENT_LEGS_BELONGING_TO_THE_MULTILEG_SECURITY_ONLY": "2",
+} as const;
+export type MultiLegRptTypeReq = (typeof MultiLegRptTypeReq)[keyof typeof MultiLegRptTypeReq];
+
+/** `NetGrossInd` (tag 430) values keyed by spec value name. */
+export const NetGrossInd = {
+  "NET": "1",
+  "GROSS": "2",
+} as const;
+export type NetGrossInd = (typeof NetGrossInd)[keyof typeof NetGrossInd];
+
+/** `NetworkRequestType` (tag 935) values keyed by spec value name. */
+export const NetworkRequestType = {
+  "SNAPSHOT": "1",
+  "SUBSCRIBE": "2",
+  "STOP_SUBSCRIBING": "4",
+  "LEVEL_OF_DETAIL_THEN_NOCOMPIDS_BECOMES_REQUIRED": "8",
+} as const;
+export type NetworkRequestType = (typeof NetworkRequestType)[keyof typeof NetworkRequestType];
+
+/** `NetworkStatusResponseType` (tag 937) values keyed by spec value name. */
+export const NetworkStatusResponseType = {
+  "FULL": "1",
+  "INCREMENTAL_UPDATE": "2",
+} as const;
+export type NetworkStatusResponseType = (typeof NetworkStatusResponseType)[keyof typeof NetworkStatusResponseType];
+
+/** `NoSides` (tag 552) values keyed by spec value name. */
+export const NoSides = {
+  "ONE_SIDE": "1",
+  "BOTH_SIDES": "2",
+} as const;
+export type NoSides = (typeof NoSides)[keyof typeof NoSides];
+
+/** `NotifyBrokerOfCredit` (tag 208) values keyed by spec value name. */
+export const NotifyBrokerOfCredit = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type NotifyBrokerOfCredit = (typeof NotifyBrokerOfCredit)[keyof typeof NotifyBrokerOfCredit];
+
+/** `OddLot` (tag 575) values keyed by spec value name. */
+export const OddLot = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type OddLot = (typeof OddLot)[keyof typeof OddLot];
+
+/** `OpenCloseSettlFlag` (tag 286) values keyed by spec value name. */
+export const OpenCloseSettlFlag = {
+  "DAILY_OPEN": "0",
+  "SESSION_OPEN": "1",
+  "DELIVERY_SETTLEMENT_ENTRY": "2",
+  "EXPECTED_ENTRY": "3",
+  "ENTRY_FROM_PREVIOUS_BUSINESS_DAY": "4",
+  "THEORETICAL_PRICE_VALUE": "5",
+} as const;
+export type OpenCloseSettlFlag = (typeof OpenCloseSettlFlag)[keyof typeof OpenCloseSettlFlag];
+
+/** `OrderCapacity` (tag 528) values keyed by spec value name. */
+export const OrderCapacity = {
+  "AGENCY": "A",
+  "PROPRIETARY": "G",
+  "INDIVIDUAL": "I",
+  "PRINCIPAL": "P",
+  "RISKLESS_PRINCIPAL": "R",
+  "AGENT_FOR_OTHER_MEMBER": "W",
+} as const;
+export type OrderCapacity = (typeof OrderCapacity)[keyof typeof OrderCapacity];
+
+/** `OrderRestrictions` (tag 529) values keyed by spec value name. */
+export const OrderRestrictions = {
+  "PROGRAM_TRADE": "1",
+  "INDEX_ARBITRAGE": "2",
+  "NON_INDEX_ARBITRAGE": "3",
+  "COMPETING_MARKET_MAKER": "4",
+  "ACTING_AS_MARKET_MAKER_OR_SPECIALIST_IN_THE_SECURITY": "5",
+  "ACTING_AS_MARKET_MAKER_OR_SPECIALIST_IN_THE_UNDERLYING_SECURITY_OF_A_DERIVATIVE_SECURITY": "6",
+  "FOREIGN_ENTITY": "7",
+  "EXTERNAL_MARKET_PARTICIPANT": "8",
+  "EXTERNAL_INTER_CONNECTED_MARKET_LINKAGE": "9",
+  "RISKLESS_ARBITRAGE": "A",
+} as const;
+export type OrderRestrictions = (typeof OrderRestrictions)[keyof typeof OrderRestrictions];
+
+/** `OrdRejReason` (tag 103) values keyed by spec value name. */
+export const OrdRejReason = {
+  "BROKER": "0",
+  "UNKNOWN_SYMBOL": "1",
+  "EXCHANGE_CLOSED": "2",
+  "ORDER_EXCEEDS_LIMIT": "3",
+  "TOO_LATE_TO_ENTER": "4",
+  "UNKNOWN_ORDER": "5",
+  "DUPLICATE_ORDER": "6",
+  "DUPLICATE_OF_A_VERBALLY_COMMUNICATED_ORDER": "7",
+  "STALE_ORDER": "8",
+  "TRADE_ALONG_REQUIRED": "9",
+  "INVALID_INVESTOR_ID": "10",
+  "UNSUPPORTED_ORDER_CHARACTERISTIC12_SURVEILLENCE_OPTION": "11",
+  "INCORRECT_QUANTITY": "13",
+  "INCORRECT_ALLOCATED_QUANTITY": "14",
+  "UNKNOWN_ACCOUNT": "15",
+  "OTHER": "99",
+} as const;
+export type OrdRejReason = (typeof OrdRejReason)[keyof typeof OrdRejReason];
+
+/** `OrdStatus` (tag 39) values keyed by spec value name. */
+export const OrdStatus = {
+  "NEW": "0",
+  "PARTIALLY_FILLED": "1",
+  "FILLED": "2",
+  "DONE_FOR_DAY": "3",
+  "CANCELED": "4",
+  "PENDING_CANCEL": "6",
+  "STOPPED": "7",
+  "REJECTED": "8",
+  "SUSPENDED": "9",
+  "PENDING_NEW": "A",
+  "CALCULATED": "B",
+  "EXPIRED": "C",
+  "ACCEPTED_FOR_BIDDING": "D",
+  "PENDING_REPLACE": "E",
+} as const;
+export type OrdStatus = (typeof OrdStatus)[keyof typeof OrdStatus];
+
+/** `OrdType` (tag 40) values keyed by spec value name. */
+export const OrdType = {
+  "MARKET": "1",
+  "LIMIT": "2",
+  "STOP": "3",
+  "STOP_LIMIT": "4",
+  "WITH_OR_WITHOUT": "6",
+  "LIMIT_OR_BETTER": "7",
+  "LIMIT_WITH_OR_WITHOUT": "8",
+  "ON_BASIS": "9",
+  "PREVIOUSLY_QUOTED": "D",
+  "PREVIOUSLY_INDICATED": "E",
+  "FOREX": "G",
+  "FUNARI": "I",
+  "MARKET_IF_TOUCHED": "J",
+  "MARKET_WITH_LEFTOVER_AS_LIMIT": "K",
+  "PREVIOUS_FUND_VALUATION_POINT": "L",
+  "NEXT_FUND_VALUATION_POINT": "M",
+  "PEGGED": "P",
+} as const;
+export type OrdType = (typeof OrdType)[keyof typeof OrdType];
+
+/** `OwnershipType` (tag 517) values keyed by spec value name. */
+export const OwnershipType = {
+  "JOINT_INVESTORS": "J",
+  "TENANTS_IN_COMMON": "T",
+  "JOINT_TRUSTEES": "2",
+} as const;
+export type OwnershipType = (typeof OwnershipType)[keyof typeof OwnershipType];
+
+/** `OwnerType` (tag 522) values keyed by spec value name. */
+export const OwnerType = {
+  "INDIVIDUAL_INVESTOR": "1",
+  "PUBLIC_COMPANY": "2",
+  "PRIVATE_COMPANY": "3",
+  "INDIVIDUAL_TRUSTEE": "4",
+  "COMPANY_TRUSTEE": "5",
+  "PENSION_PLAN": "6",
+  "CUSTODIAN_UNDER_GIFTS_TO_MINORS_ACT": "7",
+  "TRUSTS": "8",
+  "FIDUCIARIES": "9",
+  "NETWORKING_SUB_ACCOUNT": "10",
+  "NON_PROFIT_ORGANIZATION": "11",
+  "CORPORATE_BODY": "12",
+  "NOMINEE": "13",
+} as const;
+export type OwnerType = (typeof OwnerType)[keyof typeof OwnerType];
+
+/** `PartyIDSource` (tag 447) values keyed by spec value name. */
+export const PartyIDSource = {
+  "BIC": "B",
+  "GENERALLY_ACCEPTED_MARKET_PARTICIPANT_IDENTIFIER": "C",
+  "PROPRIETARY_CUSTOM_CODE": "D",
+  "ISO_COUNTRY_CODE": "E",
+  "SETTLEMENT_ENTITY_LOCATION": "F",
+  "MIC": "G",
+  "CSD_PARTICIPANT_MEMBER_CODE": "H",
+  "KOREAN_INVESTOR_ID": "1",
+  "TAIWANESE_QUALIFIED_FOREIGN_INVESTOR_ID_QFII": "2",
+  "TAIWANESE_TRADING_ACCOUNT": "3",
+  "MALAYSIAN_CENTRAL_DEPOSITORY": "4",
+  "CHINESE_B_SHARE": "5",
+  "UK_NATIONAL_INSURANCE_OR_PENSION_NUMBER": "6",
+  "US_SOCIAL_SECURITY_NUMBER": "7",
+  "US_EMPLOYER_IDENTIFICATION_NUMBER": "8",
+  "AUSTRALIAN_BUSINESS_NUMBER": "9",
+  "AUSTRALIAN_TAX_FILE_NUMBER": "A",
+  "DIRECTED_BROKER_THREE_CHARACTER_ACRONYM_AS_DEFINED_IN_ISITC_ETC_BEST_PRACTICE_GUIDELINES_DOCUMENT": "I",
+} as const;
+export type PartyIDSource = (typeof PartyIDSource)[keyof typeof PartyIDSource];
+
+/** `PartyRole` (tag 452) values keyed by spec value name. */
+export const PartyRole = {
+  "EXECUTING_FIRM": "1",
+  "BROKER_OF_CREDIT": "2",
+  "CLIENT_ID": "3",
+  "CLEARING_FIRM": "4",
+  "INVESTOR_ID": "5",
+  "INTRODUCING_FIRM": "6",
+  "ENTERING_FIRM": "7",
+  "LOCATE_LENDING_FIRM": "8",
+  "FUND_MANAGER_CLIENT_ID": "9",
+  "SETTLEMENT_LOCATION": "10",
+  "ORDER_ORIGINATION_TRADER": "11",
+  "EXECUTING_TRADER": "12",
+  "ORDER_ORIGINATION_FIRM": "13",
+  "GIVEUP_CLEARING_FIRM": "14",
+  "CORRESPONDANT_CLEARING_FIRM": "15",
+  "EXECUTING_SYSTEM": "16",
+  "CONTRA_FIRM": "17",
+  "CONTRA_CLEARING_FIRM": "18",
+  "SPONSORING_FIRM": "19",
+  "UNDERLYING_CONTRA_FIRM": "20",
+  "CLEARING_ORGANIZATION": "21",
+  "EXCHANGE": "22",
+  "CUSTOMER_ACCOUNT": "24",
+  "CORRESPONDENT_CLEARING_ORGANIZATION": "25",
+  "CORRESPONDENT_BROKER": "26",
+  "BUYER_SELLER": "27",
+  "CUSTODIAN": "28",
+  "INTERMEDIARY": "29",
+  "AGENT": "30",
+  "SUB_CUSTODIAN": "31",
+  "BENEFICIARY": "32",
+  "INTERESTED_PARTY": "33",
+  "REGULATORY_BODY": "34",
+  "LIQUIDITY_PROVIDER": "35",
+  "ENTERING_TRADER": "36",
+  "CONTRA_TRADER": "37",
+  "POSITION_ACCOUNT": "38",
+} as const;
+export type PartyRole = (typeof PartyRole)[keyof typeof PartyRole];
+
+/** `PartySubIDType` (tag 803) values keyed by spec value name. */
+export const PartySubIDType = {
+  "FIRM": "1",
+  "PERSON": "2",
+  "SYSTEM": "3",
+  "APPLICATION": "4",
+  "FULL_LEGAL_NAME_OF_FIRM": "5",
+  "POSTAL_ADDRESS": "6",
+  "PHONE_NUMBER": "7",
+  "EMAIL_ADDRESS": "8",
+  "CONTACT_NAME": "9",
+  "SECURITIES_ACCOUNT_NUMBER": "10",
+  "REGISTRATION_NUMBER": "11",
+  "REGISTERED_ADDRESS_12": "12",
+  "REGULATORY_STATUS": "13",
+  "REGISTRATION_NAME": "14",
+  "CASH_ACCOUNT_NUMBER": "15",
+  "BIC": "16",
+  "CSD_PARTICIPANT_MEMBER_CODE": "17",
+  "REGISTERED_ADDRESS_18": "18",
+  "FUND_ACCOUNT_NAME": "19",
+  "TELEX_NUMBER": "20",
+  "FAX_NUMBER": "21",
+  "SECURITIES_ACCOUNT_NAME": "22",
+  "CASH_ACCOUNT_NAME": "23",
+  "DEPARTMENT": "24",
+  "LOCATION": "25",
+  "POSITION_ACCOUNT_TYPE": "26",
+} as const;
+export type PartySubIDType = (typeof PartySubIDType)[keyof typeof PartySubIDType];
+
+/** `PaymentMethod` (tag 492) values keyed by spec value name. */
+export const PaymentMethod = {
+  "CREST": "1",
+  "NSCC": "2",
+  "EUROCLEAR": "3",
+  "CLEARSTREAM": "4",
+  "CHEQUE": "5",
+  "TELEGRAPHIC_TRANSFER": "6",
+  "FEDWIRE": "7",
+  "DEBIT_CARD": "8",
+  "DIRECT_DEBIT": "9",
+  "DIRECT_CREDIT": "10",
+  "CREDIT_CARD": "11",
+  "ACH_DEBIT": "12",
+  "ACH_CREDIT": "13",
+  "BPAY": "14",
+  "HIGH_VALUE_CLEARING_SYSTEM": "15",
+} as const;
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod];
+
+/** `PegLimitType` (tag 837) values keyed by spec value name. */
+export const PegLimitType = {
+  "OR_BETTER": "0",
+  "STRICT_LIMIT_IS_A_STRICT_LIMIT": "1",
+  "OR_WORSE_FOR_A_BUY_THE_PEG_LIMIT_IS_A_MINIMUM_AND_FOR_A_SELL_THE_PEG_LIMIT_IS_A_MAXIMUM": "2",
+} as const;
+export type PegLimitType = (typeof PegLimitType)[keyof typeof PegLimitType];
+
+/** `PegMoveType` (tag 835) values keyed by spec value name. */
+export const PegMoveType = {
+  "FLOATING": "0",
+  "FIXED": "1",
+} as const;
+export type PegMoveType = (typeof PegMoveType)[keyof typeof PegMoveType];
+
+/** `PegOffsetType` (tag 836) values keyed by spec value name. */
+export const PegOffsetType = {
+  "PRICE": "0",
+  "BASIS_POINTS": "1",
+  "TICKS": "2",
+  "PRICE_TIER": "3",
+} as const;
+export type PegOffsetType = (typeof PegOffsetType)[keyof typeof PegOffsetType];
+
+/** `PegRoundDirection` (tag 838) values keyed by spec value name. */
+export const PegRoundDirection = {
+  "MORE_AGGRESSIVE_ON_A_BUY_ORDER_ROUND_THE_PRICE_UP_ROUND_UP_TO_THE_NEAREST_TICK_ON_A_SELL_ROUND_DOWN_TO_THE_NEAREST_TICK": "1",
+  "MORE_PASSIVE_ON_A_BUY_ORDER_ROUND_DOWN_TO_NEAREST_TICK_ON_A_SELL_ORDER_ROUND_UP_TO_NEAREST_TICK": "2",
+} as const;
+export type PegRoundDirection = (typeof PegRoundDirection)[keyof typeof PegRoundDirection];
+
+/** `PegScope` (tag 840) values keyed by spec value name. */
+export const PegScope = {
+  "LOCAL": "1",
+  "NATIONAL": "2",
+  "GLOBAL": "3",
+  "NATIONAL_EXCLUDING_LOCAL": "4",
+} as const;
+export type PegScope = (typeof PegScope)[keyof typeof PegScope];
+
+/** `PosAmtType` (tag 707) values keyed by spec value name. */
+export const PosAmtType = {
+  "FINAL_MARK_TO_MARKET_AMOUNT": "FMTM",
+  "INCREMENTAL_MARK_TO_MARKET_AMOUNT": "IMTM",
+  "TRADE_VARIATION_AMOUNT": "TVAR",
+  "START_OF_DAY_MARK_TO_MARKET_AMOUNT": "SMTM",
+  "PREMIUM_AMOUNT": "PREM",
+  "CASH_RESIDUAL_AMOUNT": "CRES",
+  "CASH_AMOUNT": "CASH",
+  "VALUE_ADJUSTED_AMOUNT": "VADJ",
+} as const;
+export type PosAmtType = (typeof PosAmtType)[keyof typeof PosAmtType];
+
+/** `PositionEffect` (tag 77) values keyed by spec value name. */
+export const PositionEffect = {
+  "OPEN": "O",
+  "CLOSE": "C",
+  "ROLLED": "R",
+  "FIFO": "F",
+} as const;
+export type PositionEffect = (typeof PositionEffect)[keyof typeof PositionEffect];
+
+/** `PosMaintAction` (tag 712) values keyed by spec value name. */
+export const PosMaintAction = {
+  "NEW_USED_TO_INCREMENT_THE_OVERALL_TRANSACTION_QUANTITY": "1",
+  "REPLACE_USED_TO_OVERRIDE_THE_OVERALL_TRANSACTION_QUANTITY_OR_SPECIFIC_ADD_MESSAGES_BASED_ON_THE_REFERENCE_ID": "2",
+  "CANCEL_USED_TO_REMOVE_THE_OVERALL_TRANSACTION_OR_SPECIFIC_ADD_MESSAGES_BASED_ON_REFERENCE_ID": "3",
+} as const;
+export type PosMaintAction = (typeof PosMaintAction)[keyof typeof PosMaintAction];
+
+/** `PosMaintResult` (tag 723) values keyed by spec value name. */
+export const PosMaintResult = {
+  "SUCCESSFUL_COMPLETION": "0",
+  "REJECTED": "1",
+  "OTHER": "99",
+} as const;
+export type PosMaintResult = (typeof PosMaintResult)[keyof typeof PosMaintResult];
+
+/** `PosMaintStatus` (tag 722) values keyed by spec value name. */
+export const PosMaintStatus = {
+  "ACCEPTED": "0",
+  "ACCEPTED_WITH_WARNINGS": "1",
+  "REJECTED": "2",
+  "COMPLETED": "3",
+  "COMPLETED_WITH_WARNINGS": "4",
+} as const;
+export type PosMaintStatus = (typeof PosMaintStatus)[keyof typeof PosMaintStatus];
+
+/** `PosQtyStatus` (tag 706) values keyed by spec value name. */
+export const PosQtyStatus = {
+  "SUBMITTED": "0",
+  "ACCEPTED": "1",
+  "REJECTED": "2",
+} as const;
+export type PosQtyStatus = (typeof PosQtyStatus)[keyof typeof PosQtyStatus];
+
+/** `PosReqResult` (tag 728) values keyed by spec value name. */
+export const PosReqResult = {
+  "VALID_REQUEST": "0",
+  "INVALID_OR_UNSUPPORTED_REQUEST": "1",
+  "NO_POSITIONS_FOUND_THAT_MATCH_CRITERIA": "2",
+  "NOT_AUTHORIZED_TO_REQUEST_POSITIONS": "3",
+  "REQUEST_FOR_POSITION_NOT_SUPPORTED": "4",
+  "OTHER": "99",
+} as const;
+export type PosReqResult = (typeof PosReqResult)[keyof typeof PosReqResult];
+
+/** `PosReqStatus` (tag 729) values keyed by spec value name. */
+export const PosReqStatus = {
+  "COMPLETED": "0",
+  "COMPLETED_WITH_WARNINGS": "1",
+  "REJECTED": "2",
+} as const;
+export type PosReqStatus = (typeof PosReqStatus)[keyof typeof PosReqStatus];
+
+/** `PosReqType` (tag 724) values keyed by spec value name. */
+export const PosReqType = {
+  "POSITIONS": "0",
+  "TRADES": "1",
+  "EXERCISES": "2",
+  "ASSIGNMENTS": "3",
+} as const;
+export type PosReqType = (typeof PosReqType)[keyof typeof PosReqType];
+
+/** `PossDupFlag` (tag 43) values keyed by spec value name. */
+export const PossDupFlag = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type PossDupFlag = (typeof PossDupFlag)[keyof typeof PossDupFlag];
+
+/** `PossResend` (tag 97) values keyed by spec value name. */
+export const PossResend = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type PossResend = (typeof PossResend)[keyof typeof PossResend];
+
+/** `PosTransType` (tag 709) values keyed by spec value name. */
+export const PosTransType = {
+  "EXERCISE": "1",
+  "DO_NOT_EXERCISE": "2",
+  "POSITION_ADJUSTMENT": "3",
+  "POSITION_CHANGE_SUBMISSION_MARGIN_DISPOSITION": "4",
+  "PLEDGE": "5",
+} as const;
+export type PosTransType = (typeof PosTransType)[keyof typeof PosTransType];
+
+/** `PosType` (tag 703) values keyed by spec value name. */
+export const PosType = {
+  "TRANSACTION_QUANTITY": "TQ",
+  "INTRA_SPREAD_QTY": "IAS",
+  "INTER_SPREAD_QTY": "IES",
+  "END_OF_DAY_QTY": "FIN",
+  "START_OF_DAY_QTY": "SOD",
+  "OPTION_EXERCISE_QTY": "EX",
+  "OPTION_ASSIGNMENT": "AS",
+  "TRANSACTION_FROM_EXERCISE": "TX",
+  "TRANSACTION_FROM_ASSIGNMENT": "TA",
+  "PIT_TRADE_QTY": "PIT",
+  "TRANSFER_TRADE_QTY": "TRF",
+  "ELECTRONIC_TRADE_QTY": "ETR",
+  "ALLOCATION_TRADE_QTY": "ALC",
+  "ADJUSTMENT_QTY": "PA",
+  "AS_OF_TRADE_QTY": "ASF",
+  "DELIVERY_QTY": "DLV",
+  "TOTAL_TRANSACTION_QTY": "TOT",
+  "CROSS_MARGIN_QTY": "XM",
+  "INTEGRAL_SPLIT": "SPL",
+} as const;
+export type PosType = (typeof PosType)[keyof typeof PosType];
+
+/** `PreallocMethod` (tag 591) values keyed by spec value name. */
+export const PreallocMethod = {
+  "PRO_RATA": "0",
+  "DO_NOT_PRO_RATA_DISCUSS_FIRST": "1",
+} as const;
+export type PreallocMethod = (typeof PreallocMethod)[keyof typeof PreallocMethod];
+
+/** `PreviouslyReported` (tag 570) values keyed by spec value name. */
+export const PreviouslyReported = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type PreviouslyReported = (typeof PreviouslyReported)[keyof typeof PreviouslyReported];
+
+/** `PriceType` (tag 423) values keyed by spec value name. */
+export const PriceType = {
+  "PERCENTAGE": "1",
+  "PER_UNIT": "2",
+  "FIXED_AMOUNT": "3",
+  "DISCOUNT_PERCENTAGE_POINTS_BELOW_PAR": "4",
+  "PREMIUM_PERCENTAGE_POINTS_OVER_PAR": "5",
+  "SPREAD": "6",
+  "TED_PRICE": "7",
+  "TED_YIELD": "8",
+  "YIELD": "9",
+  "FIXED_CABINET_TRADE_PRICE": "10",
+  "VARIABLE_CABINET_TRADE_PRICE": "11",
+} as const;
+export type PriceType = (typeof PriceType)[keyof typeof PriceType];
+
+/** `PriorityIndicator` (tag 638) values keyed by spec value name. */
+export const PriorityIndicator = {
+  "PRIORITY_UNCHANGED": "0",
+  "LOST_PRIORITY_AS_RESULT_OF_ORDER_CHANGE": "1",
+} as const;
+export type PriorityIndicator = (typeof PriorityIndicator)[keyof typeof PriorityIndicator];
+
+/** `ProcessCode` (tag 81) values keyed by spec value name. */
+export const ProcessCode = {
+  "REGULAR": "0",
+  "SOFT_DOLLAR": "1",
+  "STEP_IN": "2",
+  "STEP_OUT": "3",
+  "SOFT_DOLLAR_STEP_IN": "4",
+  "SOFT_DOLLAR_STEP_OUT": "5",
+  "PLAN_SPONSOR": "6",
+} as const;
+export type ProcessCode = (typeof ProcessCode)[keyof typeof ProcessCode];
+
+/** `Product` (tag 460) values keyed by spec value name. */
+export const Product = {
+  "AGENCY": "1",
+  "COMMODITY": "2",
+  "CORPORATE": "3",
+  "CURRENCY": "4",
+  "EQUITY": "5",
+  "GOVERNMENT": "6",
+  "INDEX": "7",
+  "LOAN": "8",
+  "MONEYMARKET": "9",
+  "MORTGAGE": "10",
+  "MUNICIPAL": "11",
+  "OTHER": "12",
+  "FINANCING": "13",
+} as const;
+export type Product = (typeof Product)[keyof typeof Product];
+
+/** `ProgRptReqs` (tag 414) values keyed by spec value name. */
+export const ProgRptReqs = {
+  "BUYSIDE_EXPLICITLY_REQUESTS_STATUS_USING_STATUSREQUEST": "1",
+  "SELLSIDE_PERIODICALLY_SENDS_STATUS_USING_LISTSTATUS_PERIOD_OPTIONALLY_SPECIFIED_IN_PROGRESSPERIOD": "2",
+  "REAL_TIME_EXECUTION_REPORTS": "3",
+} as const;
+export type ProgRptReqs = (typeof ProgRptReqs)[keyof typeof ProgRptReqs];
+
+/** `PublishTrdIndicator` (tag 852) values keyed by spec value name. */
+export const PublishTrdIndicator = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type PublishTrdIndicator = (typeof PublishTrdIndicator)[keyof typeof PublishTrdIndicator];
+
+/** `PutOrCall` (tag 201) values keyed by spec value name. */
+export const PutOrCall = {
+  "PUT": "0",
+  "CALL": "1",
+} as const;
+export type PutOrCall = (typeof PutOrCall)[keyof typeof PutOrCall];
+
+/** `QtyType` (tag 854) values keyed by spec value name. */
+export const QtyType = {
+  "UNITS": "0",
+  "CONTRACTS": "1",
+} as const;
+export type QtyType = (typeof QtyType)[keyof typeof QtyType];
+
+/** `QuoteCancelType` (tag 298) values keyed by spec value name. */
+export const QuoteCancelType = {
+  "CANCEL_FOR_SYMBOL": "1",
+  "CANCEL_FOR_SECURITY_TYPE": "2",
+  "CANCEL_FOR_UNDERLYING_SYMBOL": "3",
+  "CANCEL_ALL_QUOTES": "4",
+} as const;
+export type QuoteCancelType = (typeof QuoteCancelType)[keyof typeof QuoteCancelType];
+
+/** `QuoteCondition` (tag 276) values keyed by spec value name. */
+export const QuoteCondition = {
+  "OPEN": "A",
+  "CLOSED": "B",
+  "EXCHANGE_BEST": "C",
+  "CONSOLIDATED_BEST": "D",
+  "LOCKED": "E",
+  "CROSSED": "F",
+  "DEPTH": "G",
+  "FAST_TRADING": "H",
+  "NON_FIRM": "I",
+} as const;
+export type QuoteCondition = (typeof QuoteCondition)[keyof typeof QuoteCondition];
+
+/** `QuotePriceType` (tag 692) values keyed by spec value name. */
+export const QuotePriceType = {
+  "PERCENT": "1",
+  "PER_SHARE": "2",
+  "FIXED_AMOUNT": "3",
+  "DISCOUNT_PERCENTAGE_POINTS_BELOW_PAR": "4",
+  "PREMIUM_PERCENTAGE_POINTS_OVER_PAR": "5",
+  "BASIS_POINTS_RELATIVE_TO_BENCHMARK": "6",
+  "TED_PRICE": "7",
+  "TED_YIELD": "8",
+  "YIELD_SPREAD": "9",
+  "YIELD": "10",
+} as const;
+export type QuotePriceType = (typeof QuotePriceType)[keyof typeof QuotePriceType];
+
+/** `QuoteRejectReason` (tag 300) values keyed by spec value name. */
+export const QuoteRejectReason = {
+  "UNKNOWN_SYMBOL": "1",
+  "EXCHANGE": "2",
+  "QUOTE_REQUEST_EXCEEDS_LIMIT": "3",
+  "TOO_LATE_TO_ENTER": "4",
+  "UNKNOWN_QUOTE": "5",
+  "DUPLICATE_QUOTE": "6",
+  "INVALID_BID_ASK_SPREAD": "7",
+  "INVALID_PRICE": "8",
+  "NOT_AUTHORIZED_TO_QUOTE_SECURITY": "9",
+  "OTHER": "99",
+} as const;
+export type QuoteRejectReason = (typeof QuoteRejectReason)[keyof typeof QuoteRejectReason];
+
+/** `QuoteRequestRejectReason` (tag 658) values keyed by spec value name. */
+export const QuoteRequestRejectReason = {
+  "UNKNOWN_SYMBOL": "1",
+  "EXCHANGE": "2",
+  "QUOTE_REQUEST_EXCEEDS_LIMIT": "3",
+  "TOO_LATE_TO_ENTER": "4",
+  "INVALID_PRICE": "5",
+  "NOT_AUTHORIZED_TO_REQUEST_QUOTE": "6",
+  "NO_MATCH_FOR_INQUIRY": "7",
+  "NO_MARKET_FOR_INSTRUMENT": "8",
+  "NO_INVENTORY": "9",
+  "PASS": "10",
+  "OTHER": "99",
+} as const;
+export type QuoteRequestRejectReason = (typeof QuoteRequestRejectReason)[keyof typeof QuoteRequestRejectReason];
+
+/** `QuoteRequestType` (tag 303) values keyed by spec value name. */
+export const QuoteRequestType = {
+  "MANUAL": "1",
+  "AUTOMATIC": "2",
+} as const;
+export type QuoteRequestType = (typeof QuoteRequestType)[keyof typeof QuoteRequestType];
+
+/** `QuoteResponseLevel` (tag 301) values keyed by spec value name. */
+export const QuoteResponseLevel = {
+  "NO_ACKNOWLEDGEMENT": "0",
+  "ACKNOWLEDGE_ONLY_NEGATIVE_OR_ERRONEOUS_QUOTES": "1",
+  "ACKNOWLEDGE_EACH_QUOTE_MESSAGES": "2",
+} as const;
+export type QuoteResponseLevel = (typeof QuoteResponseLevel)[keyof typeof QuoteResponseLevel];
+
+/** `QuoteRespType` (tag 694) values keyed by spec value name. */
+export const QuoteRespType = {
+  "HIT_LIFT": "1",
+  "COUNTER": "2",
+  "EXPIRED": "3",
+  "COVER": "4",
+  "DONE_AWAY": "5",
+  "PASS": "6",
+} as const;
+export type QuoteRespType = (typeof QuoteRespType)[keyof typeof QuoteRespType];
+
+/** `QuoteStatus` (tag 297) values keyed by spec value name. */
+export const QuoteStatus = {
+  "ACCEPTED": "0",
+  "CANCELED_FOR_SYMBOL": "1",
+  "CANCELED_FOR_SECURITY_TYPE": "2",
+  "CANCELED_FOR_UNDERLYING": "3",
+  "CANCELED_ALL": "4",
+  "REJECTED": "5",
+  "REMOVED_FROM_MARKET": "6",
+  "EXPIRED": "7",
+  "QUERY": "8",
+  "QUOTE_NOT_FOUND": "9",
+  "PENDING": "10",
+  "PASS": "11",
+  "LOCKED_MARKET_WARNING": "12",
+  "CROSS_MARKET_WARNING": "13",
+  "CANCELED_DUE_TO_LOCK_MARKET": "14",
+  "CANCELED_DUE_TO_CROSS_MARKET": "15",
+} as const;
+export type QuoteStatus = (typeof QuoteStatus)[keyof typeof QuoteStatus];
+
+/** `QuoteType` (tag 537) values keyed by spec value name. */
+export const QuoteType = {
+  "INDICATIVE": "0",
+  "TRADEABLE": "1",
+  "RESTRICTED_TRADEABLE": "2",
+  "COUNTER": "3",
+} as const;
+export type QuoteType = (typeof QuoteType)[keyof typeof QuoteType];
+
+/** `RegistRejReasonCode` (tag 507) values keyed by spec value name. */
+export const RegistRejReasonCode = {
+  "INVALID_UNACCEPTABLE_ACCOUNT_TYPE": "1",
+  "INVALID_UNACCEPTABLE_TAX_EXEMPT_TYPE": "2",
+  "INVALID_UNACCEPTABLE_OWNERSHIP_TYPE": "3",
+  "INVALID_UNACCEPTABLE_NO_REG_DETLS": "4",
+  "INVALID_UNACCEPTABLE_REG_SEQ_NO": "5",
+  "INVALID_UNACCEPTABLE_REG_DTLS": "6",
+  "INVALID_UNACCEPTABLE_MAILING_DTLS": "7",
+  "INVALID_UNACCEPTABLE_MAILING_INST": "8",
+  "INVALID_UNACCEPTABLE_INVESTOR_ID": "9",
+  "INVALID_UNACCEPTABLE_INVESTOR_ID_SOURCE": "10",
+  "INVALID_UNACCEPTABLE_DATE_OF_BIRTH": "11",
+  "INVALID_UNACCEPTABLE_INVESTOR_COUNTRY_OF_RESIDENCE": "12",
+  "INVALID_UNACCEPTABLE_NODISTRIBINSTNS": "13",
+  "INVALID_UNACCEPTABLE_DISTRIB_PERCENTAGE": "14",
+  "INVALID_UNACCEPTABLE_DISTRIB_PAYMENT_METHOD": "15",
+  "INVALID_UNACCEPTABLE_CASH_DISTRIB_AGENT_ACCT_NAME": "16",
+  "INVALID_UNACCEPTABLE_CASH_DISTRIB_AGENT_CODE": "17",
+  "INVALID_UNACCEPTABLE_CASH_DISTRIB_AGENT_ACCT_NUM": "18",
+  "OTHER": "99",
+} as const;
+export type RegistRejReasonCode = (typeof RegistRejReasonCode)[keyof typeof RegistRejReasonCode];
+
+/** `RegistStatus` (tag 506) values keyed by spec value name. */
+export const RegistStatus = {
+  "ACCEPTED": "A",
+  "REJECTED": "R",
+  "HELD": "H",
+  "REMINDER_IE_REGISTRATION_INSTRUCTIONS_ARE_STILL_OUTSTANDING": "N",
+} as const;
+export type RegistStatus = (typeof RegistStatus)[keyof typeof RegistStatus];
+
+/** `RegistTransType` (tag 514) values keyed by spec value name. */
+export const RegistTransType = {
+  "NEW": "0",
+  "REPLACE": "1",
+  "CANCEL": "2",
+} as const;
+export type RegistTransType = (typeof RegistTransType)[keyof typeof RegistTransType];
+
+/** `ReportToExch` (tag 113) values keyed by spec value name. */
+export const ReportToExch = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type ReportToExch = (typeof ReportToExch)[keyof typeof ReportToExch];
+
+/** `ResetSeqNumFlag` (tag 141) values keyed by spec value name. */
+export const ResetSeqNumFlag = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type ResetSeqNumFlag = (typeof ResetSeqNumFlag)[keyof typeof ResetSeqNumFlag];
+
+/** `ResponseTransportType` (tag 725) values keyed by spec value name. */
+export const ResponseTransportType = {
+  "INBAND_TRANSPORT_THE_REQUEST_WAS_SENT_OVER": "0",
+  "OUT_OF_BAND_PRE_ARRANGED_OUT_OF_BAND_DELIVERY_MECHANISM": "1",
+} as const;
+export type ResponseTransportType = (typeof ResponseTransportType)[keyof typeof ResponseTransportType];
+
+/** `RoundingDirection` (tag 468) values keyed by spec value name. */
+export const RoundingDirection = {
+  "ROUND_TO_NEAREST": "0",
+  "ROUND_DOWN": "1",
+  "ROUND_UP": "2",
+} as const;
+export type RoundingDirection = (typeof RoundingDirection)[keyof typeof RoundingDirection];
+
+/** `RoutingType` (tag 216) values keyed by spec value name. */
+export const RoutingType = {
+  "TARGET_FIRM": "1",
+  "TARGET_LIST": "2",
+  "BLOCK_FIRM": "3",
+  "BLOCK_LIST": "4",
+} as const;
+export type RoutingType = (typeof RoutingType)[keyof typeof RoutingType];
+
+/** `Scope` (tag 546) values keyed by spec value name. */
+export const Scope = {
+  "LOCAL": "1",
+  "NATIONAL": "2",
+  "GLOBAL": "3",
+} as const;
+export type Scope = (typeof Scope)[keyof typeof Scope];
+
+/** `SecurityIDSource` (tag 22) values keyed by spec value name. */
+export const SecurityIDSource = {
+  "CUSIP": "1",
+  "SEDOL": "2",
+  "QUIK": "3",
+  "ISIN_NUMBER": "4",
+  "RIC_CODE": "5",
+  "ISO_CURRENCY_CODE": "6",
+  "ISO_COUNTRY_CODE": "7",
+  "EXCHANGE_SYMBOL": "8",
+  "CONSOLIDATED_TAPE_ASSOCIATION": "9",
+  "BLOOMBERG_SYMBOL": "A",
+  "WERTPAPIER": "B",
+  "DUTCH": "C",
+  "VALOREN": "D",
+  "SICOVAM": "E",
+  "BELGIAN": "F",
+  "COMMON": "G",
+  "CLEARING_HOUSE": "H",
+  "ISDA_FPML_PRODUCT_SPECIFICATION": "I",
+  "OPTIONS_PRICE_REPORTING_AUTHORITY": "J",
+} as const;
+export type SecurityIDSource = (typeof SecurityIDSource)[keyof typeof SecurityIDSource];
+
+/** `SecurityListRequestType` (tag 559) values keyed by spec value name. */
+export const SecurityListRequestType = {
+  "SYMBOL": "0",
+  "SECURITYTYPE_AND_OR_CFICODE": "1",
+  "PRODUCT": "2",
+  "TRADINGSESSIONID": "3",
+  "ALL_SECURITIES": "4",
+} as const;
+export type SecurityListRequestType = (typeof SecurityListRequestType)[keyof typeof SecurityListRequestType];
+
+/** `SecurityRequestResult` (tag 560) values keyed by spec value name. */
+export const SecurityRequestResult = {
+  "VALID_REQUEST": "0",
+  "INVALID_OR_UNSUPPORTED_REQUEST": "1",
+  "NO_INSTRUMENTS_FOUND_THAT_MATCH_SELECTION_CRITERIA": "2",
+  "NOT_AUTHORIZED_TO_RETRIEVE_INSTRUMENT_DATA": "3",
+  "INSTRUMENT_DATA_TEMPORARILY_UNAVAILABLE": "4",
+  "REQUEST_FOR_INSTRUMENT_DATA_NOT_SUPPORTED": "5",
+} as const;
+export type SecurityRequestResult = (typeof SecurityRequestResult)[keyof typeof SecurityRequestResult];
+
+/** `SecurityRequestType` (tag 321) values keyed by spec value name. */
+export const SecurityRequestType = {
+  "REQUEST_SECURITY_IDENTITY_AND_SPECIFICATIONS": "0",
+  "REQUEST_SECURITY_IDENTITY_FOR_THE_SPECIFICATIONS_PROVIDED": "1",
+  "REQUEST_LIST_SECURITY_TYPES": "2",
+  "REQUEST_LIST_SECURITIES": "3",
+} as const;
+export type SecurityRequestType = (typeof SecurityRequestType)[keyof typeof SecurityRequestType];
+
+/** `SecurityResponseType` (tag 323) values keyed by spec value name. */
+export const SecurityResponseType = {
+  "ACCEPT_SECURITY_PROPOSAL_AS_IS": "1",
+  "ACCEPT_SECURITY_PROPOSAL_WITH_REVISIONS_AS_INDICATED_IN_THE_MESSAGE": "2",
+  "REJECT_SECURITY_PROPOSAL": "5",
+  "CAN_NOT_MATCH_SELECTION_CRITERIA": "6",
+} as const;
+export type SecurityResponseType = (typeof SecurityResponseType)[keyof typeof SecurityResponseType];
+
+/** `SecurityTradingStatus` (tag 326) values keyed by spec value name. */
+export const SecurityTradingStatus = {
+  "OPENING_DELAY": "1",
+  "TRADING_HALT": "2",
+  "RESUME": "3",
+  "NO_OPEN_NO_RESUME": "4",
+  "PRICE_INDICATION": "5",
+  "TRADING_RANGE_INDICATION": "6",
+  "MARKET_IMBALANCE_BUY": "7",
+  "MARKET_IMBALANCE_SELL": "8",
+  "MARKET_ON_CLOSE_IMBALANCE_BUY": "9",
+  "MARKET_ON_CLOSE_IMBALANCE_SELL": "10",
+  "NO_MARKET_IMBALANCE": "12",
+  "NO_MARKET_ON_CLOSE_IMBALANCE": "13",
+  "ITS_PRE_OPENING": "14",
+  "NEW_PRICE_INDICATION": "15",
+  "TRADE_DISSEMINATION_TIME": "16",
+  "READY_TO_TRADE": "17",
+  "NOT_AVAILABLE_FOR_TRADING": "18",
+  "NOT_TRADED_ON_THIS_MARKET": "19",
+  "UNKNOWN_OR_INVALID": "20",
+  "PRE_OPEN": "21",
+  "OPENING_ROTATION": "22",
+  "FAST_MARKET": "23",
+} as const;
+export type SecurityTradingStatus = (typeof SecurityTradingStatus)[keyof typeof SecurityTradingStatus];
+
+/** `SecurityType` (tag 167) values keyed by spec value name. */
+export const SecurityType = {
+  "FUTURE": "FUT",
+  "OPTION": "OPT",
+  "EURO_SUPRANATIONAL_COUPONS": "EUSUPRA",
+  "FEDERAL_AGENCY_COUPON": "FAC",
+  "FEDERAL_AGENCY_DISCOUNT_NOTE": "FADN",
+  "PRIVATE_EXPORT_FUNDING": "PEF",
+  "USD_SUPRANATIONAL_COUPONS": "SUPRA",
+  "CORPORATE_BOND": "CORP",
+  "CORPORATE_PRIVATE_PLACEMENT": "CPP",
+  "CONVERTIBLE_BOND": "CB",
+  "DUAL_CURRENCY": "DUAL",
+  "EURO_CORPORATE_BOND": "EUCORP",
+  "INDEXED_LINKED": "XLINKD",
+  "STRUCTURED_NOTES": "STRUCT",
+  "YANKEE_CORPORATE_BOND": "YANK",
+  "FOREIGN_EXCHANGE_CONTRACT": "FOR",
+  "COMMON_STOCK": "CS",
+  "PREFERRED_STOCK": "PS",
+  "BRADY_BOND": "BRADY",
+  "EURO_SOVEREIGNS": "EUSOV",
+  "US_TREASURY_BOND": "TBOND",
+  "INTEREST_STRIP_FROM_ANY_BOND_OR_NOTE": "TINT",
+  "TREASURY_INFLATION_PROTECTED_SECURITIES": "TIPS",
+  "PRINCIPAL_STRIP_OF_A_CALLABLE_BOND_OR_NOTE": "TCAL",
+  "PRINCIPAL_STRIP_FROM_A_NON_CALLABLE_BOND_OR_NOTE": "TPRN",
+  "US_TREASURY_NOTE_UST": "UST",
+  "US_TREASURY_BILL_USTB": "USTB",
+  "US_TREASURY_NOTE_TNOTE": "TNOTE",
+  "US_TREASURY_BILL_TBILL": "TBILL",
+  "REPURCHASE": "REPO",
+  "FORWARD": "FORWARD",
+  "BUY_SELLBACK": "BUYSELL",
+  "SECURITIES_LOAN": "SECLOAN",
+  "SECURITIES_PLEDGE": "SECPLEDGE",
+  "TERM_LOAN": "TERM",
+  "REVOLVER_LOAN": "RVLV",
+  "REVOLVER_TERM_LOAN": "RVLVTRM",
+  "BRIDGE_LOAN": "BRIDGE",
+  "LETTER_OF_CREDIT": "LOFC",
+  "SWING_LINE_FACILITY": "SWING",
+  "DEBTOR_IN_POSSESSION": "DINP",
+  "DEFAULTED": "DEFLTED",
+  "WITHDRAWN": "WITHDRN",
+  "REPLACED": "REPLACD",
+  "MATURED": "MATURED",
+  "AMENDED_RESTATED": "AMENDED",
+  "RETIRED": "RETIRED",
+  "BANKERS_ACCEPTANCE": "BA",
+  "BANK_NOTES": "BN",
+  "BILL_OF_EXCHANGES": "BOX",
+  "CERTIFICATE_OF_DEPOSIT": "CD",
+  "CALL_LOANS": "CL",
+  "COMMERCIAL_PAPER": "CP",
+  "DEPOSIT_NOTES": "DN",
+  "EURO_CERTIFICATE_OF_DEPOSIT": "EUCD",
+  "EURO_COMMERCIAL_PAPER": "EUCP",
+  "LIQUIDITY_NOTE": "LQN",
+  "MEDIUM_TERM_NOTES": "MTN",
+  "OVERNIGHT": "ONITE",
+  "PROMISSORY_NOTE": "PN",
+  "PLAZOS_FIJOS": "PZFJ",
+  "SHORT_TERM_LOAN_NOTE": "STN",
+  "TIME_DEPOSIT": "TD",
+  "EXTENDED_COMM_NOTE": "XCN",
+  "YANKEE_CERTIFICATE_OF_DEPOSIT": "YCD",
+  "ASSET_BACKED_SECURITIES": "ABS",
+  "CORP_MORTGAGE_BACKED_SECURITIES": "CMBS",
+  "COLLATERALIZED_MORTGAGE_OBLIGATION": "CMO",
+  "IOETTE_MORTGAGE": "IET",
+  "MORTGAGE_BACKED_SECURITIES": "MBS",
+  "MORTGAGE_INTEREST_ONLY": "MIO",
+  "MORTGAGE_PRINCIPAL_ONLY": "MPO",
+  "MORTGAGE_PRIVATE_PLACEMENT": "MPP",
+  "MISCELLANEOUS_PASS_THROUGH": "MPT",
+  "PFANDBRIEFE": "PFAND",
+  "TO_BE_ANNOUNCED": "TBA",
+  "OTHER_ANTICIPATION_NOTES_BAN_GAN_ETC": "AN",
+  "CERTIFICATE_OF_OBLIGATION": "COFO",
+  "CERTIFICATE_OF_PARTICIPATION": "COFP",
+  "GENERAL_OBLIGATION_BONDS": "GO",
+  "MANDATORY_TENDER": "MT",
+  "REVENUE_ANTICIPATION_NOTE": "RAN",
+  "REVENUE_BONDS": "REV",
+  "SPECIAL_ASSESSMENT": "SPCLA",
+  "SPECIAL_OBLIGATION": "SPCLO",
+  "SPECIAL_TAX": "SPCLT",
+  "TAX_ANTICIPATION_NOTE": "TAN",
+  "TAX_ALLOCATION": "TAXA",
+  "TAX_EXEMPT_COMMERCIAL_PAPER": "TECP",
+  "TAX_REVENUE_ANTICIPATION_NOTE": "TRAN",
+  "VARIABLE_RATE_DEMAND_NOTE": "VRDN",
+  "WARRANT": "WAR",
+  "MUTUAL_FUND": "MF",
+  "MULTI_LEG_INSTRUMENT": "MLEG",
+  "NO_SECURITY_TYPE": "NONE",
+} as const;
+export type SecurityType = (typeof SecurityType)[keyof typeof SecurityType];
+
+/** `SessionRejectReason` (tag 373) values keyed by spec value name. */
+export const SessionRejectReason = {
+  "INVALID_TAG_NUMBER": "0",
+  "REQUIRED_TAG_MISSING": "1",
+  "TAG_NOT_DEFINED_FOR_THIS_MESSAGE_TYPE": "2",
+  "UNDEFINED_TAG": "3",
+  "TAG_SPECIFIED_WITHOUT_A_VALUE": "4",
+  "VALUE_IS_INCORRECT": "5",
+  "INCORRECT_DATA_FORMAT_FOR_VALUE": "6",
+  "DECRYPTION_PROBLEM": "7",
+  "SIGNATURE_PROBLEM": "8",
+  "COMPID_PROBLEM": "9",
+  "SENDINGTIME_ACCURACY_PROBLEM": "10",
+  "INVALID_MSGTYPE": "11",
+  "XML_VALIDATION_ERROR": "12",
+  "TAG_APPEARS_MORE_THAN_ONCE": "13",
+  "TAG_SPECIFIED_OUT_OF_REQUIRED_ORDER": "14",
+  "REPEATING_GROUP_FIELDS_OUT_OF_ORDER": "15",
+  "INCORRECT_NUMINGROUP_COUNT_FOR_REPEATING_GROUP": "16",
+  "NON_DATA_VALUE_INCLUDES_FIELD_DELIMITER": "17",
+  "OTHER": "99",
+} as const;
+export type SessionRejectReason = (typeof SessionRejectReason)[keyof typeof SessionRejectReason];
+
+/** `SettlCurrFxRateCalc` (tag 156) values keyed by spec value name. */
+export const SettlCurrFxRateCalc = {
+  "MULTIPLY": "M",
+  "DIVIDE": "D",
+} as const;
+export type SettlCurrFxRateCalc = (typeof SettlCurrFxRateCalc)[keyof typeof SettlCurrFxRateCalc];
+
+/** `SettlDeliveryType` (tag 172) values keyed by spec value name. */
+export const SettlDeliveryType = {
+  "VERSUS_PAYMENT_DELIVER": "0",
+  "FREE_DELIVER": "1",
+  "TRI_PARTY": "2",
+  "HOLD_IN_CUSTODY": "3",
+} as const;
+export type SettlDeliveryType = (typeof SettlDeliveryType)[keyof typeof SettlDeliveryType];
+
+/** `SettlInstMode` (tag 160) values keyed by spec value name. */
+export const SettlInstMode = {
+  "STANDING_INSTRUCTIONS_PROVIDED": "1",
+  "SPECIFIC_ORDER_FOR_A_SINGLE_ACCOUNT": "4",
+  "REQUEST_REJECT": "5",
+} as const;
+export type SettlInstMode = (typeof SettlInstMode)[keyof typeof SettlInstMode];
+
+/** `SettlInstReqRejCode` (tag 792) values keyed by spec value name. */
+export const SettlInstReqRejCode = {
+  "UNABLE_TO_PROCESS_REQUEST": "0",
+  "UNKNOWN_ACCOUNT": "1",
+  "NO_MATCHING_SETTLEMENT_INSTRUCTIONS_FOUND": "2",
+  "OTHER": "99",
+} as const;
+export type SettlInstReqRejCode = (typeof SettlInstReqRejCode)[keyof typeof SettlInstReqRejCode];
+
+/** `SettlInstSource` (tag 165) values keyed by spec value name. */
+export const SettlInstSource = {
+  "BROKERS_INSTRUCTIONS": "1",
+  "INSTITUTIONS_INSTRUCTIONS": "2",
+  "INVESTOR": "3",
+} as const;
+export type SettlInstSource = (typeof SettlInstSource)[keyof typeof SettlInstSource];
+
+/** `SettlInstTransType` (tag 163) values keyed by spec value name. */
+export const SettlInstTransType = {
+  "NEW": "N",
+  "CANCEL": "C",
+  "REPLACE": "R",
+  "RESTATE": "T",
+} as const;
+export type SettlInstTransType = (typeof SettlInstTransType)[keyof typeof SettlInstTransType];
+
+/** `SettlPriceType` (tag 731) values keyed by spec value name. */
+export const SettlPriceType = {
+  "FINAL": "1",
+  "THEORETICAL": "2",
+} as const;
+export type SettlPriceType = (typeof SettlPriceType)[keyof typeof SettlPriceType];
+
+/** `SettlSessID` (tag 716) values keyed by spec value name. */
+export const SettlSessID = {
+  "INTRADAY": "ITD",
+  "REGULAR_TRADING_HOURS": "RTH",
+  "ELECTRONIC_TRADING_HOURS": "ETH",
+} as const;
+export type SettlSessID = (typeof SettlSessID)[keyof typeof SettlSessID];
+
+/** `SettlType` (tag 63) values keyed by spec value name. */
+export const SettlType = {
+  "REGULAR": "0",
+  "CASH": "1",
+  "NEXT_DAY": "2",
+  "T_PLUS_2": "3",
+  "T_PLUS_3": "4",
+  "T_PLUS_4": "5",
+  "FUTURE": "6",
+  "WHEN_AND_IF_ISSUED": "7",
+  "SELLERS_OPTION": "8",
+  "T_PLUS_5": "9",
+} as const;
+export type SettlType = (typeof SettlType)[keyof typeof SettlType];
+
+/** `ShortSaleReason` (tag 853) values keyed by spec value name. */
+export const ShortSaleReason = {
+  "DEALER_SOLD_SHORT": "0",
+  "DEALER_SOLD_SHORT_EXEMPT": "1",
+  "SELLING_CUSTOMER_SOLD_SHORT": "2",
+  "SELLING_CUSTOMER_SOLD_SHORT_EXEMPT": "3",
+  "QUALIFED_SERVICE_REPRESENTATIVE": "4",
+  "QSR_OR_AGU_CONTRA_SIDE_SOLD_SHORT_EXEMPT": "5",
+} as const;
+export type ShortSaleReason = (typeof ShortSaleReason)[keyof typeof ShortSaleReason];
+
+/** `Side` (tag 54) values keyed by spec value name. */
+export const Side = {
+  "BUY": "1",
+  "SELL": "2",
+  "BUY_MINUS": "3",
+  "SELL_PLUS": "4",
+  "SELL_SHORT": "5",
+  "SELL_SHORT_EXEMPT": "6",
+  "UNDISCLOSED": "7",
+  "CROSS": "8",
+  "CROSS_SHORT": "9",
+  "CROSS_SHORT_EXEMPT": "A",
+  "AS_DEFINED": "B",
+  "OPPOSITE": "C",
+  "SUBSCRIBE": "D",
+  "REDEEM": "E",
+  "LEND": "F",
+  "BORROW": "G",
+} as const;
+export type Side = (typeof Side)[keyof typeof Side];
+
+/** `SideMultiLegReportingType` (tag 752) values keyed by spec value name. */
+export const SideMultiLegReportingType = {
+  "SINGLE_SECURITY": "1",
+  "INDIVIDUAL_LEG_OF_A_MULTI_LEG_SECURITY": "2",
+  "MULTI_LEG_SECURITY": "3",
+} as const;
+export type SideMultiLegReportingType = (typeof SideMultiLegReportingType)[keyof typeof SideMultiLegReportingType];
+
+/** `SideValueInd` (tag 401) values keyed by spec value name. */
+export const SideValueInd = {
+  "SIDEVALUE1": "1",
+  "SIDEVALUE_2": "2",
+} as const;
+export type SideValueInd = (typeof SideValueInd)[keyof typeof SideValueInd];
+
+/** `SolicitedFlag` (tag 377) values keyed by spec value name. */
+export const SolicitedFlag = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type SolicitedFlag = (typeof SolicitedFlag)[keyof typeof SolicitedFlag];
+
+/** `StandInstDbType` (tag 169) values keyed by spec value name. */
+export const StandInstDbType = {
+  "OTHER": "0",
+  "DTC_SID": "1",
+  "THOMSON_ALERT": "2",
+  "A_GLOBAL_CUSTODIAN": "3",
+  "ACCOUNTNET": "4",
+} as const;
+export type StandInstDbType = (typeof StandInstDbType)[keyof typeof StandInstDbType];
+
+/** `StatusValue` (tag 928) values keyed by spec value name. */
+export const StatusValue = {
+  "CONNECTED": "1",
+  "NOT_CONNECTED_DOWN_EXPECTED_UP": "2",
+  "NOT_CONNECTED_DOWN_EXPECTED_DOWN": "3",
+  "IN_PROCESS": "4",
+} as const;
+export type StatusValue = (typeof StatusValue)[keyof typeof StatusValue];
+
+/** `StipulationType` (tag 233) values keyed by spec value name. */
+export const StipulationType = {
+  "AMT": "AMT",
+  "AUTO_REINVESTMENT_AT_RATE_OR_BETTER": "AUTOREINV",
+  "BANK_QUALIFIED": "BANKQUAL",
+  "BARGAIN_CONDITIONS_SEE": "BGNCON",
+  "COUPON_RANGE": "COUPON",
+  "ISO_CURRENCY_CODE": "CURRENCY",
+  "CUSTOM_START_END_DATE": "CUSTOMDATE",
+  "GEOGRAPHICS_AND_RANGE": "GEOG",
+  "VALUATION_DISCOUNT": "HAIRCUT",
+  "INSURED": "INSURED",
+  "YEAR_OR_YEAR_MONTH_OF_ISSUE": "ISSUE",
+  "ISSUERS_TICKER": "ISSUER",
+  "ISSUE_SIZE_RANGE": "ISSUESIZE",
+  "LOOKBACK_DAYS": "LOOKBACK",
+  "EXPLICIT_LOT_IDENTIFIER": "LOT",
+  "LOT_VARIANCE": "LOTVAR",
+  "MATURITY_YEAR_AND_MONTH": "MAT",
+  "MATURITY_RANGE": "MATURITY",
+  "MAXIMUM_SUBSTITUTIONS": "MAXSUBS",
+  "MINIMUM_QUANTITY": "MINQTY",
+  "MINIMUM_INCREMENT": "MININCR",
+  "MINIMUM_DENOMINATION": "MINDNOM",
+  "PAYMENT_FREQUENCY_CALENDAR": "PAYFREQ",
+  "NUMBER_OF_PIECES": "PIECES",
+  "POOLS_MAXIMUM": "PMAX",
+  "POOLS_PER_MILLION": "PPM",
+  "POOLS_PER_LOT": "PPL",
+  "POOLS_PER_TRADE": "PPT",
+  "PRICE_RANGE": "PRICE",
+  "PRICING_FREQUENCY": "PRICEFREQ",
+  "PRODUCTION_YEAR": "PROD",
+  "CALL_PROTECTION": "PROTECT",
+  "PURPOSE": "PURPOSE",
+  "BENCHMARK_PRICE_SOURCE": "PXSOURCE",
+  "RATING_SOURCE_AND_RANGE": "RATING",
+  "TYPE_OF_REDEMPTION_VALUES_ARE_NONCALLABLE_CALLABLE_PREFUNDED_ESCROWEDTOMATURITY_PUTABLE_CONVERTIBLE": "REDEMPTION",
+  "RESTRICTED": "RESTRICTED",
+  "MARKET_SECTOR": "SECTOR",
+  "SECURITYTYPE_INCLUDED_OR_EXCLUDED": "SECTYPE",
+  "STRUCTURE": "STRUCT",
+  "SUBSTITUTIONS_FREQUENCY": "SUBSFREQ",
+  "SUBSTITUTIONS_LEFT": "SUBSLEFT",
+  "FREEFORM_TEXT": "TEXT",
+  "TRADE_VARIANCE": "TRDVAR",
+  "WEIGHTED_AVERAGE_COUPONVALUE_IN_PERCENT": "WAC",
+  "WEIGHTED_AVERAGE_LIFE_COUPON_VALUE_IN_PERCENT": "WAL",
+  "WEIGHTED_AVERAGE_LOAN_AGE_VALUE_IN_MONTHS": "WALA",
+  "WEIGHTED_AVERAGE_MATURITY_VALUE_IN_MONTHS": "WAM",
+  "WHOLE_POOL": "WHOLE",
+  "YIELD_RANGE": "YIELD",
+} as const;
+export type StipulationType = (typeof StipulationType)[keyof typeof StipulationType];
+
+/** `SubscriptionRequestType` (tag 263) values keyed by spec value name. */
+export const SubscriptionRequestType = {
+  "SNAPSHOT": "0",
+  "SNAPSHOT_PLUS_UPDATES": "1",
+  "DISABLE_PREVIOUS_SNAPSHOT_PLUS_UPDATE_REQUEST": "2",
+} as const;
+export type SubscriptionRequestType = (typeof SubscriptionRequestType)[keyof typeof SubscriptionRequestType];
+
+/** `TargetStrategy` (tag 847) values keyed by spec value name. */
+export const TargetStrategy = {
+  "VWAP": "1",
+  "PARTICIPATE": "2",
+  "MININIZE_MARKET_IMPACT": "3",
+} as const;
+export type TargetStrategy = (typeof TargetStrategy)[keyof typeof TargetStrategy];
+
+/** `TaxAdvantageType` (tag 495) values keyed by spec value name. */
+export const TaxAdvantageType = {
+  "NONE_NOT_APPLICABLE": "0",
+  "MAXI_ISA": "1",
+  "TESSA": "2",
+  "MINI_CASH_ISA": "3",
+  "MINI_STOCKS_AND_SHARES_ISA": "4",
+  "MINI_INSURANCE_ISA": "5",
+  "CURRENT_YEAR_PAYMENT": "6",
+  "PRIOR_YEAR_PAYMENT": "7",
+  "ASSET_TRANSFER": "8",
+  "EMPLOYEE": "9",
+  "EMPLOYEE_CURRENT_YEAR": "10",
+  "EMPLOYER": "11",
+  "EMPLOYER_CURRENT_YEAR": "12",
+  "NON_FUND_PROTOTYPE_IRA": "13",
+  "NON_FUND_QUALIFIED_PLAN": "14",
+  "DEFINED_CONTRIBUTION_PLAN": "15",
+  "INDIVIDUAL_RETIREMENT_ACCOUNT": "16",
+  "INDIVIDUAL_RETIREMENT_ACCOUNT_ROLLOVER": "17",
+  "KEOGH": "18",
+  "PROFIT_SHARING_PLAN": "19",
+  "401K": "20",
+  "SELF_DIRECTED_IRA": "21",
+  "403": "22",
+  "457": "23",
+  "ROTH_IRA_24": "24",
+  "ROTH_IRA_25": "25",
+  "ROTH_CONVERSION_IRA_26": "26",
+  "ROTH_CONVERSION_IRA_27": "27",
+  "EDUCATION_IRA_28": "28",
+  "EDUCATION_IRA_29": "29",
+} as const;
+export type TaxAdvantageType = (typeof TaxAdvantageType)[keyof typeof TaxAdvantageType];
+
+/** `TerminationType` (tag 788) values keyed by spec value name. */
+export const TerminationType = {
+  "OVERNIGHT": "1",
+  "TERM": "2",
+  "FLEXIBLE": "3",
+  "OPEN": "4",
+} as const;
+export type TerminationType = (typeof TerminationType)[keyof typeof TerminationType];
+
+/** `TestMessageIndicator` (tag 464) values keyed by spec value name. */
+export const TestMessageIndicator = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type TestMessageIndicator = (typeof TestMessageIndicator)[keyof typeof TestMessageIndicator];
+
+/** `TickDirection` (tag 274) values keyed by spec value name. */
+export const TickDirection = {
+  "PLUS_TICK": "0",
+  "ZERO_PLUS_TICK": "1",
+  "MINUS_TICK": "2",
+  "ZERO_MINUS_TICK": "3",
+} as const;
+export type TickDirection = (typeof TickDirection)[keyof typeof TickDirection];
+
+/** `TimeInForce` (tag 59) values keyed by spec value name. */
+export const TimeInForce = {
+  "DAY": "0",
+  "GOOD_TILL_CANCEL": "1",
+  "AT_THE_OPENING": "2",
+  "IMMEDIATE_OR_CANCEL": "3",
+  "FILL_OR_KILL": "4",
+  "GOOD_TILL_CROSSING": "5",
+  "GOOD_TILL_DATE": "6",
+  "AT_THE_CLOSE": "7",
+} as const;
+export type TimeInForce = (typeof TimeInForce)[keyof typeof TimeInForce];
+
+/** `TradeAllocIndicator` (tag 826) values keyed by spec value name. */
+export const TradeAllocIndicator = {
+  "ALLOCATION_NOT_REQUIRED": "0",
+  "ALLOCATION_REQUIRED": "1",
+  "USE_ALLOCATION_PROVIDED_WITH_THE_TRADE": "2",
+} as const;
+export type TradeAllocIndicator = (typeof TradeAllocIndicator)[keyof typeof TradeAllocIndicator];
+
+/** `TradeCondition` (tag 277) values keyed by spec value name. */
+export const TradeCondition = {
+  "CASH": "A",
+  "AVERAGE_PRICE_TRADE": "B",
+  "CASH_TRADE": "C",
+  "NEXT_DAY": "D",
+  "OPENING": "E",
+  "INTRADAY_TRADE_DETAIL": "F",
+  "RULE_127_TRADE": "G",
+  "RULE_155_TRADE": "H",
+  "SOLD_LAST": "I",
+  "NEXT_DAY_TRADE": "J",
+  "OPENED": "K",
+  "SELLER": "L",
+  "SOLD": "M",
+  "STOPPED_STOCK": "N",
+  "IMBALANCE_MORE_BUYERS": "P",
+  "IMBALANCE_MORE_SELLERS": "Q",
+  "OPENING_PRICE": "R",
+} as const;
+export type TradeCondition = (typeof TradeCondition)[keyof typeof TradeCondition];
+
+/** `TradedFlatSwitch` (tag 258) values keyed by spec value name. */
+export const TradedFlatSwitch = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type TradedFlatSwitch = (typeof TradedFlatSwitch)[keyof typeof TradedFlatSwitch];
+
+/** `TradeReportRejectReason` (tag 751) values keyed by spec value name. */
+export const TradeReportRejectReason = {
+  "SUCCESSFUL": "0",
+  "INVALID_PARTY_INFORMATION": "1",
+  "UNKNOWN_INSTRUMENT": "2",
+  "UNAUTHORIZED_TO_REPORT_TRADES": "3",
+  "INVALID_TRADE_TYPE": "4",
+  "OTHER": "99",
+} as const;
+export type TradeReportRejectReason = (typeof TradeReportRejectReason)[keyof typeof TradeReportRejectReason];
+
+/** `TradeReportType` (tag 856) values keyed by spec value name. */
+export const TradeReportType = {
+  "SUBMIT": "0",
+  "ALLEGED": "1",
+  "ACCEPT": "2",
+  "DECLINE": "3",
+  "ADDENDUM": "4",
+  "NO_WAS": "5",
+  "TRADE_REPORT_CANCEL": "6",
+  "LOCKED_IN_TRADE_BREAK": "7",
+} as const;
+export type TradeReportType = (typeof TradeReportType)[keyof typeof TradeReportType];
+
+/** `TradeRequestResult` (tag 749) values keyed by spec value name. */
+export const TradeRequestResult = {
+  "SUCCESSFUL": "0",
+  "INVALID_OR_UNKNOWN_INSTRUMENT": "1",
+  "INVALID_TYPE_OF_TRADE_REQUESTED": "2",
+  "INVALID_PARTIES": "3",
+  "INVALID_TRANSPORT_TYPE_REQUESTED": "4",
+  "INVALID_DESTINATION_REQUESTED": "5",
+  "TRADEREQUESTTYPE_NOT_SUPPORTED": "8",
+  "UNAUTHORIZED_FOR_TRADE_CAPTURE_REPORT_REQUEST": "9",
+  "OTHER": "99",
+} as const;
+export type TradeRequestResult = (typeof TradeRequestResult)[keyof typeof TradeRequestResult];
+
+/** `TradeRequestStatus` (tag 750) values keyed by spec value name. */
+export const TradeRequestStatus = {
+  "ACCEPTED": "0",
+  "COMPLETED": "1",
+  "REJECTED": "2",
+} as const;
+export type TradeRequestStatus = (typeof TradeRequestStatus)[keyof typeof TradeRequestStatus];
+
+/** `TradeRequestType` (tag 569) values keyed by spec value name. */
+export const TradeRequestType = {
+  "ALL_TRADES": "0",
+  "MATCHED_TRADES_MATCHING_CRITERIA_PROVIDED_ON_REQUEST": "1",
+  "UNMATCHED_TRADES_THAT_MATCH_CRITERIA": "2",
+  "UNREPORTED_TRADES_THAT_MATCH_CRITERIA": "3",
+  "ADVISORIES_THAT_MATCH_CRITERIA": "4",
+} as const;
+export type TradeRequestType = (typeof TradeRequestType)[keyof typeof TradeRequestType];
+
+/** `TradSesMethod` (tag 338) values keyed by spec value name. */
+export const TradSesMethod = {
+  "ELECTRONIC": "1",
+  "OPEN_OUTCRY": "2",
+  "TWO_PARTY": "3",
+} as const;
+export type TradSesMethod = (typeof TradSesMethod)[keyof typeof TradSesMethod];
+
+/** `TradSesMode` (tag 339) values keyed by spec value name. */
+export const TradSesMode = {
+  "TESTING": "1",
+  "SIMULATED": "2",
+  "PRODUCTION": "3",
+} as const;
+export type TradSesMode = (typeof TradSesMode)[keyof typeof TradSesMode];
+
+/** `TradSesStatus` (tag 340) values keyed by spec value name. */
+export const TradSesStatus = {
+  "UNKNOWN": "0",
+  "HALTED": "1",
+  "OPEN": "2",
+  "CLOSED": "3",
+  "PRE_OPEN": "4",
+  "PRE_CLOSE": "5",
+  "REQUEST_REJECTED": "6",
+} as const;
+export type TradSesStatus = (typeof TradSesStatus)[keyof typeof TradSesStatus];
+
+/** `TradSesStatusRejReason` (tag 567) values keyed by spec value name. */
+export const TradSesStatusRejReason = {
+  "UNKNOWN_OR_INVALID_TRADINGSESSIONID": "1",
+  "OTHER": "99",
+} as const;
+export type TradSesStatusRejReason = (typeof TradSesStatusRejReason)[keyof typeof TradSesStatusRejReason];
+
+/** `TrdRegTimestampType` (tag 770) values keyed by spec value name. */
+export const TrdRegTimestampType = {
+  "EXECUTION_TIME": "1",
+  "TIME_IN": "2",
+  "TIME_OUT": "3",
+  "BROKER_RECEIPT": "4",
+  "BROKER_EXECUTION": "5",
+} as const;
+export type TrdRegTimestampType = (typeof TrdRegTimestampType)[keyof typeof TrdRegTimestampType];
+
+/** `TrdRptStatus` (tag 939) values keyed by spec value name. */
+export const TrdRptStatus = {
+  "ACCEPTED": "0",
+  "REJECTED": "1",
+} as const;
+export type TrdRptStatus = (typeof TrdRptStatus)[keyof typeof TrdRptStatus];
+
+/** `TrdType` (tag 828) values keyed by spec value name. */
+export const TrdType = {
+  "REGULAR_TRADE": "0",
+  "BLOCK_TRADE": "1",
+  "EFP": "2",
+  "TRANSFER": "3",
+  "LATE_TRADE": "4",
+  "T_TRADE": "5",
+  "WEIGHTED_AVERAGE_PRICE_TRADE": "6",
+  "BUNCHED_TRADE": "7",
+  "LATE_BUNCHED_TRADE": "8",
+  "PRIOR_REFERENCE_PRICE_TRADE": "9",
+  "AFTER_HOURS_TRADE": "10",
+} as const;
+export type TrdType = (typeof TrdType)[keyof typeof TrdType];
+
+/** `UnsolicitedIndicator` (tag 325) values keyed by spec value name. */
+export const UnsolicitedIndicator = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type UnsolicitedIndicator = (typeof UnsolicitedIndicator)[keyof typeof UnsolicitedIndicator];
+
+/** `Urgency` (tag 61) values keyed by spec value name. */
+export const Urgency = {
+  "NORMAL": "0",
+  "FLASH": "1",
+  "BACKGROUND": "2",
+} as const;
+export type Urgency = (typeof Urgency)[keyof typeof Urgency];
+
+/** `UserRequestType` (tag 924) values keyed by spec value name. */
+export const UserRequestType = {
+  "LOGONUSER": "1",
+  "LOGOFFUSER": "2",
+  "CHANGEPASSWORDFORUSER": "3",
+  "REQUEST_INDIVIDUAL_USER_STATUS": "4",
+} as const;
+export type UserRequestType = (typeof UserRequestType)[keyof typeof UserRequestType];
+
+/** `UserStatus` (tag 926) values keyed by spec value name. */
+export const UserStatus = {
+  "LOGGED_IN": "1",
+  "NOT_LOGGED_IN": "2",
+  "USER_NOT_RECOGNISED": "3",
+  "PASSWORD_INCORRECT": "4",
+  "PASSWORD_CHANGED": "5",
+  "OTHER": "6",
+} as const;
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus];
+
+/** `WorkingIndicator` (tag 636) values keyed by spec value name. */
+export const WorkingIndicator = {
+  "YES": "Y",
+  "NO": "N",
+} as const;
+export type WorkingIndicator = (typeof WorkingIndicator)[keyof typeof WorkingIndicator];
+
+/** `YieldType` (tag 235) values keyed by spec value name. */
+export const YieldType = {
+  "AFTER_TAX_YIELD": "AFTERTAX",
+  "ANNUAL_YIELD": "ANNUAL",
+  "YIELD_AT_ISSUE": "ATISSUE",
+  "YIELD_TO_AVERAGE_MATURITY": "AVGMATURITY",
+  "BOOK_YIELD": "BOOK",
+  "YIELD_TO_NEXT_CALL": "CALL",
+  "YIELD_CHANGE_SINCE_CLOSE": "CHANGE",
+  "CLOSING_YIELD": "CLOSE",
+  "COMPOUND_YIELD": "COMPOUND",
+  "CURRENT_YIELD": "CURRENT",
+  "TRUE_GROSS_YIELD": "GROSS",
+  "GOVERNMENT_EQUIVALENT_YIELD": "GOVTEQUIV",
+  "YIELD_WITH_INFLATION_ASSUMPTION": "INFLATION",
+  "INVERSE_FLOATER_BOND_YIELD": "INVERSEFLOATER",
+  "MOST_RECENT_CLOSING_YIELD": "LASTCLOSE",
+  "CLOSING_YIELD_MOST_RECENT_MONTH": "LASTMONTH",
+  "CLOSING_YIELD_MOST_RECENT_QUARTER": "LASTQUARTER",
+  "CLOSING_YIELD_MOST_RECENT_YEAR": "LASTYEAR",
+  "YIELD_TO_LONGEST_AVERAGE_LIFE": "LONGAVGLIFE",
+  "MARK_TO_MARKET_YIELD": "MARK",
+  "YIELD_TO_MATURITY": "MATURITY",
+  "YIELD_TO_NEXT_REFUND": "NEXTREFUND",
+  "OPEN_AVERAGE_YIELD": "OPENAVG",
+  "YIELD_TO_NEXT_PUT": "PUT",
+  "PREVIOUS_CLOSE_YIELD": "PREVCLOSE",
+  "PROCEEDS_YIELD": "PROCEEDS",
+  "SEMI_ANNUAL_YIELD": "SEMIANNUAL",
+  "YIELD_TO_SHORTEST_AVERAGE_LIFE": "SHORTAVGLIFE",
+  "SIMPLE_YIELD": "SIMPLE",
+  "TAX_EQUIVALENT_YIELD": "TAXEQUIV",
+  "YIELD_TO_TENDER_DATE": "TENDER",
+  "TRUE_YIELD": "TRUE",
+  "YIELD_VALUE_OF_1_32": "VALUE1/32",
+  "YIELD_TO_WORST": "WORST",
+} as const;
+export type YieldType = (typeof YieldType)[keyof typeof YieldType];
+
+/**
+ * Enumerated field values: field name → spec value name → on-the-wire string.
+ * `Enums.MDEntryType.BID === "0"`. Values are wire-verbatim strings even for
+ * int-typed fields (`Enums.SessionRejectReason.INVALID_TAG_NUMBER === "0"`),
+ * so they compare directly against tokenizer and parser output. Fields are
+ * sorted by name; values keep the spec's order. Names that start with a digit
+ * (`"401K"`) need bracket access. Each entry references the top-level const
+ * of the same name (`Enums.MDEntryType === MDEntryType`).
+ * Exceptions with no top-level const, inlined here: `MsgType` — see the note on each entry.
+ */
+export const Enums = {
+  "AccountType": AccountType,
+  "AcctIDSource": AcctIDSource,
+  "Adjustment": Adjustment,
+  "AdjustmentType": AdjustmentType,
+  "AdvSide": AdvSide,
+  "AdvTransType": AdvTransType,
+  "AffirmStatus": AffirmStatus,
+  "AggregatedBook": AggregatedBook,
+  "AllocAccountType": AllocAccountType,
+  "AllocCancReplaceReason": AllocCancReplaceReason,
+  "AllocHandlInst": AllocHandlInst,
+  "AllocIntermedReqType": AllocIntermedReqType,
+  "AllocLinkType": AllocLinkType,
+  "AllocNoOrdersType": AllocNoOrdersType,
+  "AllocRejCode": AllocRejCode,
+  "AllocReportType": AllocReportType,
+  "AllocSettlInstType": AllocSettlInstType,
+  "AllocStatus": AllocStatus,
+  "AllocTransType": AllocTransType,
+  "AllocType": AllocType,
+  "ApplQueueAction": ApplQueueAction,
+  "ApplQueueResolution": ApplQueueResolution,
+  "AssignmentMethod": AssignmentMethod,
+  "AvgPxIndicator": AvgPxIndicator,
+  "BasisPxType": BasisPxType,
+  "BidDescriptorType": BidDescriptorType,
+  "BidRequestTransType": BidRequestTransType,
+  "BidTradeType": BidTradeType,
+  "BidType": BidType,
+  "BookingType": BookingType,
+  "BookingUnit": BookingUnit,
+  "BusinessRejectReason": BusinessRejectReason,
+  "CancellationRights": CancellationRights,
+  "CashMargin": CashMargin,
+  "ClearingFeeIndicator": ClearingFeeIndicator,
+  "ClearingInstruction": ClearingInstruction,
+  "CollAction": CollAction,
+  "CollAsgnReason": CollAsgnReason,
+  "CollAsgnRejectReason": CollAsgnRejectReason,
+  "CollAsgnRespType": CollAsgnRespType,
+  "CollAsgnTransType": CollAsgnTransType,
+  "CollInquiryQualifier": CollInquiryQualifier,
+  "CollInquiryResult": CollInquiryResult,
+  "CollInquiryStatus": CollInquiryStatus,
+  "CollStatus": CollStatus,
+  "CommType": CommType,
+  "ConfirmRejReason": ConfirmRejReason,
+  "ConfirmStatus": ConfirmStatus,
+  "ConfirmTransType": ConfirmTransType,
+  "ConfirmType": ConfirmType,
+  "ContAmtType": ContAmtType,
+  "CorporateAction": CorporateAction,
+  "CoveredOrUncovered": CoveredOrUncovered,
+  "CPProgram": CPProgram,
+  "CrossPrioritization": CrossPrioritization,
+  "CrossType": CrossType,
+  "CustOrderCapacity": CustOrderCapacity,
+  "CxlRejReason": CxlRejReason,
+  "CxlRejResponseTo": CxlRejResponseTo,
+  "DayBookingInst": DayBookingInst,
+  "DeleteReason": DeleteReason,
+  "DeliveryForm": DeliveryForm,
+  "DeliveryType": DeliveryType,
+  "DiscretionInst": DiscretionInst,
+  "DiscretionLimitType": DiscretionLimitType,
+  "DiscretionMoveType": DiscretionMoveType,
+  "DiscretionOffsetType": DiscretionOffsetType,
+  "DiscretionRoundDirection": DiscretionRoundDirection,
+  "DiscretionScope": DiscretionScope,
+  "DistribPaymentMethod": DistribPaymentMethod,
+  "DKReason": DKReason,
+  "DlvyInstType": DlvyInstType,
+  "DueToRelated": DueToRelated,
+  "EmailType": EmailType,
+  "EncryptMethod": EncryptMethod,
+  "EventType": EventType,
+  "ExchangeForPhysical": ExchangeForPhysical,
+  "ExecInst": ExecInst,
+  "ExecPriceType": ExecPriceType,
+  "ExecRestatementReason": ExecRestatementReason,
+  "ExecType": ExecType,
+  "ExerciseMethod": ExerciseMethod,
+  "ExpirationCycle": ExpirationCycle,
+  "FinancialStatus": FinancialStatus,
+  "ForexReq": ForexReq,
+  "FundRenewWaiv": FundRenewWaiv,
+  "GapFillFlag": GapFillFlag,
+  "GTBookingInst": GTBookingInst,
+  "HaltReasonChar": HaltReasonChar,
+  "HandlInst": HandlInst,
+  "IncTaxInd": IncTaxInd,
+  "InstrAttribType": InstrAttribType,
+  "InViewOfCommon": InViewOfCommon,
+  "IOINaturalFlag": IOINaturalFlag,
+  "IOIQltyInd": IOIQltyInd,
+  "IOIQty": IOIQty,
+  "IOIQualifier": IOIQualifier,
+  "IOITransType": IOITransType,
+  "LastCapacity": LastCapacity,
+  "LastFragment": LastFragment,
+  "LastLiquidityInd": LastLiquidityInd,
+  "LegalConfirm": LegalConfirm,
+  "LegSwapType": LegSwapType,
+  "LiquidityIndType": LiquidityIndType,
+  "ListExecInstType": ListExecInstType,
+  "ListOrderStatus": ListOrderStatus,
+  "ListStatusType": ListStatusType,
+  "LocateReqd": LocateReqd,
+  "MassCancelRejectReason": MassCancelRejectReason,
+  "MassCancelRequestType": MassCancelRequestType,
+  "MassCancelResponse": MassCancelResponse,
+  "MassStatusReqType": MassStatusReqType,
+  "MatchStatus": MatchStatus,
+  "MatchType": MatchType,
+  "MDEntryType": MDEntryType,
+  "MDImplicitDelete": MDImplicitDelete,
+  "MDReqRejReason": MDReqRejReason,
+  "MDUpdateAction": MDUpdateAction,
+  "MDUpdateType": MDUpdateType,
+  "MessageEncoding": MessageEncoding,
+  "MiscFeeBasis": MiscFeeBasis,
+  "MiscFeeType": MiscFeeType,
+  "MoneyLaunderingStatus": MoneyLaunderingStatus,
+  "MsgDirection": MsgDirection,
+  // inlined — top-level export skipped: the field name collides with another export of this package
+  "MsgType": {
+    "HEARTBEAT": "0",
+    "TEST_REQUEST": "1",
+    "RESEND_REQUEST": "2",
+    "REJECT": "3",
+    "SEQUENCE_RESET": "4",
+    "LOGOUT": "5",
+    "INDICATION_OF_INTEREST": "6",
+    "ADVERTISEMENT": "7",
+    "EXECUTION_REPORT": "8",
+    "ORDER_CANCEL_REJECT": "9",
+    "LOGON": "A",
+    "NEWS": "B",
+    "EMAIL": "C",
+    "ORDER_SINGLE": "D",
+    "ORDER_LIST": "E",
+    "ORDER_CANCEL_REQUEST": "F",
+    "ORDER_CANCEL_REPLACE_REQUEST": "G",
+    "ORDER_STATUS_REQUEST": "H",
+    "ALLOCATION_INSTRUCTION": "J",
+    "LIST_CANCEL_REQUEST": "K",
+    "LIST_EXECUTE": "L",
+    "LIST_STATUS_REQUEST": "M",
+    "LIST_STATUS": "N",
+    "ALLOCATION_INSTRUCTION_ACK": "P",
+    "DONT_KNOW_TRADE": "Q",
+    "QUOTE_REQUEST": "R",
+    "QUOTE": "S",
+    "SETTLEMENT_INSTRUCTIONS": "T",
+    "MARKET_DATA_REQUEST": "V",
+    "MARKET_DATA_SNAPSHOT_FULL_REFRESH": "W",
+    "MARKET_DATA_INCREMENTAL_REFRESH": "X",
+    "MARKET_DATA_REQUEST_REJECT": "Y",
+    "QUOTE_CANCEL": "Z",
+    "QUOTE_STATUS_REQUEST": "a",
+    "MASS_QUOTE_ACKNOWLEDGEMENT": "b",
+    "SECURITY_DEFINITION_REQUEST": "c",
+    "SECURITY_DEFINITION": "d",
+    "SECURITY_STATUS_REQUEST": "e",
+    "SECURITY_STATUS": "f",
+    "TRADING_SESSION_STATUS_REQUEST": "g",
+    "TRADING_SESSION_STATUS": "h",
+    "MASS_QUOTE": "i",
+    "BUSINESS_MESSAGE_REJECT": "j",
+    "BID_REQUEST": "k",
+    "BID_RESPONSE": "l",
+    "LIST_STRIKE_PRICE": "m",
+    "XML_MESSAGE": "n",
+    "REGISTRATION_INSTRUCTIONS": "o",
+    "REGISTRATION_INSTRUCTIONS_RESPONSE": "p",
+    "ORDER_MASS_CANCEL_REQUEST": "q",
+    "ORDER_MASS_CANCEL_REPORT": "r",
+    "NEW_ORDER_s": "s",
+    "CROSS_ORDER_CANCEL_REPLACE_REQUEST": "t",
+    "CROSS_ORDER_CANCEL_REQUEST": "u",
+    "SECURITY_TYPE_REQUEST": "v",
+    "SECURITY_TYPES": "w",
+    "SECURITY_LIST_REQUEST": "x",
+    "SECURITY_LIST": "y",
+    "DERIVATIVE_SECURITY_LIST_REQUEST": "z",
+    "DERIVATIVE_SECURITY_LIST": "AA",
+    "NEW_ORDER_AB": "AB",
+    "MULTILEG_ORDER_CANCEL_REPLACE": "AC",
+    "TRADE_CAPTURE_REPORT_REQUEST": "AD",
+    "TRADE_CAPTURE_REPORT": "AE",
+    "ORDER_MASS_STATUS_REQUEST": "AF",
+    "QUOTE_REQUEST_REJECT": "AG",
+    "RFQ_REQUEST": "AH",
+    "QUOTE_STATUS_REPORT": "AI",
+    "QUOTE_RESPONSE": "AJ",
+    "CONFIRMATION": "AK",
+    "POSITION_MAINTENANCE_REQUEST": "AL",
+    "POSITION_MAINTENANCE_REPORT": "AM",
+    "REQUEST_FOR_POSITIONS": "AN",
+    "REQUEST_FOR_POSITIONS_ACK": "AO",
+    "POSITION_REPORT": "AP",
+    "TRADE_CAPTURE_REPORT_REQUEST_ACK": "AQ",
+    "TRADE_CAPTURE_REPORT_ACK": "AR",
+    "ALLOCATION_REPORT": "AS",
+    "ALLOCATION_REPORT_ACK": "AT",
+    "CONFIRMATION_ACK": "AU",
+    "SETTLEMENT_INSTRUCTION_REQUEST": "AV",
+    "ASSIGNMENT_REPORT": "AW",
+    "COLLATERAL_REQUEST": "AX",
+    "COLLATERAL_ASSIGNMENT": "AY",
+    "COLLATERAL_RESPONSE": "AZ",
+    "COLLATERAL_REPORT": "BA",
+    "COLLATERAL_INQUIRY": "BB",
+    "NETWORK_BC": "BC",
+    "NETWORK_BD": "BD",
+    "USER_REQUEST": "BE",
+    "USER_RESPONSE": "BF",
+    "COLLATERAL_INQUIRY_ACK": "BG",
+    "CONFIRMATION_REQUEST": "BH",
+  },
+  "MultiLegReportingType": MultiLegReportingType,
+  "MultiLegRptTypeReq": MultiLegRptTypeReq,
+  "NetGrossInd": NetGrossInd,
+  "NetworkRequestType": NetworkRequestType,
+  "NetworkStatusResponseType": NetworkStatusResponseType,
+  "NoSides": NoSides,
+  "NotifyBrokerOfCredit": NotifyBrokerOfCredit,
+  "OddLot": OddLot,
+  "OpenCloseSettlFlag": OpenCloseSettlFlag,
+  "OrderCapacity": OrderCapacity,
+  "OrderRestrictions": OrderRestrictions,
+  "OrdRejReason": OrdRejReason,
+  "OrdStatus": OrdStatus,
+  "OrdType": OrdType,
+  "OwnershipType": OwnershipType,
+  "OwnerType": OwnerType,
+  "PartyIDSource": PartyIDSource,
+  "PartyRole": PartyRole,
+  "PartySubIDType": PartySubIDType,
+  "PaymentMethod": PaymentMethod,
+  "PegLimitType": PegLimitType,
+  "PegMoveType": PegMoveType,
+  "PegOffsetType": PegOffsetType,
+  "PegRoundDirection": PegRoundDirection,
+  "PegScope": PegScope,
+  "PosAmtType": PosAmtType,
+  "PositionEffect": PositionEffect,
+  "PosMaintAction": PosMaintAction,
+  "PosMaintResult": PosMaintResult,
+  "PosMaintStatus": PosMaintStatus,
+  "PosQtyStatus": PosQtyStatus,
+  "PosReqResult": PosReqResult,
+  "PosReqStatus": PosReqStatus,
+  "PosReqType": PosReqType,
+  "PossDupFlag": PossDupFlag,
+  "PossResend": PossResend,
+  "PosTransType": PosTransType,
+  "PosType": PosType,
+  "PreallocMethod": PreallocMethod,
+  "PreviouslyReported": PreviouslyReported,
+  "PriceType": PriceType,
+  "PriorityIndicator": PriorityIndicator,
+  "ProcessCode": ProcessCode,
+  "Product": Product,
+  "ProgRptReqs": ProgRptReqs,
+  "PublishTrdIndicator": PublishTrdIndicator,
+  "PutOrCall": PutOrCall,
+  "QtyType": QtyType,
+  "QuoteCancelType": QuoteCancelType,
+  "QuoteCondition": QuoteCondition,
+  "QuotePriceType": QuotePriceType,
+  "QuoteRejectReason": QuoteRejectReason,
+  "QuoteRequestRejectReason": QuoteRequestRejectReason,
+  "QuoteRequestType": QuoteRequestType,
+  "QuoteResponseLevel": QuoteResponseLevel,
+  "QuoteRespType": QuoteRespType,
+  "QuoteStatus": QuoteStatus,
+  "QuoteType": QuoteType,
+  "RegistRejReasonCode": RegistRejReasonCode,
+  "RegistStatus": RegistStatus,
+  "RegistTransType": RegistTransType,
+  "ReportToExch": ReportToExch,
+  "ResetSeqNumFlag": ResetSeqNumFlag,
+  "ResponseTransportType": ResponseTransportType,
+  "RoundingDirection": RoundingDirection,
+  "RoutingType": RoutingType,
+  "Scope": Scope,
+  "SecurityIDSource": SecurityIDSource,
+  "SecurityListRequestType": SecurityListRequestType,
+  "SecurityRequestResult": SecurityRequestResult,
+  "SecurityRequestType": SecurityRequestType,
+  "SecurityResponseType": SecurityResponseType,
+  "SecurityTradingStatus": SecurityTradingStatus,
+  "SecurityType": SecurityType,
+  "SessionRejectReason": SessionRejectReason,
+  "SettlCurrFxRateCalc": SettlCurrFxRateCalc,
+  "SettlDeliveryType": SettlDeliveryType,
+  "SettlInstMode": SettlInstMode,
+  "SettlInstReqRejCode": SettlInstReqRejCode,
+  "SettlInstSource": SettlInstSource,
+  "SettlInstTransType": SettlInstTransType,
+  "SettlPriceType": SettlPriceType,
+  "SettlSessID": SettlSessID,
+  "SettlType": SettlType,
+  "ShortSaleReason": ShortSaleReason,
+  "Side": Side,
+  "SideMultiLegReportingType": SideMultiLegReportingType,
+  "SideValueInd": SideValueInd,
+  "SolicitedFlag": SolicitedFlag,
+  "StandInstDbType": StandInstDbType,
+  "StatusValue": StatusValue,
+  "StipulationType": StipulationType,
+  "SubscriptionRequestType": SubscriptionRequestType,
+  "TargetStrategy": TargetStrategy,
+  "TaxAdvantageType": TaxAdvantageType,
+  "TerminationType": TerminationType,
+  "TestMessageIndicator": TestMessageIndicator,
+  "TickDirection": TickDirection,
+  "TimeInForce": TimeInForce,
+  "TradeAllocIndicator": TradeAllocIndicator,
+  "TradeCondition": TradeCondition,
+  "TradedFlatSwitch": TradedFlatSwitch,
+  "TradeReportRejectReason": TradeReportRejectReason,
+  "TradeReportType": TradeReportType,
+  "TradeRequestResult": TradeRequestResult,
+  "TradeRequestStatus": TradeRequestStatus,
+  "TradeRequestType": TradeRequestType,
+  "TradSesMethod": TradSesMethod,
+  "TradSesMode": TradSesMode,
+  "TradSesStatus": TradSesStatus,
+  "TradSesStatusRejReason": TradSesStatusRejReason,
+  "TrdRegTimestampType": TrdRegTimestampType,
+  "TrdRptStatus": TrdRptStatus,
+  "TrdType": TrdType,
+  "UnsolicitedIndicator": UnsolicitedIndicator,
+  "Urgency": Urgency,
+  "UserRequestType": UserRequestType,
+  "UserStatus": UserStatus,
+  "WorkingIndicator": WorkingIndicator,
+  "YieldType": YieldType,
+} as const;
+export type EnumFieldName = keyof typeof Enums;
