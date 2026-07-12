@@ -25,9 +25,7 @@ const { message, issues } = fix.parse(raw); // never throws; issues is FixIssue[
 const problems = fix.validate(message); // presence, enums, datatypes, conditional rules
 const wire = fix.encode({
   msgType: 'D',
-  fields: {
-    /* ... */
-  },
+  fields: {/* ... */},
 }); // ordered + framed
 ```
 

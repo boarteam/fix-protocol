@@ -155,9 +155,9 @@ export type TagsOf<E extends DictionaryExtension> = Readonly<{
  * (entries carrying `msgType`); message patches are excluded.
  */
 export type MsgTypesOf<E extends DictionaryExtension> = Readonly<{
-  [K in keyof MsgsOf<E> & string as MsgsOf<E>[K] extends { msgType: string }
-    ? K
-    : never]: MsgsOf<E>[K] extends { msgType: infer M extends string } ? M : never;
+  [
+    K in keyof MsgsOf<E> & string as MsgsOf<E>[K] extends { msgType: string } ? K : never
+  ]: MsgsOf<E>[K] extends { msgType: infer M extends string } ? M : never;
 }>;
 
 /**
