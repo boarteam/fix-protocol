@@ -25,6 +25,12 @@ pnpm format        # prettier --write   (pnpm format:check to verify)
 pnpm check:bundle  # asserts the published bundles stay browser-safe (no net/Buffer/crypto/joi/@nestjs)
 ```
 
+Formatting is automatic: `pnpm install` registers a pre-commit hook
+([simple-git-hooks](https://github.com/toplenboren/simple-git-hooks) +
+[lint-staged](https://github.com/lint-staged/lint-staged)) that runs Prettier on the files you
+commit, so `format:check` can only fail in CI if the hook was bypassed (`git commit -n` or
+`SKIP_SIMPLE_GIT_HOOKS=1`).
+
 Before opening a PR, the full gate should be green:
 
 ```bash
