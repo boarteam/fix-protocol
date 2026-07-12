@@ -7,8 +7,19 @@ import { dictionary } from '@boarteam/fix-dict-fix44';
 import { run as runParseAndValidate } from './parse-and-validate.mjs';
 import { run as runEncode } from './encode-a-message.mjs';
 import { run as runDemo } from './demo-decode.mjs';
+import { run as runExtend } from './extend-dictionary.mjs';
 
 describe('examples', () => {
+  it('extend-dictionary nests the cTrader custom tags and keeps every gate clean', () => {
+    const r = runExtend();
+    expect(r.extendErrors).toBe(0);
+    expect(r.gateIssues).toBe(0);
+    expect(r.instruments).toBe(3);
+    expect(r.parseIssues).toBe(0);
+    expect(r.symbolNameTag).toBe(1007);
+    expect(r.reverseName).toBe('SymbolName');
+  });
+
   it('parse-and-validate decodes the repeating group', () => {
     const result = runParseAndValidate();
     expect(result.msgType).toBe('W');
