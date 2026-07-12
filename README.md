@@ -216,9 +216,67 @@ const { message, issues } = fix.parse(pipeDelimitedLine, { soh: '|' });
 
 `parse` options: `soh` (default the SOH byte `0x01`; pass `"|"` to read pipe-delimited logs) and `checkFraming` (default `true`; framing findings come back as issues, never a rejection).
 
+### Extending the dictionary (venue-custom tags)
+
+Real venues extend FIX beyond the spec — cTrader, for example, sends `SymbolName(1007)` and
+`SymbolDigits(1008)` _inside_ the `NoRelatedSym` repeating group of SecurityList (35=y).
+Unknown tags inside a group break group reconstruction, and `encode` only emits fields the
+dictionary places. `extendDictionary` fixes both from one declaration:
+
+```ts
+import { defineExtension, extendDictionary, createFixEngine } from '@boarteam/fix';
+import { dictionary as fix44 } from '@boarteam/fix-dict-fix44';
+
+const ctrader = defineExtension({
+  id: 'ctrader',
+  fields: {
+    SymbolName: { tag: 1007, type: 'String' },
+    SymbolDigits: { tag: 1008, type: 'int' },
+  },
+  messages: {
+    SecurityList: { groups: { NoRelatedSym: { append: ['SymbolName', 'SymbolDigits'] } } },
+  },
+});
+
+const { dictionary, issues } = extendDictionary(fix44, ctrader); // never throws — issues are data
+const fix = createFixEngine(dictionary);
+// SecurityList now parses with 1007/1008 nested per instrument, and encode round-trips them.
+```
+
+An extension can add **fields**, **enum values** on existing fields, **components**, whole
+**messages** (the standard header/trailer are injected for you), and place members into message
+bodies or repeating groups — `after: 'Instrument'` anchors a wire position, dotted paths
+(`'NoRelatedSym.NoUnderlyings'`) reach nested groups. Placements are append-only by design: a
+group's first field is its entry delimiter, and `extendDictionary` reverts any operation that
+would shift one (`extend/group-delimiter-shift`), skips duplicates, and rejects placements that
+could re-parse into the wrong group (`extend/ambiguous-boundary`). Everything it does or refuses
+to do is reported through stable `extend/*` issue codes — `error` means skipped or reverted, so
+if the base passed `validateDictionary` and the result has no error-severity issues, the result
+passes too.
+
+The **same declaration** drives the typed maps — no duplication, full literal typing (TS ≥ 5.0):
+
+```ts
+import { extendTags, invertTags, tagsOf } from '@boarteam/fix';
+import { Tags as Fix44Tags } from '@boarteam/fix-dict-fix44';
+
+export const Tags = extendTags(Fix44Tags, tagsOf(ctrader)); // Tags.SymbolName hovers as 1007
+export type TagName = keyof typeof Tags; // includes 'SymbolName'
+export const TagNames = invertTags(Tags); // TagNames[1007] hovers as 'SymbolName'
+```
+
+For a reusable dialect, put the declaration and the derived exports in one module mirroring a
+dict package's surface (`dictionary`, `Tags`, `TagNames`, `MsgType`, `MsgTypeNames`) — see the
+runnable [`examples/extend-dictionary.mjs`](examples/extend-dictionary.mjs). Two things keep such
+a module honest: fail fast on error-severity issues at module init, and — if the module ships as
+a package that emits `.d.ts` — annotate the exports with the provided alias types (`ExtendTags`,
+`InvertTags`, `ExtendMsgTypes`, `InvertMsgTypes`) so the declaration emit stays small and nominal
+instead of structurally inlining the 900-key base map. The same pattern scales to publishable
+venue packages (e.g. a future `@boarteam/fix-dict-fix44-ctrader`).
+
 ### Lower-level building blocks
 
-If you do not want the engine wrapper, the same capabilities are exported as free functions: `parse`, `parseAll`, `encode`, `validate`, `tokenize`, `splitMessages`, `decodeValue`, `calculateChecksum`, `bodyLength`, `loadDictionary`, `Dictionary`, and `validateDictionary`.
+If you do not want the engine wrapper, the same capabilities are exported as free functions: `parse`, `parseAll`, `encode`, `validate`, `tokenize`, `splitMessages`, `decodeValue`, `calculateChecksum`, `bodyLength`, `loadDictionary`, `Dictionary`, `validateDictionary`, and the dictionary-extension helpers (`extendDictionary`, `defineExtension`, `tagsOf`, `msgTypesOf`, `extendTags`, `invertTags`, `extendMsgTypes`, `invertMsgTypes`).
 
 ### Output shapes
 
