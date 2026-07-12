@@ -60,5 +60,14 @@ export type {
   CoverageGap,
 } from './dictionary/types';
 
+// Dictionary extension helpers (typed maps).
+export { extendTags, invertTags, extendMsgTypes, invertMsgTypes } from './dictionary/extendTags';
+export type {
+  ExtendTags,
+  InvertTags,
+  ExtendMsgTypes,
+  InvertMsgTypes,
+} from './dictionary/extendTags';
+
 // Diagnostics.
 export type { FixIssue, FixSeverity, KnownIssueCode } from './errors';
