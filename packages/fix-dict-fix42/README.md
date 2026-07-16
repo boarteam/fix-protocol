@@ -27,6 +27,11 @@ per-field const are also same-name types — unions of their wire values — so
 field without a top-level const is `MsgType` (tag 35), whose name belongs to the
 message-type map: use `Enums.MsgType`.
 
+It also exports the typed encode-side API: `message` (a factory bound to this dictionary),
+`MessageBodies` (the `MsgType` value → body-type registry), and a named body type per message
+plus augmentable per-container group/component `interface`s. See the [`@boarteam/fix`
+README](https://www.npmjs.com/package/@boarteam/fix) for the typed-message API.
+
 Requires `@boarteam/fix` as a peer dependency.
 
 ## License

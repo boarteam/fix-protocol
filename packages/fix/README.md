@@ -34,6 +34,53 @@ const wire = fix.encode({
 - **Pure & deterministic**; **never throws** on the analyze path (diagnostics are returned
   data); **browser + Node** via `TextEncoder`/`TextDecoder`.
 
+## Typed, self-rendering messages
+
+`encode(EncodeMessage)` is the low-level primitive — an untyped, tag-keyed bag. For a
+**statically-typed** encode side, the dictionary packages ship a `message` factory generated
+from the same dictionary: creating a message for a `MsgType` yields a builder that knows only
+that message's fields/groups and their value types, and renders **byte-identical** to `encode`.
+
+```ts
+import { message, MsgType } from '@boarteam/fix-dict-fix44';
+
+const wire = message(MsgType.MarketDataSnapshotFullRefresh) // typed to this message's body
+  .set('MDReqID', 'req-1')
+  .set('Symbol', 'EURUSD')
+  .set('NoMDEntries', [
+    { MDEntryType: '0', MDEntryPx: '1.1050' }, // group entries are typed too
+    { MDEntryType: '1', MDEntryPx: '1.1052' },
+  ])
+  .render({
+    SenderCompID: 'ME',
+    TargetCompID: 'YOU',
+    MsgSeqNum: 1,
+    SendingTime: '20260716-12:00:00',
+  });
+```
+
+- **Value types come from the field datatype**: enumerated → the generated value union
+  (`MDEntryType`); `Boolean` → `boolean`; numeric (`int`/`float`/`Price`/`Qty`/…) →
+  `number | string` (the string is the exact-formatting escape hatch — a `number` float is
+  rendered by `String()`, so pass a string when you need an exact form like `1.10`); everything
+  else → `string`. Illegal fields, wrong value types, and malformed group entries are compile
+  errors.
+- **Transport/session-agnostic**: envelope fields (`MsgSeqNum`/`SenderCompID`/`SendingTime`/
+  `TargetCompID`; framing `8`/`9`/`10` are computed) are supplied to `render(envelope)` — the
+  library never holds a sequence counter, clock, or comp-IDs. The body type excludes them.
+- **Mutable or immutable**: `message(...)` is a fast, fluent mutable builder for hot loops;
+  `message.immutable(...)` (and `.toImmutable()`) is copy-on-write. Both accept a bulk object
+  (`message('W', { MDReqID: 'r1' })` / `.assign({...})`) and double as a typed **read model**
+  (`msg.get('Symbol')`, `msg.get('NoMDEntries')?.[0]?.MDEntryPx`) for deriving log metadata.
+- The engine façade mirrors it: `createFixEngine<MessageBodies>(dictionary).create(msgType)`.
+
+**Venue extensions** (e.g. a broker's custom tags in an existing group) need no regenerated
+dictionary: `extendDictionary(dictionary, ext)` adds them at runtime, and the generated,
+per-container group/component `interface`s (`SecListGrp_NoRelatedSymEntry`, …) are augmentable —
+patch the shared interface via declaration merging (single venue) or an override-interface
+intersection (multiple venues), then rebind `messageFactory<MessageBodies>(extended)`. The
+augmented type and the extended dictionary ship as a pair.
+
 Full docs, examples, and the contribution guide are in the
 [monorepo](https://github.com/boarteam/fix-protocol).
 
