@@ -206,6 +206,30 @@ const wire = fix.encode({
 
 `encode` emits fields in dictionary order and computes `BeginString (8)`, `BodyLength (9)`, and `CheckSum (10)` byte-accurately. It is pure — **you** supply the session fields (sequence number, sending time); the engine never invents them.
 
+### Typed messages
+
+`encode` above is the untyped, tag-keyed primitive. For a **statically-typed** encode side, each dictionary package also ships a `message` factory generated from the same dictionary: creating a message for a `MsgType` yields a builder that knows only that message's fields/groups and their value types, and renders **byte-identical** to `encode`.
+
+```ts
+import { message, MsgType } from '@boarteam/fix-dict-fix44';
+
+const wire = message(MsgType.MarketDataSnapshotFullRefresh) // typed to this message's body
+  .set('MDReqID', 'req-1')
+  .set('Symbol', 'EUR/USD')
+  .set('NoMDEntries', [
+    { MDEntryType: '0', MDEntryPx: '1.1050' }, // group entries are typed too
+    { MDEntryType: '1', MDEntryPx: '1.1052' },
+  ])
+  .render({
+    SenderCompID: 'BUYSIDE',
+    TargetCompID: 'SELLSIDE',
+    MsgSeqNum: 42,
+    SendingTime: '20240101-12:00:00.000',
+  });
+```
+
+Illegal fields, wrong value types, and malformed group entries are **compile errors**; value types follow the field datatype (enumerated → the value union; `Boolean` → `boolean`; numeric → `number | string`; else `string`). Envelope/session fields (`MsgSeqNum`/`SenderCompID`/`SendingTime`/`TargetCompID`; framing `8`/`9`/`10` computed) are supplied to `render` — the body type excludes them, so the library holds no sequence counter, clock, or comp-IDs. `message(...)` is a fast, fluent mutable builder for hot loops; `message.immutable(...)` is copy-on-write; both accept a bulk object and double as a typed read model (`msg.get('Symbol')`). The engine façade mirrors it: `createFixEngine<MessageBodies>(dictionary).create(msgType)`. Venue-custom tags need no regenerated dictionary — see [Extending the dictionary](#extending-the-dictionary-venue-custom-tags) and each package's README.
+
 ### Reading pipe-delimited logs
 
 Most captured logs render the SOH separator as `|`. Pass it through:
@@ -276,7 +300,7 @@ venue packages (e.g. a future `@boarteam/fix-dict-fix44-ctrader`).
 
 ### Lower-level building blocks
 
-If you do not want the engine wrapper, the same capabilities are exported as free functions: `parse`, `parseAll`, `encode`, `validate`, `tokenize`, `splitMessages`, `decodeValue`, `calculateChecksum`, `bodyLength`, `loadDictionary`, `Dictionary`, `validateDictionary`, and the dictionary-extension helpers (`extendDictionary`, `defineExtension`, `tagsOf`, `msgTypesOf`, `extendTags`, `invertTags`, `extendMsgTypes`, `invertMsgTypes`).
+If you do not want the engine wrapper, the same capabilities are exported as free functions: `parse`, `parseAll`, `encode`, `validate`, `tokenize`, `splitMessages`, `decodeValue`, `calculateChecksum`, `bodyLength`, `loadDictionary`, `Dictionary`, `validateDictionary`, the typed-message helpers (`messageFactory`, `createMessage`, `createImmutableMessage`), and the dictionary-extension helpers (`extendDictionary`, `defineExtension`, `tagsOf`, `msgTypesOf`, `extendTags`, `invertTags`, `extendMsgTypes`, `invertMsgTypes`).
 
 ### Output shapes
 

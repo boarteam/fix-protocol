@@ -10,7 +10,8 @@ A zero-dependency FIX toolkit that runs in the browser and in Node:
 
 - **`@boarteam/fix`** — the engine: tokenize, parse (with nested repeating-group
   reconstruction), validate (pure and non-throwing), and encode (dictionary-ordered, with
-  byte-accurate `BodyLength`/`CheckSum`).
+  byte-accurate `BodyLength`/`CheckSum`) — plus a typed, self-rendering `Message` builder over
+  the generated per-message body types (renders byte-identical to `encode`).
 - **`@boarteam/fix-dict-fix44`** — the complete FIX 4.4 dictionary as data (912 fields /
   93 messages / 105 components / 23 datatypes), generated directly from the QuickFIX
   `FIX44.xml` data dictionary (so not "cross-checked" against it — that would be circular).

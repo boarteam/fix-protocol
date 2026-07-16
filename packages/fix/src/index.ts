@@ -39,6 +39,17 @@ export type { ConditionalRule, ConditionalContext } from './validate/conditions'
 export { createFixEngine } from './engine';
 export type { FixEngine, EngineOptions } from './engine';
 
+// Typed, self-rendering Message API.
+export { createMessage, createImmutableMessage, messageFactory } from './message';
+export type {
+  MessageView,
+  MutableMessage,
+  ImmutableMessage,
+  MessageFactory,
+  Envelope,
+  UntypedBody,
+} from './message';
+
 // Dictionary runtime + contract.
 export { Dictionary, loadDictionary } from './dictionary/Dictionary';
 export type { ResolvedDatatype } from './dictionary/Dictionary';
