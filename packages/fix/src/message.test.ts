@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 import { encode } from './codec/encode';
 import { SOH } from './codec/tokenize';
 import { loadDictionary } from './dictionary/Dictionary';
@@ -6,9 +6,12 @@ import type { DictionaryJSON } from './dictionary/types';
 import { createFixEngine } from './engine';
 import {
   type ImmutableMessage,
+  type MessageOf,
+  type MessageView,
   createImmutableMessage,
   createMessage,
   messageFactory,
+  messageTypeGuard,
 } from './message';
 
 const show = (s: string) => s.replace(/\x01/g, '|');
@@ -320,6 +323,75 @@ describe('messageFactory + engine.create', () => {
     );
     const imm = engine.createImmutable('A', { EncryptMethod: 0 });
     expect(imm.get('EncryptMethod')).toBe(0);
+  });
+});
+
+describe('messageTypeGuard + engine.is — narrow an unknown message', () => {
+  const isMessageType = messageTypeGuard<TinyBodies>();
+  const engine = createFixEngine<TinyBodies>(dict);
+
+  it('returns the correct boolean (standalone guard and engine.is)', () => {
+    const w: MessageView<any> = createMessage<MDSnapshotBody>('W', dict);
+    const a: MessageView<any> = createMessage<LogonBody>('A', dict);
+    expect(isMessageType(w, 'W')).toBe(true);
+    expect(isMessageType(w, 'A')).toBe(false);
+    expect(isMessageType(a, 'A')).toBe(true);
+    // engine.is is the same guard with Bodies already bound.
+    expect(engine.is(w, 'W')).toBe(true);
+    expect(engine.is(a, 'W')).toBe(false);
+    expect(engine.is(a, 'A')).toBe(true);
+  });
+
+  it('narrows MessageView<any> to the typed read surface inside the guard', () => {
+    // The generic-boundary shape: the concrete body is erased to `any`.
+    const m: MessageView<any> = createMessage<MDSnapshotBody>('W', dict, {
+      Symbol: 'AAPL',
+      NoMDEntries: [{ MDEntryType: '0' }],
+    });
+    // guard(m, 'W') compiles for m: MessageView<any> …
+    if (isMessageType(m, 'W')) {
+      // … and inside, reads are typed to the W body.
+      expectTypeOf(m.get('Symbol')).toEqualTypeOf<string | undefined>();
+      expectTypeOf(m.get('NoMDEntries')).toEqualTypeOf<MDEntry[] | undefined>();
+      // Runtime reads still work through the narrowed view.
+      expect(m.get('Symbol')).toBe('AAPL');
+      expect(m.get('NoMDEntries')?.[0]?.MDEntryType).toBe('0');
+      // @ts-expect-error — SecurityID is not a field of the W body
+      m.get('SecurityID');
+    }
+    // @ts-expect-error — 'ZZ' is not a MsgType value in TinyBodies
+    isMessageType(m, 'ZZ');
+  });
+
+  it('narrows an immutable message too — it targets the shared read surface', () => {
+    // The guard narrows to MessageView, which MutableMessage and ImmutableMessage both extend,
+    // so the immutable flavour must pass through it exactly like the mutable one.
+    const imm: MessageView<any> = createImmutableMessage<MDSnapshotBody>('W', dict, {
+      Symbol: 'AAPL',
+      NoMDEntries: [{ MDEntryType: '0' }],
+    });
+    expect(isMessageType(imm, 'W')).toBe(true);
+    expect(isMessageType(imm, 'A')).toBe(false);
+    if (isMessageType(imm, 'W')) {
+      expectTypeOf(imm.get('NoMDEntries')).toEqualTypeOf<MDEntry[] | undefined>();
+      expect(imm.get('Symbol')).toBe('AAPL');
+    }
+  });
+
+  it('engine.is narrows identically, and MessageOf annotates a narrowed message', () => {
+    const m: MessageView<any> = engine.create('W', { NoMDEntries: [{ MDEntryType: '0' }] });
+    if (engine.is(m, 'W')) {
+      expectTypeOf(m.get('NoMDEntries')).toEqualTypeOf<MDEntry[] | undefined>();
+    }
+    // MessageOf<Bodies, M> is the read surface of message M — usable as an annotation.
+    expectTypeOf<MessageOf<TinyBodies, 'W'>>().toEqualTypeOf<
+      MessageView<MDSnapshotBody & object>
+    >();
+    const readEntries = (w: MessageOf<TinyBodies, 'W'>): MDEntry[] | undefined =>
+      w.get('NoMDEntries');
+    expect(readEntries(engine.create('W', { NoMDEntries: [{ MDEntryType: '0' }] }))).toEqual([
+      { MDEntryType: '0' },
+    ]);
   });
 });
 

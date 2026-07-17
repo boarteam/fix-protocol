@@ -11,10 +11,12 @@ import type { DictionaryJSON } from './dictionary/types';
 import type { FixIssue } from './errors';
 import {
   type ImmutableMessage,
+  type MessageTypeGuard,
   type MutableMessage,
   type UntypedBody,
   createImmutableMessage,
   createMessage,
+  messageTypeGuard,
 } from './message';
 import { type ValidateOptions, validate } from './validate/validate';
 
@@ -62,6 +64,13 @@ export interface FixEngine<Bodies = Record<string, UntypedBody>> {
     msgType: M,
     init?: Partial<Bodies[M] & object>,
   ): ImmutableMessage<Bodies[M] & object>;
+  /**
+   * Narrow a message of unknown body to a specific message's read surface, keyed on its
+   * `MsgType` value — the read-side counterpart of {@link FixEngine.create}, with `Bodies`
+   * already bound. Inside `if (engine.is(msg, 'W')) { … }`, `msg.get(…)` is typed to that
+   * message's body. Runtime is a plain `msgType` compare. See {@link messageTypeGuard}.
+   */
+  is: MessageTypeGuard<Bodies>;
 }
 
 /**
@@ -91,6 +100,7 @@ export function createFixEngine<Bodies = Record<string, UntypedBody>>(
     create: (msgType, init) => createMessage<Bodies[typeof msgType] & object>(msgType, dict, init),
     createImmutable: (msgType, init) =>
       createImmutableMessage<Bodies[typeof msgType] & object>(msgType, dict, init),
+    is: messageTypeGuard<Bodies>(),
   };
 }
 

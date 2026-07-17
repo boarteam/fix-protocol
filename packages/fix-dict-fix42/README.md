@@ -29,8 +29,11 @@ message-type map: use `Enums.MsgType`.
 
 It also exports the typed encode-side API: `message` (a factory bound to this dictionary),
 `MessageBodies` (the `MsgType` value → body-type registry), and a named body type per message
-plus augmentable per-container group/component `interface`s. See the [`@boarteam/fix`
-README](https://www.npmjs.com/package/@boarteam/fix) for the typed-message API.
+plus augmentable per-container group/component `interface`s. For the read side it exports
+`isMessageType` (a type guard that narrows a `MessageView<any>` of unknown type to a specific
+message's body, keyed on its `MsgType` value) and `MessageOf<M>` (the matching annotation alias).
+See the [`@boarteam/fix` README](https://www.npmjs.com/package/@boarteam/fix) for the
+typed-message API.
 
 Requires `@boarteam/fix` as a peer dependency.
 

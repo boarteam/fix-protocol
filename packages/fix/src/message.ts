@@ -387,3 +387,57 @@ export function messageFactory<Bodies>(dict: Dictionary | DictionaryJSON): Messa
     new ImmutableMessageImpl<Bodies[M] & object>(d, msgType, init ? { ...init } : {});
   return factory;
 }
+
+/**
+ * A `Bodies`-bound message-narrowing type guard — the read-side counterpart of
+ * {@link MessageFactory}. Given a message of unknown body (a `MessageView<any>`, e.g. at a
+ * generic `send(message)` boundary where the concrete msgType is erased) and a `MsgType` value
+ * keyed into `Bodies`, it narrows the message to that message's body so subsequent
+ * {@link MessageView.get}/{@link MessageView.has} reads are typed — no `any`, no casts. The
+ * runtime is a plain `msgType` string compare; the narrowing comes entirely from `Bodies[M]`.
+ *
+ * It narrows to the read surface {@link MessageView} (the interface both {@link MutableMessage}
+ * and {@link ImmutableMessage} extend), not to the mutable/immutable *kind*: the guard's job is
+ * typed reads at an inbound/outbound boundary, and a call site that already holds a concrete
+ * builder rarely needs to re-narrow it. Preserving the kind would take a second overload keyed
+ * on the input type for no read-side benefit. Build one with {@link messageTypeGuard}.
+ */
+export type MessageTypeGuard<Bodies> = <M extends keyof Bodies & string>(
+  // The body is unknown at this boundary, so `any` keeps `get()`/`has()` callable on the input;
+  // the true-branch type comes from the `Bodies[M]` narrowing target, not from this parameter.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  message: MessageView<any>,
+  msgType: M,
+) => message is MessageView<Bodies[M] & object>;
+
+/**
+ * The read surface of the message whose `MsgType` value is `M` in a `Bodies` registry — a
+ * convenience alias for annotating a narrowed message (a function parameter, a variable). Equal
+ * to `MessageView<Bodies[M] & object>`; the dict packages emit a pre-bound one-argument
+ * `MessageOf<M>` over their generated `MessageBodies`.
+ */
+export type MessageOf<Bodies, M extends keyof Bodies & string> = MessageView<Bodies[M] & object>;
+
+/**
+ * Build a dictionary-agnostic {@link MessageTypeGuard} bound to a `Bodies` registry (the
+ * generated `MessageBodies` map of `MsgType` value → body type). The dict packages call this and
+ * re-export the result as `isMessageType`:
+ *
+ * ```ts
+ * const isMessageType = messageTypeGuard<MessageBodies>();
+ * if (isMessageType(message, 'W')) {
+ *   message.get('SecurityID');      // string | undefined — typed to MarketDataSnapshotFullRefresh
+ *   message.get('NoMDEntries');     // the typed entry array
+ * }
+ * ```
+ *
+ * Pure and side-effect-free: the only runtime work is `message.msgType === msgType`, so it holds
+ * no dictionary, session, or transport state.
+ */
+export function messageTypeGuard<Bodies>(): MessageTypeGuard<Bodies> {
+  return <M extends keyof Bodies & string>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    message: MessageView<any>,
+    msgType: M,
+  ): message is MessageView<Bodies[M] & object> => message.msgType === msgType;
+}

@@ -47,8 +47,11 @@ For the typed encode side it also exports `message` (a factory bound to this dic
 `MessageBodies` (the `MsgType` value → body-type registry), and a named body type per message
 (`NewOrderSingleBody`, `MarketDataSnapshotFullRefreshBody`, …) plus augmentable per-container
 group/component `interface`s (`SecListGrp_NoRelatedSymEntry`, `InstrumentFields`, …) that venue
-extensions patch via declaration merging. See the [`@boarteam/fix`
-README](https://www.npmjs.com/package/@boarteam/fix) for the typed-message API.
+extensions patch via declaration merging. For the read side it exports `isMessageType` — a type
+guard that narrows a `MessageView<any>` of unknown type to a specific message's body keyed on its
+`MsgType` value (so `get()` becomes typed) — and `MessageOf<M>`, the matching annotation alias.
+See the [`@boarteam/fix` README](https://www.npmjs.com/package/@boarteam/fix) for the
+typed-message API.
 
 Requires `@boarteam/fix` as a peer dependency.
 

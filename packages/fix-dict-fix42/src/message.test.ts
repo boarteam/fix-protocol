@@ -1,12 +1,15 @@
-import { createFixEngine } from '@boarteam/fix';
+import { createFixEngine, type MessageView } from '@boarteam/fix';
 import { describe, expect, expectTypeOf, it } from 'vitest';
 import {
   type LogonBody,
   MDEntryType,
+  type MarketDataSnapshotFullRefreshBody,
   type MarketDataSnapshotFullRefresh_NoMDEntriesEntry,
+  type MessageOf,
   MsgType,
   type MessageBodies,
   dictionary,
+  isMessageType,
   message,
 } from './index';
 
@@ -82,5 +85,28 @@ describe('FIX 4.2 type-level guarantees', () => {
     needsLogon({ EncryptMethod: 0, HeartBtInt: 30 });
     // @ts-expect-error a NoMDEntries entry requires MDEntryType
     message('W').set('NoMDEntries', [{ MDEntryPx: '1.0' }]);
+  });
+
+  it('isMessageType narrows an unknown message; MessageOf is the read surface', () => {
+    const msg: MessageView<any> = message('W')
+      .set('Symbol', 'EUR/USD')
+      .set('NoMDEntries', [{ MDEntryType: MDEntryType.Bid, MDEntryPx: '1.1050' }]);
+    // Pin the positive case outside the `if` — otherwise a guard that wrongly returned false
+    // would skip the block below and this test would pass vacuously.
+    expect(isMessageType(msg, 'W')).toBe(true);
+    if (isMessageType(msg, 'W')) {
+      expectTypeOf(msg.get('NoMDEntries')).toEqualTypeOf<
+        MarketDataSnapshotFullRefresh_NoMDEntriesEntry[] | undefined
+      >();
+      // @ts-expect-error — NotAField is not part of the W body
+      msg.get('NotAField');
+      expect(msg.get('Symbol')).toBe('EUR/USD');
+    }
+    expect(isMessageType(msg, MsgType.Logon)).toBe(false);
+    // @ts-expect-error — 'not-a-msgtype' is not a MessageBodies wire value
+    isMessageType(msg, 'not-a-msgtype');
+    expectTypeOf<MessageOf<'W'>>().toEqualTypeOf<
+      MessageView<MarketDataSnapshotFullRefreshBody & object>
+    >();
   });
 });

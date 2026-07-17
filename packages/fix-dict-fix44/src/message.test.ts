@@ -1,4 +1,4 @@
-import { createFixEngine } from '@boarteam/fix';
+import { createFixEngine, type MessageView } from '@boarteam/fix';
 import { describe, expect, expectTypeOf, it } from 'vitest';
 import {
   type EncryptMethod,
@@ -6,10 +6,12 @@ import {
   type LogonBody,
   MDEntryType,
   type MDFullGrp_NoMDEntriesEntry,
+  type MessageOf,
   MsgType,
   type MarketDataSnapshotFullRefreshBody,
   type MessageBodies,
   dictionary,
+  isMessageType,
   message,
 } from './index';
 
@@ -199,6 +201,45 @@ describe('type-level guarantees', () => {
     needsLogon({ EncryptMethod: 0 });
     // @ts-expect-error EncryptMethod is required
     needsLogon({ HeartBtInt: 30 });
+  });
+
+  it('isMessageType narrows a MessageView<any> so get() is typed to the message body', () => {
+    // The consumer boundary: an outgoing message whose concrete MsgType is erased to `any`.
+    const msg: MessageView<any> = message('W')
+      .set('MDReqID', 'r1')
+      .set('Symbol', 'AAPL')
+      .set('NoMDEntries', [{ MDEntryType: '0', MDEntryPx: '1.5' }]);
+    if (isMessageType(msg, 'W')) {
+      // Inside the guard, reads are typed to MarketDataSnapshotFullRefresh — no casts.
+      expectTypeOf(msg.get('NoMDEntries')).toEqualTypeOf<
+        MDFullGrp_NoMDEntriesEntry[] | undefined
+      >();
+      expectTypeOf(msg.get('Symbol')).toEqualTypeOf<string | undefined>();
+      // @ts-expect-error — NotAField is not part of the W body
+      msg.get('NotAField');
+      expect(msg.get('Symbol')).toBe('AAPL');
+      expect(msg.get('NoMDEntries')?.[0]?.MDEntryPx).toBe('1.5');
+    }
+    // @ts-expect-error — 'not-a-msgtype' is not a MessageBodies wire value
+    isMessageType(msg, 'not-a-msgtype');
+  });
+
+  it('isMessageType returns the correct boolean at runtime', () => {
+    const w: MessageView<any> = message('W');
+    const a: MessageView<any> = message('A');
+    expect(isMessageType(w, 'W')).toBe(true);
+    expect(isMessageType(w, MsgType.Logon)).toBe(false);
+    expect(isMessageType(a, MsgType.Logon)).toBe(true);
+  });
+
+  it('MessageOf<M> is the read surface of message M', () => {
+    // MessageOf<'W'> is MessageView<MarketDataSnapshotFullRefreshBody> — the `& object` mirrors
+    // the constraint the whole typed-message layer applies (a no-op for an object body).
+    expectTypeOf<MessageOf<'W'>>().toEqualTypeOf<
+      MessageView<MarketDataSnapshotFullRefreshBody & object>
+    >();
+    const w: MessageOf<'W'> = message('W');
+    expectTypeOf(w.get('NoMDEntries')).toEqualTypeOf<MDFullGrp_NoMDEntriesEntry[] | undefined>();
   });
 });
 

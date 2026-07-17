@@ -40,12 +40,14 @@ export { createFixEngine } from './engine';
 export type { FixEngine, EngineOptions } from './engine';
 
 // Typed, self-rendering Message API.
-export { createMessage, createImmutableMessage, messageFactory } from './message';
+export { createMessage, createImmutableMessage, messageFactory, messageTypeGuard } from './message';
 export type {
   MessageView,
   MutableMessage,
   ImmutableMessage,
   MessageFactory,
+  MessageTypeGuard,
+  MessageOf,
   Envelope,
   UntypedBody,
 } from './message';

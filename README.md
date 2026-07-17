@@ -230,6 +230,19 @@ const wire = message(MsgType.MarketDataSnapshotFullRefresh) // typed to this mes
 
 Illegal fields, wrong value types, and malformed group entries are **compile errors**; value types follow the field datatype (enumerated → the value union; `Boolean` → `boolean`; numeric → `number | string`; else `string`). Envelope/session fields (`MsgSeqNum`/`SenderCompID`/`SendingTime`/`TargetCompID`; framing `8`/`9`/`10` computed) are supplied to `render` — the body type excludes them, so the library holds no sequence counter, clock, or comp-IDs. `message(...)` is a fast, fluent mutable builder for hot loops; `message.immutable(...)` is copy-on-write; both accept a bulk object and double as a typed read model (`msg.get('Symbol')`). The engine façade mirrors it: `createFixEngine<MessageBodies>(dictionary).create(msgType)`. Venue-custom tags need no regenerated dictionary — see [Extending the dictionary](#extending-the-dictionary-venue-custom-tags) and each package's README.
 
+Where the concrete type is erased — a generic `send(message: MessageView<any>)`, a log-metadata helper — `message.msgType === 'W'` cannot narrow the body, so each dictionary package also ships `isMessageType`, a guard keyed on the `MsgType` value (and a `MessageOf<M>` alias for annotations). Inside it, reads are typed to that message with no casts; the runtime is a plain string compare, the typing comes from the generated body registry. The engine binds the same guard as `createFixEngine<MessageBodies>(dictionary).is`.
+
+```ts
+import { isMessageType, MsgType } from '@boarteam/fix-dict-fix44';
+
+if (isMessageType(message, MsgType.MarketDataSnapshotFullRefresh)) {
+  const securityID = message.get('SecurityID'); // string | undefined
+  for (const entry of message.get('NoMDEntries') ?? []) {
+    entry.MDEntryPx; // MDFullGrp_NoMDEntriesEntry — entry fields typed
+  }
+}
+```
+
 ### Reading pipe-delimited logs
 
 Most captured logs render the SOH separator as `|`. Pass it through:
@@ -300,7 +313,7 @@ venue packages (e.g. a future `@boarteam/fix-dict-fix44-ctrader`).
 
 ### Lower-level building blocks
 
-If you do not want the engine wrapper, the same capabilities are exported as free functions: `parse`, `parseAll`, `encode`, `validate`, `tokenize`, `splitMessages`, `decodeValue`, `calculateChecksum`, `bodyLength`, `loadDictionary`, `Dictionary`, `validateDictionary`, the typed-message helpers (`messageFactory`, `createMessage`, `createImmutableMessage`), and the dictionary-extension helpers (`extendDictionary`, `defineExtension`, `tagsOf`, `msgTypesOf`, `extendTags`, `invertTags`, `extendMsgTypes`, `invertMsgTypes`).
+If you do not want the engine wrapper, the same capabilities are exported as free functions: `parse`, `parseAll`, `encode`, `validate`, `tokenize`, `splitMessages`, `decodeValue`, `calculateChecksum`, `bodyLength`, `loadDictionary`, `Dictionary`, `validateDictionary`, the typed-message helpers (`messageFactory`, `messageTypeGuard`, `createMessage`, `createImmutableMessage`), and the dictionary-extension helpers (`extendDictionary`, `defineExtension`, `tagsOf`, `msgTypesOf`, `extendTags`, `invertTags`, `extendMsgTypes`, `invertMsgTypes`).
 
 ### Output shapes
 

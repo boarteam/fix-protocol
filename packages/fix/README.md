@@ -74,6 +74,33 @@ const wire = message(MsgType.MarketDataSnapshotFullRefresh) // typed to this mes
   (`msg.get('Symbol')`, `msg.get('NoMDEntries')?.[0]?.MDEntryPx`) for deriving log metadata.
 - The engine façade mirrors it: `createFixEngine<MessageBodies>(dictionary).create(msgType)`.
 
+**Narrowing an unknown message.** At a generic boundary — a `send(message: MessageView<any>)`,
+a log-metadata helper — the concrete `MsgType` is erased, so `message.msgType === 'W'` cannot
+narrow the body. A `Bodies`-bound type guard keyed on `msgType` restores it: the runtime is a
+plain string compare, the typing comes from the `Bodies` registry. The engine binds one as
+`engine.is`; the dict packages re-export a ready-made `isMessageType` (and a `MessageOf<M>` alias
+for annotations), so no engine instance is needed. `messageTypeGuard<Bodies>()` builds a standalone
+guard.
+
+```ts
+import { isMessageType, MsgType } from '@boarteam/fix-dict-fix44';
+import type { MessageView } from '@boarteam/fix';
+
+function logMeta(message: MessageView<any>) {
+  if (isMessageType(message, MsgType.MarketDataSnapshotFullRefresh)) {
+    // message: MessageView<MarketDataSnapshotFullRefreshBody> — get() is typed, no casts
+    const securityID = message.get('SecurityID'); // string | undefined
+    for (const entry of message.get('NoMDEntries') ?? []) {
+      entry.MDEntryType; // MDFullGrp_NoMDEntriesEntry — entry fields typed
+    }
+  }
+}
+```
+
+Both flavours narrow to the read surface `MessageView` (the interface the mutable and immutable
+message share), not to the mutable/immutable _kind_ — the guard's purpose is typed reads, not
+re-obtaining a builder.
+
 **Venue extensions** (e.g. a broker's custom tags in an existing group) need no regenerated
 dictionary: `extendDictionary(dictionary, ext)` adds them at runtime, and the generated,
 per-container group/component `interface`s (`SecListGrp_NoRelatedSymEntry`, …) are augmentable —
