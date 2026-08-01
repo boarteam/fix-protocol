@@ -39,16 +39,54 @@ export type { FieldValue } from './codec/encode';
 export type UntypedBody = Record<string, FieldValue | readonly UntypedBody[]>;
 
 /**
+ * The init shape for a message body `B` — what {@link MessageFactory}, {@link createMessage},
+ * and the engine's `create` accept. Key modifiers are preserved from `B`: a
+ * dictionary-required field must be named (pass `undefined` to deliberately omit it — the
+ * escape hatch for dialects that skip a "required" tag), an optional field may be left out
+ * entirely. Every value additionally accepts `null | undefined`, and all absent values —
+ * `undefined`, `null`, and `''` — are skipped at render and reported absent by
+ * {@link MessageView.has}, so possibly-empty values pass straight through without guards:
+ *
+ * ```ts
+ * message(MsgType.Logon, {
+ *   EncryptMethod: EncryptMethod.NONE,
+ *   HeartBtInt: 30,
+ *   Username: username,   // string | null | undefined — no `if (username)` needed
+ *   Password: password,
+ * });
+ * ```
+ *
+ * Repeating-group entry arrays are widened deep via {@link FieldInit}: entry keys keep their
+ * requiredness, entry values accept the same absent forms. `| undefined` is spelled
+ * explicitly so the shape stays correct for consumers compiling with
+ * `exactOptionalPropertyTypes`.
+ */
+export type MessageInit<B> = {
+  [K in keyof B]: FieldInit<B[K]> | null | undefined;
+};
+
+/**
+ * A single field/group value in init position: a group-counter value (an array of entry
+ * bodies) is accepted as a `readonly` array of {@link MessageInit}-widened entries; scalar
+ * values pass through unchanged, so enum unions and dialect casts are preserved. Entries
+ * themselves may NOT be `null`/`undefined` — the renderer recurses into each entry object.
+ */
+export type FieldInit<V> = V extends readonly (infer E extends object)[]
+  ? readonly MessageInit<E>[]
+  : V;
+
+/**
  * Envelope (header/trailer/session) fields supplied to {@link MessageView.render} at call
  * time — the fields a Message deliberately does NOT model in its typed body: `MsgSeqNum`
  * (34), `SenderCompID` (49), `SendingTime` (52), `TargetCompID` (56), and any other
  * standard-header/trailer field. Keys may be field **names** (`SenderCompID`) or numeric
  * **tags** (`49`); framing tags 8/9/10 and `MsgType` (35) are computed by the encoder and
- * ignored if supplied here.
+ * ignored if supplied here. Absent values (`undefined`, `null`, `''`) are skipped, so
+ * conditional session fields (`SenderSubID`, …) can be passed straight through.
  */
 export interface Envelope {
-  readonly [field: string]: FieldValue;
-  readonly [tag: number]: FieldValue;
+  readonly [field: string]: FieldValue | null | undefined;
+  readonly [tag: number]: FieldValue | null | undefined;
 }
 
 /**
@@ -60,7 +98,7 @@ export interface MessageView<B extends object> {
   readonly msgType: string;
   /** Read a body field/group by name; `undefined` when unset. Typed to the field's value type. */
   get<K extends keyof B & string>(name: K): B[K] | undefined;
-  /** Whether a body field/group is currently set (present and not `undefined`). */
+  /** Whether a body field/group is currently renderable (not `undefined`/`null`/`''`). */
   has(name: keyof B & string): boolean;
   /**
    * The tag-keyed {@link EncodeMessage} this body renders to (the escape hatch to the
@@ -68,8 +106,8 @@ export interface MessageView<B extends object> {
    * included — they are supplied to {@link render}.
    */
   toEncodeMessage(): EncodeMessage;
-  /** A shallow snapshot of the name-keyed body (also used by `JSON.stringify`). */
-  toJSON(): Partial<B>;
+  /** A shallow snapshot of the name-keyed body as stored, absent values included (also used by `JSON.stringify`). */
+  toJSON(): Partial<MessageInit<B>>;
   /**
    * Render to a complete, framed FIX string. The body is merged with the supplied
    * {@link Envelope} and passed to {@link ./codec/encode.encode}: fields land in their
@@ -87,10 +125,10 @@ export interface MessageView<B extends object> {
  * accessor properties), so writes are ordinary property assignments.
  */
 export interface MutableMessage<B extends object> extends MessageView<B> {
-  /** Set one field/group; returns `this` for chaining. */
-  set<K extends keyof B & string>(name: K, value: B[K]): this;
-  /** Set many fields/groups at once from a partial body object; returns `this`. */
-  assign(fields: Partial<B>): this;
+  /** Set one field/group (absent values allowed — see {@link MessageInit}); returns `this` for chaining. */
+  set<K extends keyof B & string>(name: K, value: FieldInit<B[K]> | null | undefined): this;
+  /** Set many fields/groups at once from a partial init object; returns `this`. */
+  assign(fields: Partial<MessageInit<B>>): this;
   /** Unset a field/group; returns `this`. */
   delete(name: keyof B & string): this;
   /** A snapshot copy as an {@link ImmutableMessage} (the mutable original is unaffected). */
@@ -104,10 +142,13 @@ export interface MutableMessage<B extends object> extends MessageView<B> {
  * to change a repeating group, pass a fresh array to {@link with}/{@link merge}.
  */
 export interface ImmutableMessage<B extends object> extends MessageView<B> {
-  /** A new message with one field/group set. */
-  with<K extends keyof B & string>(name: K, value: B[K]): ImmutableMessage<B>;
-  /** A new message with many fields/groups set from a partial body object. */
-  merge(fields: Partial<B>): ImmutableMessage<B>;
+  /** A new message with one field/group set (absent values allowed — see {@link MessageInit}). */
+  with<K extends keyof B & string>(
+    name: K,
+    value: FieldInit<B[K]> | null | undefined,
+  ): ImmutableMessage<B>;
+  /** A new message with many fields/groups set from a partial init object. */
+  merge(fields: Partial<MessageInit<B>>): ImmutableMessage<B>;
   /** A new message with a field/group unset. */
   without(name: keyof B & string): ImmutableMessage<B>;
   /** A snapshot copy as a {@link MutableMessage}. */
@@ -121,15 +162,19 @@ export interface ImmutableMessage<B extends object> extends MessageView<B> {
  * exactly that message's body. Build one with {@link messageFactory}.
  */
 export interface MessageFactory<Bodies> {
-  /** Create a mutable message for `msgType`, optionally seeded with `init`. */
+  /**
+   * Create a mutable message for `msgType`, optionally seeded with a complete `init` (see
+   * {@link MessageInit}: required keys must be named, `undefined` deliberately omits; omit
+   * `init` entirely to build incrementally).
+   */
   <M extends keyof Bodies & string>(
     msgType: M,
-    init?: Partial<Bodies[M] & object>,
+    init?: MessageInit<Bodies[M] & object>,
   ): MutableMessage<Bodies[M] & object>;
-  /** Create an immutable message for `msgType`, optionally seeded with `init`. */
+  /** Create an immutable message for `msgType`, optionally seeded with a complete `init`. */
   immutable<M extends keyof Bodies & string>(
     msgType: M,
-    init?: Partial<Bodies[M] & object>,
+    init?: MessageInit<Bodies[M] & object>,
   ): ImmutableMessage<Bodies[M] & object>;
 }
 
@@ -152,12 +197,15 @@ abstract class MessageBase<B extends object> implements MessageView<B> {
   }
 
   get<K extends keyof B & string>(name: K): B[K] | undefined {
-    return this.body[name] as B[K] | undefined;
+    // A stored `null` (legal in MessageInit) reads back as `undefined`, keeping the declared
+    // `B[K] | undefined` return type truthful.
+    return (this.body[name] ?? undefined) as B[K] | undefined;
   }
 
   has(name: keyof B & string): boolean {
-    // `null` reads as absent, consistent with render (which omits `null`/`undefined`).
-    return this.body[name as string] != null;
+    // Absent ⇔ `undefined`/`null`/`''`, mirroring render (which skips all three).
+    const value = this.body[name as string];
+    return value != null && value !== '';
   }
 
   toEncodeMessage(): EncodeMessage {
@@ -170,8 +218,8 @@ abstract class MessageBase<B extends object> implements MessageView<B> {
     return { msgType: this.msgType, fields, groups };
   }
 
-  toJSON(): Partial<B> {
-    return { ...(this.body as Partial<B>) };
+  toJSON(): Partial<MessageInit<B>> {
+    return { ...(this.body as Partial<MessageInit<B>>) };
   }
 
   render(envelope: Envelope = {}, options?: EncodeOptions): string {
@@ -201,12 +249,12 @@ abstract class MessageBase<B extends object> implements MessageView<B> {
 }
 
 class MutableMessageImpl<B extends object> extends MessageBase<B> implements MutableMessage<B> {
-  set<K extends keyof B & string>(name: K, value: B[K]): this {
+  set<K extends keyof B & string>(name: K, value: FieldInit<B[K]> | null | undefined): this {
     this.body[name] = value;
     return this;
   }
 
-  assign(fields: Partial<B>): this {
+  assign(fields: Partial<MessageInit<B>>): this {
     Object.assign(this.body, fields);
     return this;
   }
@@ -222,11 +270,14 @@ class MutableMessageImpl<B extends object> extends MessageBase<B> implements Mut
 }
 
 class ImmutableMessageImpl<B extends object> extends MessageBase<B> implements ImmutableMessage<B> {
-  with<K extends keyof B & string>(name: K, value: B[K]): ImmutableMessage<B> {
+  with<K extends keyof B & string>(
+    name: K,
+    value: FieldInit<B[K]> | null | undefined,
+  ): ImmutableMessage<B> {
     return new ImmutableMessageImpl<B>(this.dict, this.msgType, { ...this.body, [name]: value });
   }
 
-  merge(fields: Partial<B>): ImmutableMessage<B> {
+  merge(fields: Partial<MessageInit<B>>): ImmutableMessage<B> {
     return new ImmutableMessageImpl<B>(this.dict, this.msgType, { ...this.body, ...fields });
   }
 
@@ -261,9 +312,11 @@ function bodyToEncode(
   const groups: Record<number, GroupEntry[]> = {};
   for (const name of Object.keys(body)) {
     const value = body[name];
-    // Skip both `undefined` and `null`: the encoder omits only `undefined`, so a `null`
-    // left in the body would otherwise reach the wire as the literal text `tag=null`.
-    if (value === undefined || value === null) {
+    // Skip `undefined`, `null`, and `''` — the three absent forms (see MessageInit). The
+    // encoder omits only `undefined`; a `null` left in the body would otherwise reach the
+    // wire as the literal text `tag=null`, and `''` as a malformed empty `tag=` value. A
+    // caller who truly needs an empty value on the wire can drop to the `encode` primitive.
+    if (value === undefined || value === null || value === '') {
       continue;
     }
     const field = dict.fieldByName(name);
@@ -315,7 +368,8 @@ function toTagFields(
   const out: Record<number, FieldValue> = {};
   for (const key of Object.keys(envelope)) {
     const value = envelope[key];
-    if (value === undefined || value === null) {
+    // Same absence rule as the body: `undefined`/`null`/`''` are skipped.
+    if (value === undefined || value === null || value === '') {
       continue;
     }
     const tag = /^\d+$/.test(key) ? Number(key) : dict.fieldByName(key)?.tag;
@@ -339,15 +393,16 @@ function resolveDict(dict: Dictionary | DictionaryJSON): Dictionary {
 }
 
 /**
- * Create a {@link MutableMessage} for a `MsgType`, optionally seeded with an initial body.
- * The body type `B` defaults to the loose {@link UntypedBody}; pass a generated per-message
- * body type (or use the dict package's typed `message` factory / a `createFixEngine<Bodies>`
- * engine) for field-level type safety.
+ * Create a {@link MutableMessage} for a `MsgType`, optionally seeded with a complete
+ * {@link MessageInit} (omit it to build incrementally). The body type `B` defaults to the
+ * loose {@link UntypedBody}; pass a generated per-message body type (or use the dict
+ * package's typed `message` factory / a `createFixEngine<Bodies>` engine) for field-level
+ * type safety.
  */
 export function createMessage<B extends object = UntypedBody>(
   msgType: string,
   dict: Dictionary | DictionaryJSON,
-  init?: Partial<B>,
+  init?: MessageInit<B>,
 ): MutableMessage<B> {
   return new MutableMessageImpl<B>(resolveDict(dict), msgType, init ? { ...init } : {});
 }
@@ -356,7 +411,7 @@ export function createMessage<B extends object = UntypedBody>(
 export function createImmutableMessage<B extends object = UntypedBody>(
   msgType: string,
   dict: Dictionary | DictionaryJSON,
-  init?: Partial<B>,
+  init?: MessageInit<B>,
 ): ImmutableMessage<B> {
   return new ImmutableMessageImpl<B>(resolveDict(dict), msgType, init ? { ...init } : {});
 }
@@ -376,13 +431,13 @@ export function messageFactory<Bodies>(dict: Dictionary | DictionaryJSON): Messa
   const d = resolveDict(dict);
   function factory<M extends keyof Bodies & string>(
     msgType: M,
-    init?: Partial<Bodies[M] & object>,
+    init?: MessageInit<Bodies[M] & object>,
   ): MutableMessage<Bodies[M] & object> {
     return new MutableMessageImpl<Bodies[M] & object>(d, msgType, init ? { ...init } : {});
   }
   factory.immutable = <M extends keyof Bodies & string>(
     msgType: M,
-    init?: Partial<Bodies[M] & object>,
+    init?: MessageInit<Bodies[M] & object>,
   ): ImmutableMessage<Bodies[M] & object> =>
     new ImmutableMessageImpl<Bodies[M] & object>(d, msgType, init ? { ...init } : {});
   return factory;

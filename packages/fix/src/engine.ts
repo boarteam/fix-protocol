@@ -11,6 +11,7 @@ import type { DictionaryJSON } from './dictionary/types';
 import type { FixIssue } from './errors';
 import {
   type ImmutableMessage,
+  type MessageInit,
   type MessageTypeGuard,
   type MutableMessage,
   type UntypedBody,
@@ -57,12 +58,12 @@ export interface FixEngine<Bodies = Record<string, UntypedBody>> {
    */
   create<M extends keyof Bodies & string>(
     msgType: M,
-    init?: Partial<Bodies[M] & object>,
+    init?: MessageInit<Bodies[M] & object>,
   ): MutableMessage<Bodies[M] & object>;
   /** Create a typed {@link ImmutableMessage} for a `MsgType`. See {@link createImmutableMessage}. */
   createImmutable<M extends keyof Bodies & string>(
     msgType: M,
-    init?: Partial<Bodies[M] & object>,
+    init?: MessageInit<Bodies[M] & object>,
   ): ImmutableMessage<Bodies[M] & object>;
   /**
    * Narrow a message of unknown body to a specific message's read surface, keyed on its

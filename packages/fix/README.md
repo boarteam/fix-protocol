@@ -69,9 +69,15 @@ const wire = message(MsgType.MarketDataSnapshotFullRefresh) // typed to this mes
   `TargetCompID`; framing `8`/`9`/`10` are computed) are supplied to `render(envelope)` — the
   library never holds a sequence counter, clock, or comp-IDs. The body type excludes them.
 - **Mutable or immutable**: `message(...)` is a fast, fluent mutable builder for hot loops;
-  `message.immutable(...)` (and `.toImmutable()`) is copy-on-write. Both accept a bulk object
-  (`message('W', { MDReqID: 'r1' })` / `.assign({...})`) and double as a typed **read model**
-  (`msg.get('Symbol')`, `msg.get('NoMDEntries')?.[0]?.MDEntryPx`) for deriving log metadata.
+  `message.immutable(...)` (and `.toImmutable()`) is copy-on-write. Both accept a complete bulk
+  init (`message('A', { EncryptMethod: 0, HeartBtInt: 30 })` — required keys must be named;
+  `.assign({...})` stays partial) and double as a typed **read model** (`msg.get('Symbol')`,
+  `msg.get('NoMDEntries')?.[0]?.MDEntryPx`) for deriving log metadata.
+- **Absent values pass through**: an init/`set` value of `undefined`, `null`, or `''` is skipped
+  at render and reads as unset — `message('A', { …, Username: username })` needs no
+  `if (username)` guard, in the body, in group entries, and in the envelope alike. A required
+  key can be deliberately left off the wire by naming it with `undefined` (dialect quirks); to
+  force a literal empty value onto the wire, drop to the `encode` primitive.
 - The engine façade mirrors it: `createFixEngine<MessageBodies>(dictionary).create(msgType)`.
 
 **Narrowing an unknown message.** At a generic boundary — a `send(message: MessageView<any>)`,

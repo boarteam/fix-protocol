@@ -46,6 +46,7 @@ function tinyDict(): DictionaryJSON {
       56: f(56, 'TargetCompID', 'String'),
       34: f(34, 'MsgSeqNum', 'int'),
       52: f(52, 'SendingTime', 'String'),
+      115: f(115, 'OnBehalfOfCompID', 'String'),
       10: f(10, 'CheckSum', 'String'),
       98: f(98, 'EncryptMethod', 'int'),
       108: f(108, 'HeartBtInt', 'int'),
@@ -69,6 +70,7 @@ function tinyDict(): DictionaryJSON {
           { kind: 'field', tag: 56, reqd: 'Y' },
           { kind: 'field', tag: 34, reqd: 'Y' },
           { kind: 'field', tag: 52, reqd: 'Y' },
+          { kind: 'field', tag: 115, reqd: 'N' },
         ],
       },
       'Standard Message Trailer': {
@@ -86,6 +88,7 @@ function tinyDict(): DictionaryJSON {
           { kind: 'field', tag: 98, reqd: 'Y' },
           { kind: 'field', tag: 108, reqd: 'Y' },
           { kind: 'field', tag: 141, reqd: 'N' },
+          { kind: 'field', tag: 58, reqd: 'N' },
           { kind: 'component', name: 'Standard Message Trailer', reqd: 'Y' },
         ],
       },
@@ -126,6 +129,7 @@ interface LogonBody {
   EncryptMethod: number | string;
   HeartBtInt: number | string;
   ResetSeqNumFlag?: boolean;
+  Text?: string;
 }
 interface MDEntry {
   MDEntryType: string;
@@ -159,7 +163,7 @@ describe('createMessage — read/write surface', () => {
   });
 
   it('accepts a whole object of fields (bulk) via init and assign', () => {
-    const msg = createMessage<LogonBody>('A', dict, { EncryptMethod: 0 });
+    const msg = createMessage<LogonBody>('A', dict, { EncryptMethod: 0, HeartBtInt: 15 });
     msg.assign({ HeartBtInt: 30, ResetSeqNumFlag: true });
     expect(msg.toJSON()).toEqual({ EncryptMethod: 0, HeartBtInt: 30, ResetSeqNumFlag: true });
   });
@@ -257,11 +261,84 @@ describe('render — byte-identical to encode()', () => {
   });
 });
 
+describe('absent values — undefined, null, and empty string are skipped', () => {
+  it('renders an init with absent values byte-identically to omitting the keys', () => {
+    const withAbsent = createMessage<LogonBody>('A', dict, {
+      EncryptMethod: 0,
+      HeartBtInt: 30,
+      ResetSeqNumFlag: undefined,
+      Text: null,
+    }).render(ENVELOPE);
+    const withoutKeys = createMessage<LogonBody>('A', dict, {
+      EncryptMethod: 0,
+      HeartBtInt: 30,
+    }).render(ENVELOPE);
+    expect(withAbsent).toBe(withoutKeys);
+  });
+
+  it("'' is absent: not rendered, has() false, still readable via get()", () => {
+    const msg = createMessage<LogonBody>('A', dict, { EncryptMethod: 0, HeartBtInt: 30, Text: '' });
+    expect(msg.has('Text')).toBe(false);
+    expect(msg.get('Text')).toBe('');
+    expect(show(msg.render(ENVELOPE))).not.toContain('|58=');
+  });
+
+  it('set(null)/assign(null) unset at render; get() normalizes null to undefined', () => {
+    const msg = createMessage<LogonBody>('A', dict, {
+      EncryptMethod: 0,
+      HeartBtInt: 30,
+      ResetSeqNumFlag: true,
+      Text: 'hi',
+    });
+    msg.set('ResetSeqNumFlag', null).assign({ Text: null });
+    expect(msg.get('ResetSeqNumFlag')).toBeUndefined();
+    expect(msg.has('Text')).toBe(false);
+    const wire = show(msg.render(ENVELOPE));
+    expect(wire).not.toContain('|141=');
+    expect(wire).not.toContain('|58=');
+  });
+
+  it('skips absent values inside repeating-group entries, recursively', () => {
+    const wire = createMessage<MDSnapshotBody>('W', dict, {
+      NoMDEntries: [
+        { MDEntryType: '0', MDEntryPx: undefined, NoPartyIDs: null },
+        { MDEntryType: '1', MDEntryPx: '', NoPartyIDs: [] },
+      ],
+    }).render(ENVELOPE);
+    const oracle = createMessage<MDSnapshotBody>('W', dict, {
+      NoMDEntries: [{ MDEntryType: '0' }, { MDEntryType: '1' }],
+    }).render(ENVELOPE);
+    expect(wire).toBe(oracle);
+    expect(show(wire)).toContain('|268=2|269=0|269=1|');
+    expect(show(wire)).not.toContain('|270=');
+    expect(show(wire)).not.toContain('|453=');
+  });
+
+  it('an empty group array renders no counter tag at all', () => {
+    const wire = createMessage<MDSnapshotBody>('W', dict, {
+      Symbol: 'AAPL',
+      NoMDEntries: [],
+    }).render(ENVELOPE);
+    expect(show(wire)).toContain('|55=AAPL|');
+    expect(show(wire)).not.toContain('|268=');
+  });
+
+  it('applies the same absence rule to envelope fields', () => {
+    const base = createMessage<LogonBody>('A', dict, { EncryptMethod: 0, HeartBtInt: 30 });
+    const plain = base.render(ENVELOPE);
+    expect(base.render({ ...ENVELOPE, OnBehalfOfCompID: undefined })).toBe(plain);
+    expect(base.render({ ...ENVELOPE, OnBehalfOfCompID: null })).toBe(plain);
+    expect(base.render({ ...ENVELOPE, OnBehalfOfCompID: '' })).toBe(plain);
+    expect(show(base.render({ ...ENVELOPE, OnBehalfOfCompID: 'OBO' }))).toContain('|115=OBO|');
+  });
+});
+
 describe('immutable message', () => {
   it('with/merge/without return new instances and never mutate the original', () => {
-    const base: ImmutableMessage<LogonBody> = createImmutableMessage<LogonBody>('A', dict, {
-      EncryptMethod: 0,
-    });
+    const base: ImmutableMessage<LogonBody> = createImmutableMessage<LogonBody>('A', dict).with(
+      'EncryptMethod',
+      0,
+    );
     const next = base.with('HeartBtInt', 30);
     expect(base.has('HeartBtInt')).toBe(false); // original untouched
     expect(next.get('HeartBtInt')).toBe(30);
@@ -297,12 +374,16 @@ describe('immutable message', () => {
 describe('messageFactory + engine.create', () => {
   it('binds a dictionary and creates typed messages', () => {
     const message = messageFactory<TinyBodies>(dict);
-    const wire = message('W', { Symbol: 'AAPL' })
-      .set('NoMDEntries', [{ MDEntryType: '0' }])
-      .render(ENVELOPE);
+    const wire = message('W', {
+      Symbol: 'AAPL',
+      NoMDEntries: [{ MDEntryType: '0' }],
+    }).render(ENVELOPE);
     expect(show(wire)).toContain('|55=AAPL|268=1|269=0|');
 
-    const imm = message.immutable('A', { EncryptMethod: 0 }).with('HeartBtInt', 30);
+    // `HeartBtInt: undefined` names the required key while deliberately leaving it unset.
+    const imm = message
+      .immutable('A', { EncryptMethod: 0, HeartBtInt: undefined })
+      .with('HeartBtInt', 30);
     expect(imm.get('HeartBtInt')).toBe(30);
   });
 
@@ -321,8 +402,34 @@ describe('messageFactory + engine.create', () => {
     expect(engine.encode(bodyOnly, { soh: SOH })).toBe(
       engine.encode({ msgType: 'A', fields: { 98: 0, 108: 30 } }),
     );
-    const imm = engine.createImmutable('A', { EncryptMethod: 0 });
+    const imm = engine.createImmutable('A', { EncryptMethod: 0, HeartBtInt: undefined });
     expect(imm.get('EncryptMethod')).toBe(0);
+  });
+});
+
+describe('type-level: MessageInit requiredness and widening', () => {
+  const message = messageFactory<TinyBodies>(dict);
+
+  it('requires required keys when an init is passed; values may be null/undefined', () => {
+    message('A', { EncryptMethod: 0, HeartBtInt: 30 }); // complete init
+    message('A', { EncryptMethod: 0, HeartBtInt: undefined }); // named, deliberately unset
+    message('A', { EncryptMethod: null, HeartBtInt: null }); // absent at render
+    message('A'); // no init at all — incremental building stays lenient
+    // @ts-expect-error an init must name the required EncryptMethod and HeartBtInt
+    message('A', {});
+    // @ts-expect-error an init must name the required HeartBtInt
+    message('A', { EncryptMethod: 0 });
+    // @ts-expect-error a group entry still requires its required members
+    message('W', { NoMDEntries: [{ MDEntryPx: '1.0' }] });
+  });
+
+  it('widens set()/assign() values but not get() reads', () => {
+    const a = message('A', { EncryptMethod: 0, HeartBtInt: 30 });
+    const maybeText: string | null | undefined = null;
+    a.set('Text', maybeText); // no guard needed
+    a.assign({ ResetSeqNumFlag: true }); // assign stays partial — no required keys demanded
+    expectTypeOf(a.get('Text')).toEqualTypeOf<string | undefined>();
+    expectTypeOf(a.toJSON().Text).toEqualTypeOf<string | null | undefined>();
   });
 });
 
@@ -432,7 +539,7 @@ describe('error handling', () => {
   });
 
   it('treats null as absent in the read model, consistent with render', () => {
-    const msg = createMessage<MDSnapshotBody>('W', dict).set('Symbol', null as unknown as never);
+    const msg = createMessage<MDSnapshotBody>('W', dict).set('Symbol', null);
     expect(msg.has('Symbol')).toBe(false); // null reads as absent
     expect(show(msg.set('NoMDEntries', [{ MDEntryType: '0' }]).render(ENVELOPE))).not.toContain(
       '|55=',

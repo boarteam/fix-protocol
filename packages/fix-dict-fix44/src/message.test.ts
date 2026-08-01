@@ -135,7 +135,7 @@ describe('mutable + immutable + bulk construction', () => {
   });
 
   it('the immutable builder renders identically and never mutates', () => {
-    const base = message.immutable('W', { MDReqID: 'r1' });
+    const base = message.immutable('W').merge({ MDReqID: 'r1' });
     const next = base.with('NoMDEntries', [{ MDEntryType: '0' }]);
     expect(base.has('NoMDEntries')).toBe(false); // original untouched
     expect(next.render(ENV)).toBe(
@@ -153,6 +153,59 @@ describe('mutable + immutable + bulk construction', () => {
     expect(msg.get('Symbol')).toBe('AAPL');
     expect(msg.get('NoMDEntries')?.[0]?.MDEntryPx).toBe('1.5');
     expect(msg.msgType).toBe('W');
+  });
+});
+
+describe('guard-free init — MessageInit over the generated bodies', () => {
+  it('passes possibly-absent values straight through the init', () => {
+    const username: string | null | undefined = 'u1';
+    const password: string | null | undefined = null;
+    const wire = message(MsgType.Logon, {
+      EncryptMethod: 0,
+      HeartBtInt: 30,
+      ResetSeqNumFlag: true,
+      Username: username,
+      Password: password,
+    }).render(ENV);
+    expect(wire).toBe(
+      engine.encode({
+        msgType: 'A',
+        fields: { ...ENV_TAGS, 98: 0, 108: 30, 141: true, 553: 'u1' },
+      }),
+    );
+    expect(show(wire)).not.toContain('|554=');
+  });
+
+  it("skips '' like undefined/null (an empty FIX value is malformed anyway)", () => {
+    const withEmpty = message('A', { EncryptMethod: 0, HeartBtInt: 30, Username: '' }).render(ENV);
+    const without = message('A', { EncryptMethod: 0, HeartBtInt: 30 }).render(ENV);
+    expect(withEmpty).toBe(without);
+  });
+
+  it('requires required keys in a passed init, at top level and inside entries', () => {
+    message('A'); // bare create stays lenient for incremental building
+    // @ts-expect-error init must name the required EncryptMethod and HeartBtInt
+    message(MsgType.Logon, { Username: 'u' });
+    // @ts-expect-error a NoMDEntries entry requires MDEntryType
+    message('W', { Symbol: 'X', NoMDEntries: [{ MDEntryPx: '1.0' }] });
+  });
+
+  it('NoRelatedSym: [] renders no counter tag; typed entry arrays stay assignable', () => {
+    const entries: MDFullGrp_NoMDEntriesEntry[] = [
+      { MDEntryType: MDEntryType.BID, MDEntryPx: '1.10' },
+    ];
+    const w = message('W', { Symbol: 'EURUSD', NoMDEntries: entries }).render(ENV);
+    expect(show(w)).toContain('|55=EURUSD|268=1|');
+
+    const v = message(MsgType.MarketDataRequest, {
+      MDReqID: 'r1',
+      SubscriptionRequestType: '1',
+      MarketDepth: 1,
+      NoMDEntryTypes: [{ MDEntryType: MDEntryType.BID }],
+      NoRelatedSym: [],
+    }).render(ENV);
+    expect(show(v)).toContain('|262=r1|');
+    expect(show(v)).not.toContain('|146=');
   });
 });
 

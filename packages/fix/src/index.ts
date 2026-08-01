@@ -48,6 +48,8 @@ export type {
   MessageFactory,
   MessageTypeGuard,
   MessageOf,
+  MessageInit,
+  FieldInit,
   Envelope,
   UntypedBody,
 } from './message';
