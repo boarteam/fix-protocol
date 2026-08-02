@@ -170,10 +170,22 @@ export interface CoverageGap {
 
 /** The complete, serializable dictionary. */
 export interface DictionaryJSON {
-  /** Dialect identifier, e.g. `"FIX.4.4"`. Matches the `BeginString` (tag 8) value. */
+  /**
+   * Dialect identifier, e.g. `"FIX.4.4"` or `"FIX.5.0SP2"`. For pre-FIXT dialects this
+   * matches the `BeginString` (tag 8) value; for FIXT dialects it names the *application*
+   * version, which differs from the transport's {@link beginString} (`"FIXT.1.1"`) — the
+   * app version rides on `DefaultApplVerID(1137)` / `ApplVerID(1128)`, see {@link applVerID}.
+   */
   version: string;
   /** The `BeginString` (tag 8) value framed messages must carry, e.g. `"FIX.4.4"`. */
   beginString: string;
+  /**
+   * The `ApplVerID` enum code (tag 1128 / `DefaultApplVerID` 1137 value) identifying this
+   * dictionary's application version under FIXT, e.g. `"9"` for FIX 5.0 SP2. Present only
+   * on FIXT-era application/merged dictionaries; absent for pre-FIXT dialects (whose app
+   * version is implied by the `BeginString`) and for transport-only dictionaries.
+   */
+  applVerID?: string;
   /** Provenance: what generated this dictionary and from what source. */
   source?: { generator: string; spec: string; generatedFrom?: string };
   /** Datatypes by name. */

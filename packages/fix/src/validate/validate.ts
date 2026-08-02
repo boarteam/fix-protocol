@@ -50,6 +50,13 @@ const DATE_RE = /^\d{8}$/;
 const MONTH_YEAR_RE = /^\d{4}(?:0[1-9]|1[0-2])(?:(?:0[1-9]|[12]\d|3[01])|w[1-5])?$/;
 const CURRENCY_RE = /^[A-Za-z]{3}$/;
 const COUNTRY_RE = /^[A-Za-z]{2}$/;
+// FIX 5.0 TZ types: local time with an optional ISO 8601 zone designator (`Z` or `±hh[:mm]`).
+// Seconds and sub-second precision are optional (EPs and venues vary), mirroring the lenient
+// fractional-seconds stance of the UTC types above.
+const TZ_SUFFIX = /(?:Z|[+-]\d{2}(?::\d{2})?)?$/.source;
+const TZ_TIMESTAMP_RE = new RegExp(`^\\d{8}-\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d+)?)?${TZ_SUFFIX}`);
+const TZ_TIME_RE = new RegExp(`^\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d+)?)?${TZ_SUFFIX}`);
+const LANGUAGE_RE = /^[A-Za-z]{2}$/;
 
 /**
  * Datatype names that carry a lexical format the parser keeps verbatim. {@link checkFormat}
@@ -62,10 +69,14 @@ const FORMAT_NAMES = new Set([
   'UTCDateOnly',
   'UTCDate', // FIX 4.2 spelling of UTCDateOnly
   'LocalMktDate',
+  'LocalMktTime', // FIX 5.0: local-market wall-clock time, same lexical shape as UTCTimeOnly
   'month-year',
   'MonthYear', // FIX 4.2 spelling of month-year
   'Currency',
   'Country',
+  'TZTimestamp', // FIX 5.0: timestamp with optional ISO 8601 zone designator
+  'TZTimeOnly', // FIX 5.0: time-of-day with optional ISO 8601 zone designator
+  'Language', // FIX 5.0: ISO 639-1 code (heuristic, like Currency/Country)
 ]);
 
 /**
@@ -309,9 +320,20 @@ function checkFormat(
     case 'UTCDate':
     case 'LocalMktDate':
       return DATE_RE.test(raw) ? undefined : badFormat(field, raw, named, path);
+    case 'LocalMktTime':
+      return UTC_TIME_RE.test(raw) ? undefined : badFormat(field, raw, 'LocalMktTime', path);
+    case 'TZTimestamp':
+      return TZ_TIMESTAMP_RE.test(raw) ? undefined : badFormat(field, raw, 'TZTimestamp', path);
+    case 'TZTimeOnly':
+      return TZ_TIME_RE.test(raw) ? undefined : badFormat(field, raw, 'TZTimeOnly', path);
     case 'month-year':
     case 'MonthYear':
       return MONTH_YEAR_RE.test(raw) ? undefined : badFormat(field, raw, named, path);
+    case 'Language':
+      // ISO 639-1 is a heuristic, not a closed set in the dictionary: warn, don't reject.
+      return LANGUAGE_RE.test(raw)
+        ? undefined
+        : badFormat(field, raw, 'Language (ISO 639-1)', path, 'warning');
     case 'Currency':
       // ISO 4217 is a heuristic, not a closed set in the dictionary: warn, don't reject.
       return CURRENCY_RE.test(raw)

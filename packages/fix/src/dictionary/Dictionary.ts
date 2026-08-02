@@ -54,6 +54,15 @@ export class Dictionary {
     return this.json.beginString;
   }
 
+  /**
+   * The `ApplVerID` code (tag 1128 / `DefaultApplVerID` 1137 value) of this dictionary's
+   * application version under FIXT (e.g. `"9"` for FIX 5.0 SP2), or `undefined` for
+   * pre-FIXT and transport-only dictionaries. See {@link DictionaryJSON.applVerID}.
+   */
+  get applVerID(): string | undefined {
+    return this.json.applVerID;
+  }
+
   /** Look up a field by tag. */
   fieldByTag(tag: number): FieldDef | undefined {
     return this.json.fields[tag];
