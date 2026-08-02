@@ -1,4 +1,5 @@
 import type { Dictionary } from '../dictionary/Dictionary';
+import { type FixtDictionaries, isFixtDictionaries, resolveFixt } from '../dictionary/fixt';
 import type { MemberRef, MessageDef } from '../dictionary/types';
 import { type FixIssue, issue } from '../errors';
 import { calculateChecksum, bodyLength as byteLength } from './checksum';
@@ -101,17 +102,24 @@ const CHECK_SUM = 10;
  * — fields are kept at the top level with no group reconstruction, and a repeated tag is
  * reported (`parse/duplicate-tag`) keeping the first. A `parse/unknown-msgtype` issue is
  * also emitted.
+ *
+ * `dict` may also be a FIXT transport/application pair ({@link FixtDictionaries}): the
+ * message is then parsed over the pair's merged view — envelope and session messages from
+ * the transport, bodies from the application dictionary, with `begin-string-mismatch`
+ * comparing against the transport's `FIXT.1.1`. With a `resolveApp` hook, each message's
+ * `ApplVerID(1128)` (falling back to the pair's `defaultApplVerID`) routes it to the right
+ * application dictionary.
  */
 export function parse(
   raw: string | Uint8Array,
-  dict: Dictionary,
+  dict: Dictionary | FixtDictionaries,
   options: ParseOptions = {},
 ): ParseResult {
   const frames = splitMessages(raw, { soh: options.soh });
   // Fall back to the raw input when no `8=` frame was found, so fragments and
   // pipe-delimited logs (which splitMessages cannot frame) still parse.
   const frame = frames.length > 0 ? frames[0]! : toBytes(raw);
-  return parseFrame(frame, dict, options);
+  return parseFrame(frame, effectiveDict(dict, frame, options), options);
 }
 
 /**
@@ -120,7 +128,7 @@ export function parse(
  */
 export function parseAll(
   raw: string | Uint8Array,
-  dict: Dictionary,
+  dict: Dictionary | FixtDictionaries,
   options: ParseOptions = {},
 ): ParseResult[] {
   const frames = splitMessages(raw, { soh: options.soh });
@@ -128,9 +136,37 @@ export function parseAll(
     // No `8=` frame found. Mirror `parse`: treat a non-empty buffer as one fragment so a
     // header-less message or pipe-delimited log line is not silently dropped.
     const bytes = toBytes(raw);
-    return bytes.length === 0 ? [] : [parseFrame(bytes, dict, options)];
+    return bytes.length === 0
+      ? []
+      : [parseFrame(bytes, effectiveDict(dict, bytes, options), options)];
   }
-  return frames.map((frame) => parseFrame(frame, dict, options));
+  return frames.map((frame) => parseFrame(frame, effectiveDict(dict, frame, options), options));
+}
+
+const APPL_VER_ID = 1128;
+
+/**
+ * The single dictionary a frame is parsed over. For a plain dictionary that is the
+ * dictionary itself; for a FIXT pair it is the pair's merged view, routed per frame by
+ * `ApplVerID(1128)` only when the pair carries a `resolveApp` hook (the pre-scan to find
+ * tag 1128 costs one extra field scan, so the common single-app pair skips it).
+ */
+function effectiveDict(
+  dict: Dictionary | FixtDictionaries,
+  frame: Uint8Array,
+  options: ParseOptions,
+): Dictionary {
+  if (!isFixtDictionaries(dict)) {
+    return dict;
+  }
+  if (!dict.resolveApp) {
+    return resolveFixt(dict).merged;
+  }
+  const base = resolveFixt(dict);
+  const applVerID = scanFields(frame, base.merged, { soh: options.soh }).find(
+    ([t]) => t === APPL_VER_ID,
+  )?.[1];
+  return resolveFixt(dict, applVerID).merged;
 }
 
 /**

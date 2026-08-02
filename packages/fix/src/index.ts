@@ -57,6 +57,10 @@ export type {
 // Dictionary runtime + contract.
 export { Dictionary, loadDictionary } from './dictionary/Dictionary';
 export type { ResolvedDatatype } from './dictionary/Dictionary';
+
+// FIXT transport/application split.
+export { isFixtDictionaries, mergeFixtDictionaries } from './dictionary/fixt';
+export type { FixtDictionaries } from './dictionary/fixt';
 export { validateDictionary } from './dictionary/validateDictionary';
 export type {
   DictionaryJSON,
@@ -104,4 +108,4 @@ export type {
 } from './dictionary/extension';
 
 // Diagnostics.
-export type { FixIssue, FixSeverity, KnownIssueCode } from './errors';
+export type { FixIssue, FixSeverity, FixLayer, KnownIssueCode } from './errors';

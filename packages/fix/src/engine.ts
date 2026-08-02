@@ -7,6 +7,7 @@ import {
   parseAll,
 } from './codec/parse';
 import { Dictionary, loadDictionary } from './dictionary/Dictionary';
+import { type FixtDictionaries, isFixtDictionaries, resolveFixt } from './dictionary/fixt';
 import type { DictionaryJSON } from './dictionary/types';
 import type { FixIssue } from './errors';
 import {
@@ -41,8 +42,17 @@ export interface EngineOptions {
  * name-keyed {@link UntypedBody} path.
  */
 export interface FixEngine<Bodies = Record<string, UntypedBody>> {
-  /** The runtime dictionary this engine is bound to. */
+  /**
+   * The runtime dictionary this engine is bound to. For an engine created with a FIXT
+   * transport/application pair this is the pair's *merged* view (the dictionary messages
+   * are structurally parsed and encoded against); the layers stay reachable via
+   * {@link transport} and {@link app}.
+   */
   readonly dictionary: Dictionary;
+  /** The FIXT transport dictionary, when the engine was created with a pair. */
+  readonly transport?: Dictionary;
+  /** The (default) application dictionary, when the engine was created with a pair. */
+  readonly app?: Dictionary;
   /** Parse the first message in the input. See {@link parse}. */
   parse(raw: string | Uint8Array, options?: ParseOptions): ParseResult;
   /** Parse every message in a concatenated buffer. See {@link parseAll}. */
@@ -75,9 +85,12 @@ export interface FixEngine<Bodies = Record<string, UntypedBody>> {
 }
 
 /**
- * Create a {@link FixEngine} bound to a dictionary. Accepts either a {@link Dictionary}
- * runtime index or a raw {@link DictionaryJSON} (which is loaded for you). The returned
- * engine is pure and reusable across messages.
+ * Create a {@link FixEngine} bound to a dictionary. Accepts a {@link Dictionary} runtime
+ * index, a raw {@link DictionaryJSON} (which is loaded for you), or a FIXT
+ * transport/application pair ({@link FixtDictionaries}) — the FIXT form parses/encodes over
+ * the pair's merged view and returns layer-attributed diagnostics from
+ * {@link FixEngine.validate} (see {@link FixIssue.layer}). The returned engine is pure and
+ * reusable across messages.
  *
  * @example
  * ```ts
@@ -86,11 +99,41 @@ export interface FixEngine<Bodies = Record<string, UntypedBody>> {
  * const fix = createFixEngine(dictionary);
  * const { message, issues } = fix.parse(raw);
  * ```
+ *
+ * @example FIXT.1.1 pair (layer-attributed validation)
+ * ```ts
+ * import { dictionary as fixt11 } from '@boarteam/fix-dict-fixt11';
+ * import { dictionary as fix50sp2 } from '@boarteam/fix-dict-fix50sp2';
+ * const fix = createFixEngine({ transport: fixt11, app: fix50sp2 });
+ * const issues = fix.validate(fix.parse(raw).message);
+ * const sessionFindings = issues.filter((i) => i.layer === 'session'); // → Reject(3)
+ * ```
  */
 export function createFixEngine<Bodies = Record<string, UntypedBody>>(
-  dictionary: Dictionary | DictionaryJSON,
+  dictionary: Dictionary | DictionaryJSON | FixtDictionaries,
   options: EngineOptions = {},
 ): FixEngine<Bodies> {
+  if (isFixtDictionaries(dictionary)) {
+    const resolved = resolveFixt(dictionary);
+    return {
+      dictionary: resolved.merged,
+      transport: resolved.transport,
+      app: resolved.app,
+      // parse/validate/encode take the PAIR (not the resolved merge) so per-message
+      // ApplVerID(1128) routing through a resolveApp hook stays live per call.
+      parse: (raw, o) => parse(raw, dictionary, mergeParse(options, o)),
+      parseAll: (raw, o) => parseAll(raw, dictionary, mergeParse(options, o)),
+      encode: (message, o) => encode(message, dictionary, { ...o, soh: o?.soh ?? options.soh }),
+      validate: (message, o) => validate(message, dictionary, o),
+      // Typed builders bind to the merged view: both session and application bodies are
+      // constructible (pass the merged dict package's MessageBodies as `Bodies`).
+      create: (msgType, init) =>
+        createMessage<Bodies[typeof msgType] & object>(msgType, resolved.merged, init),
+      createImmutable: (msgType, init) =>
+        createImmutableMessage<Bodies[typeof msgType] & object>(msgType, resolved.merged, init),
+      is: messageTypeGuard<Bodies>(),
+    };
+  }
   const dict = dictionary instanceof Dictionary ? dictionary : loadDictionary(dictionary);
   return {
     dictionary: dict,

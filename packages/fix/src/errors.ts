@@ -6,6 +6,15 @@
 export type FixSeverity = 'error' | 'warning' | 'info';
 
 /**
+ * Which FIXT layer an issue belongs to, when validation ran against a transport/application
+ * dictionary pair: `session` findings are transport-owned (admin messages, envelope fields)
+ * and map to a session-level `Reject(3)`; `application` findings map to a
+ * `BusinessMessageReject(j)`. Absent when validating against a single dictionary, which has
+ * no layering to attribute.
+ */
+export type FixLayer = 'session' | 'application';
+
+/**
  * The catalogue of issue codes the engine currently emits. Codes are part of the public
  * SemVer contract, so this union documents the known set and gives callers autocompletion
  * and exhaustiveness — while {@link FixIssue.code} stays open (`KnownIssueCode | string`)
@@ -89,6 +98,10 @@ export type KnownIssueCode =
   // (e.g. the `Length` companion of a present `data` field, or `OrigSendingTime` when
   // `PossDupFlag` = `Y`).
   | 'validate/conditional-required'
+  // FIXT pair mode only: a session (admin) message carries an application-layer field —
+  // one the app dictionary defines but the transport dictionary does not. Session messages
+  // are transport-owned, so this is flagged for a session-level Reject (layer 'session').
+  | 'validate/field-outside-layer'
   // --- dictionary extension (extendDictionary) ---
   // fields
   // An extension field's tag already exists; the extension definition replaces it.
@@ -212,6 +225,11 @@ export interface FixIssue {
    * number to avoid coupling the engine to a particular dictionary's enum.
    */
   sessionRejectReason?: number;
+  /**
+   * The FIXT layer this issue belongs to. Set only when validating against a
+   * transport/application dictionary pair — see {@link FixLayer}.
+   */
+  layer?: FixLayer;
 }
 
 /**
