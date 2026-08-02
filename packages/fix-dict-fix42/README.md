@@ -5,7 +5,7 @@ The **complete FIX 4.2 dictionary as data** (405 fields / 46 messages / 21 datat
 official FIX 4.2 specification (FIX Repository, 2010 Edition) and cross-checked against the
 QuickFIX `FIX42.xml` dictionary by a CI drift gate — never hand-maintained.
 
-Stable (1.x) and actively developed. See the
+Stable and actively developed. See the
 [project README](https://github.com/boarteam/fix-protocol#readme) for coverage, the cross-check
 report, and declared coverage gaps.
 

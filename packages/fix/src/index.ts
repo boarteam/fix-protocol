@@ -6,7 +6,7 @@
  * package is in early (0.x) development.
  */
 
-export const VERSION = '0.2.0';
+export const VERSION = '0.4.0';
 
 // Codec primitives.
 export { calculateChecksum, bodyLength } from './codec/checksum';

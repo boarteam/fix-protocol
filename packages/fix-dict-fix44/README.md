@@ -4,7 +4,7 @@ The **complete FIX 4.4 dictionary as data** (912 fields / 93 messages / 105 comp
 datatypes) for the [`@boarteam/fix`](https://www.npmjs.com/package/@boarteam/fix) engine.
 Generated directly from the QuickFIX `FIX44.xml` data dictionary — never hand-maintained.
 
-Stable (1.x) and actively developed. See the
+Stable and actively developed. See the
 [project README](https://github.com/boarteam/fix-protocol#readme) for coverage and declared
 coverage gaps.
 
