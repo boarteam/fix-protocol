@@ -1,6 +1,6 @@
 {
   "name": "@boarteam/fix-dict-fix50sp2",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "FIX 5.0 SP2 over FIXT.1.1 as a self-contained dictionary (fields, components, messages, datatypes, enums) for @boarteam/fix. FIXT session envelope + base-SP2 application layer, generated from QuickFIX/J data dictionaries.",
   "license": "Apache-2.0",
   "type": "module",

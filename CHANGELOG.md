@@ -17,8 +17,22 @@ out in the changeset. Additive changes and fixes are patch bumps.
 
 ## Unreleased
 
-Pre-release development toward **0.1.0**. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the
-roadmap. Highlights so far:
+- **FIX 5.0 SP2 / FIXT.1.1 support** (engine minor + two new dictionary packages):
+  `@boarteam/fix-dict-fix50sp2` — the self-contained FIX 5.0 SP2 dictionary over FIXT.1.1
+  (envelope + 7 session messages + 108 base-SP2 app messages; 1,452 fields / 176 components /
+  28 datatypes; `applVerID: '9'`), generated from QuickFIX/J and cross-checked against
+  quickfix-go with a reviewed EP-drift baseline — and `@boarteam/fix-dict-fixt11` — the
+  transport-only FIXT.1.1 dictionary (74 fields / 7 session messages, typed `LogonBody`
+  requiring `DefaultApplVerID`). The engine gains the FIXT pair API: every codec entry point
+  accepts `{ transport, app }`, `validate` attributes findings to `session` vs `application`
+  (`FixIssue.layer`) with a `validate/field-outside-layer` purity check, an optional
+  `resolveApp(applVerID)` hook routes multi-version sessions statelessly, and
+  `mergeFixtDictionaries` is exported for venue-dialect composition. New FIX 5.0 datatype
+  formats validated: `TZTimestamp`, `TZTimeOnly`, `LocalMktTime`, `Language` (plus
+  `MultipleCharValue` token validation via the dictionaries). Cross-engine conformance:
+  golden FIXT frames encoded by `@boarteam/fix` are parsed + validated clean by quickfix-go.
+
+### Earlier pre-release highlights (toward 0.1.0)
 
 - Dictionary-driven, zero-dependency engine: tokenize, parse (with nested repeating-group
   reconstruction), validate (presence/enum/datatype/conditional), and a byte-accurate ordered

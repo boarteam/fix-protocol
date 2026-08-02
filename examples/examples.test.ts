@@ -8,6 +8,7 @@ import { run as runParseAndValidate } from './parse-and-validate.mjs';
 import { run as runEncode } from './encode-a-message.mjs';
 import { run as runDemo } from './demo-decode.mjs';
 import { run as runExtend } from './extend-dictionary.mjs';
+import { run as runFixt } from './fixt-pair.mjs';
 
 describe('examples', () => {
   it('extend-dictionary nests the cTrader custom tags and keeps every gate clean', () => {
@@ -24,6 +25,15 @@ describe('examples', () => {
     const result = runParseAndValidate();
     expect(result.msgType).toBe('W');
     expect(result.entries).toBe(2);
+  });
+
+  it('fixt-pair renders FIXT frames and attributes findings to layers', () => {
+    const r = runFixt();
+    expect(r.logonBeginString).toBe('FIXT.1.1');
+    expect(r.logonIssues).toBe(0);
+    expect(r.logonValidation).toBe(0);
+    expect(r.sessionLayer).toBe('session');
+    expect(r.applicationLayer).toBe('application');
   });
 
   it('encode-a-message produces a framed, re-parseable message', () => {

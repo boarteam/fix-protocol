@@ -94,11 +94,11 @@ There is a real gap in the FIX tooling landscape, and `@boarteam/fix` aims squar
 
 Point-in-time snapshot, June 2026. The alternatives are capable tools — this table is about category fit, not quality. The honest differentiators here are browser support, zero dependencies, the analyzer (not session-engine) focus, and the never-throws contract.
 
-| Library                | License    | Price                                                                                       | Browser            | Runtime deps                  | Parse | Validate | Encode                   | Never-throws | FIX versions | Stars    | npm/mo. |
-| ---------------------- | ---------- | ------------------------------------------------------------------------------------------- | ------------------ | ----------------------------- | ----- | -------- | ------------------------ | ------------ | ------------ | -------- | ------- |
-| **@boarteam/fix** (TS) | Apache-2.0 | Free                                                                                        | **Browser + Node** | **0**                         | ✅    | ✅       | ✅                       | **✅**       | 4.4 + 4.2    | new repo | ~204    |
-| fixparser (TS)         | Commercial | Free tier needs a registered license key; encode + connectivity gated behind Pro (~$5K+/yr) | Browser (partial)  | has deps                      | ✅    | ✅       | Pro-only                 | n/a          | multiple     | ~51      | ~9,375  |
-| jspurefix (TS)         | Apache-2.0 | Free                                                                                        | Node-only          | has deps + heavy post-install | ✅    | ✅       | ✅ (full session engine) | n/a          | multiple     | ~75      | ~61,370 |
+| Library                | License    | Price                                                                                       | Browser            | Runtime deps                  | Parse | Validate | Encode                   | Never-throws | FIX versions                | Stars    | npm/mo. |
+| ---------------------- | ---------- | ------------------------------------------------------------------------------------------- | ------------------ | ----------------------------- | ----- | -------- | ------------------------ | ------------ | --------------------------- | -------- | ------- |
+| **@boarteam/fix** (TS) | Apache-2.0 | Free                                                                                        | **Browser + Node** | **0**                         | ✅    | ✅       | ✅                       | **✅**       | 5.0SP2/FIXT.1.1 + 4.4 + 4.2 | new repo | ~204    |
+| fixparser (TS)         | Commercial | Free tier needs a registered license key; encode + connectivity gated behind Pro (~$5K+/yr) | Browser (partial)  | has deps                      | ✅    | ✅       | Pro-only                 | n/a          | multiple                    | ~51      | ~9,375  |
+| jspurefix (TS)         | Apache-2.0 | Free                                                                                        | Node-only          | has deps + heavy post-install | ✅    | ✅       | ✅ (full session engine) | n/a          | multiple                    | ~75      | ~61,370 |
 
 For context — a different category, not embeddable analyzers: **QuickFIX** (C++) and **QuickFIX/J** (Java) are server-side session/transport engines; **simplefix** (Python) is lightweight but unmaintained and Python-only; hosted decoders (FIXSIM, Esprow, and similar) are paste-in SaaS, not npm libraries. If you need a socket that maintains sequence numbers and heartbeats, you want a session engine — see [What this is not](#what-this-is-not).
 
@@ -108,7 +108,7 @@ For context — a different category, not embeddable analyzers: **QuickFIX** (C+
 
 **1. It works in front of you.** The block above is real captured output, not a sketch. The repeating group becomes an array of nested objects you can index into; numeric fields like `MDEntryPx (270)` and `OrderQty (38)` come back as typed numbers, not strings. Pure `string` / `Uint8Array` in, structured object out, over `TextEncoder` / `TextDecoder` — no Node-only APIs in the core, so the same engine runs in a browser tab and on a Node backend.
 
-**2. It is provably correct, and it never throws.** `parse` and `validate` return findings as **data** — they never throw, hang, or crash, even on garbage input. `BeginString (8)`, `BodyLength (9)`, and `CheckSum (10)` are computed byte-accurately on encode, and repeating groups are reconstructed faithfully. Correctness is pinned by golden fixtures and a reference oracle for the market-data and session message sets, a decode → encode round-trip across **all 93 FIX 4.4 messages**, and an adversarial robustness suite that asserts `parse` and `validate` never throw, hang, or crash on malformed input. CI runs on Node 18 / 20 / 22 and a browser-like environment, and a bundle check enforces the zero-dependency, browser-safe surface on every commit.
+**2. It is provably correct, and it never throws.** `parse` and `validate` return findings as **data** — they never throw, hang, or crash, even on garbage input. `BeginString (8)`, `BodyLength (9)`, and `CheckSum (10)` are computed byte-accurately on encode, and repeating groups are reconstructed faithfully. Correctness is pinned by golden fixtures and a reference oracle for the market-data and session message sets, a decode → encode round-trip across **all 93 FIX 4.4 and all 115 FIX 5.0 SP2 messages**, a cross-engine check (FIXT frames encoded here are parsed and validated clean by quickfix-go's transport/application validator), and an adversarial robustness suite that asserts `parse` and `validate` never throw, hang, or crash on malformed input. CI runs on Node 18 / 20 / 22 and a browser-like environment, and a bundle check enforces the zero-dependency, browser-safe surface on every commit.
 
 **3. It is enterprise-safe.** **Zero runtime dependencies** — nothing to vet transitively, no heavy post-install, nothing that breaks the browser build. No telemetry. No license key, no registration, no gated "Pro" tier. Apache-2.0, with its explicit patent grant. The engine is pure and deterministic — no wall clock, no randomness, no global state — and it never invents session fields (you supply sequence numbers and timestamps), which is exactly why it is trivially testable and safe to embed.
 
@@ -124,7 +124,7 @@ npm install @boarteam/fix @boarteam/fix-dict-fix44
 pnpm add @boarteam/fix @boarteam/fix-dict-fix44
 ```
 
-Swap in `@boarteam/fix-dict-fix42` for FIX 4.2. The dictionary packages declare a peer dependency on `@boarteam/fix`. Requirements: **Node ≥ 18**, or any modern browser. Both are zero-dependency, dual ESM + CJS, with TypeScript types included.
+Swap in `@boarteam/fix-dict-fix42` for FIX 4.2, or `@boarteam/fix-dict-fix50sp2` for FIX 5.0 SP2 over FIXT.1.1 (with `@boarteam/fix-dict-fixt11` as the transport-only dictionary for layer-attributed validation). The dictionary packages declare a peer dependency on `@boarteam/fix`. Requirements: **Node ≥ 18**, or any modern browser. Both are zero-dependency, dual ESM + CJS, with TypeScript types included.
 
 ---
 
@@ -350,6 +350,22 @@ Generated **directly from the QuickFIX `FIX.4.4` XML data dictionary**. Because 
 
 Generated from the **FIX Repository 2010 Edition** and genuinely **cross-checked against the QuickFIX `FIX42.xml` dictionary** by a CI drift gate. There are **2 recorded coverage gaps**, both `synthesized-datatype`: `MultipleValueString` (synthesized over base `String`) and `Length` (synthesized over base `int`) are each referenced by fields but absent from `Datatypes.xml`.
 
+### FIX 5.0 SP2 over FIXT.1.1 — `@boarteam/fix-dict-fix50sp2`
+
+| Fields | Messages | Components | Datatypes | Inline repeating groups |
+| -----: | -------: | ---------: | --------: | ----------------------: |
+|  1,452 |      115 |        176 |        28 |                     147 |
+
+The **self-contained FIX 5.0 SP2 dictionary**: the FIXT.1.1 session envelope + the 7 session messages + the 108 **base-SP2** application messages, with `version: 'FIX.5.0SP2'`, `beginString: 'FIXT.1.1'`, and `applVerID: '9'` modelling the transport/application split FIX 5.0 introduced. Generated from the **QuickFIX/J `FIX50SP2.xml` + `FIXT11.xml`** data dictionaries (base SP2 — deliberately not the quickfix C++ copy, which was regenerated at EP280) and **cross-checked against quickfix-go's independently-maintained `FIX50SP2.xml`** by a CI drift gate with a reviewed EP-drift baseline. Descriptions come from FIX Orchestra (EP307 application layer + EP247 session layer; 99.9% of fields, 99.7% of enum values — the remainder is recorded in `coverageGaps`). Golden FIXT frames encoded by this engine are **parsed and validated clean by quickfix-go's** transport/application validator (cross-engine check). Known limitations: `XMLnonFIX(n)` is not shipped (QuickFIX/J master comments it out; quickfix-go omits it), and like FIX 4.2 there are no conditional-required (`C`) markings.
+
+### FIXT.1.1 — `@boarteam/fix-dict-fixt11`
+
+| Fields | Messages | Components | Datatypes |
+| -----: | -------: | ---------: | --------: |
+|     74 |        7 |          4 |         9 |
+
+The **transport-only** dictionary: the FIXT session envelope (a strict superset of the FIX 4.4 header — adds `ApplVerID(1128)`, `CstmApplVerID(1129)`, `ApplExtID(1156)`, `HopGrp`) and the session messages, with `Logon` requiring `DefaultApplVerID(1137)` — in the data _and_ in the generated `LogonBody` type. Pair it with an application dictionary (`createFixEngine({ transport, app })`) for **layer-attributed validation**: every finding is tagged `session` or `application`, so you know whether to answer with a session `Reject(3)` or a `BusinessMessageReject(j)`.
+
 Field, enum, and datatype **descriptions** are sourced from the Apache-2.0 [FIX Orchestra](https://www.fixtrading.org/standards/fix-orchestra/) files.
 
 ---
@@ -364,13 +380,15 @@ What it owns instead: decoding and validating messages you already have, encodin
 
 ## Packages
 
-| Package                                                                              | Version | What it is                                                                 |
-| ------------------------------------------------------------------------------------ | ------- | -------------------------------------------------------------------------- |
-| [`@boarteam/fix`](https://www.npmjs.com/package/@boarteam/fix)                       | 0.1.1   | The engine: tokenize / parse / validate / encode + the dictionary runtime. |
-| [`@boarteam/fix-dict-fix44`](https://www.npmjs.com/package/@boarteam/fix-dict-fix44) | 0.1.0   | Full FIX 4.4 dictionary as data. Peer-depends on `@boarteam/fix`.          |
-| [`@boarteam/fix-dict-fix42`](https://www.npmjs.com/package/@boarteam/fix-dict-fix42) | 0.1.0   | Full FIX 4.2 dictionary as data. Peer-depends on `@boarteam/fix`.          |
+| Package                                                                              | Version            | What it is                                                                                     |
+| ------------------------------------------------------------------------------------ | ------------------ | ---------------------------------------------------------------------------------------------- |
+| [`@boarteam/fix`](https://www.npmjs.com/package/@boarteam/fix)                       | 0.2.0              | The engine: tokenize / parse / validate / encode + the dictionary runtime + the FIXT pair API. |
+| [`@boarteam/fix-dict-fix44`](https://www.npmjs.com/package/@boarteam/fix-dict-fix44) | 1.0.0              | Full FIX 4.4 dictionary as data. Peer-depends on `@boarteam/fix`.                              |
+| [`@boarteam/fix-dict-fix42`](https://www.npmjs.com/package/@boarteam/fix-dict-fix42) | 1.0.0              | Full FIX 4.2 dictionary as data. Peer-depends on `@boarteam/fix`.                              |
+| `@boarteam/fix-dict-fix50sp2`                                                        | 1.0.0 (unreleased) | FIX 5.0 SP2 over FIXT.1.1, self-contained (envelope + session + app messages).                 |
+| `@boarteam/fix-dict-fixt11`                                                          | 1.0.0 (unreleased) | FIXT.1.1 transport-only dictionary (envelope + session messages), for the pair API.            |
 
-All packages: zero runtime dependencies, dual ESM + CJS, Node ≥ 18, browser + Node, Apache-2.0. The dictionary packages also export `dictionary`, `Tags` (name → tag), `MsgType` (name → msgtype), and `DICTIONARY_VERSION` (e.g. `"FIX.4.4"`).
+All packages: zero runtime dependencies, dual ESM + CJS, Node ≥ 18, browser + Node, Apache-2.0. The dictionary packages also export `dictionary`, `Tags` (name → tag), `MsgType` (name → msgtype), and `DICTIONARY_VERSION` (e.g. `"FIX.4.4"`, `"FIX.5.0SP2"`).
 
 ---
 
@@ -388,7 +406,7 @@ While on `0.x`, a breaking change to any of those ships as a **minor** bump (`0.
 
 **Maintenance pledge.** A **monthly release / maintenance cadence**. Consistency is the whole point — the prior generation of free JS FIX parsers died from neglect, and that is exactly the failure mode this project is built to avoid. [Issues and feedback](https://github.com/boarteam/fix-protocol/issues) shape the road to 1.0.
 
-**Roadmap.** FIX 5.0 / FIXT.1.1 dictionaries through the same pipeline, a CLI, and first-class FIX Orchestra support.
+**Roadmap.** ~~FIX 5.0 / FIXT.1.1 dictionaries through the same pipeline~~ — **shipped**: `@boarteam/fix-dict-fix50sp2` + `@boarteam/fix-dict-fixt11`, generated and cross-checked like the 4.x dicts, with the transport/application pair API in the engine. Next: a CLI and first-class FIX Orchestra support.
 
 ---
 

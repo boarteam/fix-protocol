@@ -60,6 +60,12 @@ importers:
       '@boarteam/fix-dict-fix44':
         specifier: workspace:*
         version: link:../packages/fix-dict-fix44
+      '@boarteam/fix-dict-fix50sp2':
+        specifier: workspace:*
+        version: link:../packages/fix-dict-fix50sp2
+      '@boarteam/fix-dict-fixt11':
+        specifier: workspace:*
+        version: link:../packages/fix-dict-fixt11
 
   packages/fix:
     devDependencies:
