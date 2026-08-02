@@ -13,6 +13,12 @@ export default tseslint.config(
       '**/node_modules/**',
       'packages/fix-dict-fix44/src/dictionary.json',
       'packages/fix-dict-fix44/src/index.ts', // generated
+      'packages/fix-dict-fix42/src/dictionary.json',
+      'packages/fix-dict-fix42/src/index.ts', // generated
+      'packages/fix-dict-fix50sp2/src/dictionary.json',
+      'packages/fix-dict-fix50sp2/src/index.ts', // generated
+      'packages/fix-dict-fixt11/src/dictionary.json',
+      'packages/fix-dict-fixt11/src/index.ts', // generated
       'docs/**',
     ],
   },
