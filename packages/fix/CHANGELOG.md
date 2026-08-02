@@ -1,5 +1,34 @@
 # @boarteam/fix
 
+## 0.4.0
+
+### Minor Changes
+
+- 3e57f43: FIX 5.0 SP2 / FIXT.1.1 support. `parse`/`parseAll`/`encode`/`validate`/`createFixEngine` now
+  also accept a FIXT transport/application dictionary pair (`FixtDictionaries`): parsing and
+  encoding run over the pair's merged view (tag 8 carries the transport's `FIXT.1.1`), and
+  `validate` attributes every finding to a layer (`FixIssue.layer: 'session' | 'application'`)
+  so callers can choose between a session `Reject(3)` and a `BusinessMessageReject(j)` — with a
+  session-layer purity check (`validate/field-outside-layer`) flagging application-only fields
+  on admin messages. An optional `resolveApp(applVerID)` hook routes multi-version sessions by
+  per-message `ApplVerID(1128)` with a caller-supplied `defaultApplVerID` (the engine still
+  holds no session state). Also new: `mergeFixtDictionaries(transport, app)` (the documented
+  single-dictionary convenience), `DictionaryJSON.applVerID` + `Dictionary.applVerID` (the
+  ApplVerID code a FIXT-era dictionary answers to), and named-format validation for the FIX 5.0
+  datatypes (`TZTimestamp`, `TZTimeOnly`, `LocalMktTime`, `Language`).
+- 3e57f43: Typed guard-free message inits (`MessageInit`) and a uniform absence rule.
+
+  BREAKING (0.x minor):
+
+  - `message(msgType, init)`, `engine.create/createImmutable`, and `createMessage/createImmutableMessage` now take `MessageInit<B>`: when an init object is passed, dictionary-required keys must be named (pass `undefined` to deliberately omit one — the escape hatch for dialects that skip a "required" tag). Omitting `init` entirely keeps the lenient incremental-building path.
+  - The absence rule is now uniform: `undefined`, `null`, and `''` are skipped at render (body, repeating-group entries, and envelope), `has()` reports them absent, and `get()` normalizes a stored `null` to `undefined`. Previously `''` rendered as an empty `tag=` value (malformed FIX); callers who need a literal empty value can use the low-level `encode` primitive.
+
+  Additive:
+
+  - Every init/`set`/`with` value — including fields inside repeating-group entries — additionally accepts `null | undefined`, so possibly-absent values pass straight through without `if (x) msg.set(...)` guards. `assign`/`merge` take `Partial<MessageInit<B>>` (no required-key demand). `Envelope` values accept `null | undefined` for conditional session fields (`SenderSubID`, …). `toJSON()` is typed as the stored init shape. New exported types: `MessageInit`, `FieldInit`.
+
+  The dict packages have no source change; they are republished so their peer range accepts the new `@boarteam/fix` version.
+
 ## 0.3.0
 
 ### Minor Changes
