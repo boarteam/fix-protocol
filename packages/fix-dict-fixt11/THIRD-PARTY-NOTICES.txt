@@ -1,0 +1,91 @@
+THIRD-PARTY NOTICES — @boarteam/fix-dict-fixt11
+
+The dictionary data in this package is derived from the third-party sources
+below. @boarteam/fix-dict-fixt11 itself is licensed under Apache-2.0 (see
+LICENSE); these notices cover the upstream material it incorporates.
+
+================================================================================
+1. QuickFIX/J FIXT11.xml data dictionary
+   Used for: message / field / component / enum structure and required-ness.
+================================================================================
+
+The structural data is generated from the QuickFIX/J FIXT11.xml data dictionary
+in the QuickFIX/J repository (https://github.com/quickfix-j/quickfixj), vendored
+at commit a6f19fd5f20bd6c9879e2ffa8261d20c61881f47 (retrieved 2026-08-02).
+QuickFIX/J data dictionaries are distributed under the QuickFIX Software
+License:
+
+This product includes software developed by quickfixengine.org
+(http://www.quickfixengine.org/).
+
+The QuickFIX Software License, Version 1.0
+
+Copyright (c) 2001-2020 Oren Miller
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in
+   the documentation and/or other materials provided with the
+   distribution.
+
+3. The end-user documentation included with the redistribution,
+   if any, must include the following acknowledgment:
+      "This product includes software developed by
+       quickfixengine.org (http://www.quickfixengine.org/)."
+   Alternately, this acknowledgment may appear in the software itself,
+   if and wherever such third-party acknowledgments normally appear.
+
+4. The names "QuickFIX" and "quickfixengine.org" must
+   not be used to endorse or promote products derived from this
+   software without prior written permission. For written
+   permission, please contact ask@quickfixengine.org
+
+5. Products derived from this software may not be called "QuickFIX",
+   nor may "QuickFIX" appear in their name, without prior written
+   permission of quickfixengine.org
+
+THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED.  IN NO EVENT SHALL QUICKFIXENGINE.ORG OR
+ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+
+================================================================================
+2. FIX Orchestra — "orchestrations"
+   Used for: field, enum, and datatype descriptions.
+================================================================================
+
+Field, enum, and datatype descriptions are derived from FIXTSession.xml (FIX.5.0SP2_EP247)
+in the FIX Trading Community "orchestrations" repository
+(https://github.com/FIXTradingCommunity/orchestrations), vendored at commit
+138cedaeb20f07446a65c85b857ddc58c0650d20 (retrieved 2026-08-02), reshaped into
+this dictionary's JSON form.
+
+Copyright (c) 2017-2026 FIX Protocol Limited.
+
+The "orchestrations" repository is published by FIX Trading Community under the
+Apache License, Version 2.0 (the "License"), per the repository's LICENSE file
+and README grant; you may not use this file except in compliance with the
+License. You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0 — a copy is also provided in this
+package's LICENSE file. (The XML files internally carry a dcterms:rights
+"All Rights Reserved" metadata note; the governing license for the repository's
+contents is the repository-level Apache-2.0 grant cited above.)
+
+"FIX" and "Financial Information eXchange" are trademarks of FIX Protocol
+Limited. This is an independent open-source project, not affiliated with or
+endorsed by FIX Protocol Limited, the QuickFIX project, or the QuickFIX/J
+project.

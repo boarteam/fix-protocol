@@ -69,9 +69,15 @@ const wire = message(MsgType.MarketDataSnapshotFullRefresh) // typed to this mes
   `TargetCompID`; framing `8`/`9`/`10` are computed) are supplied to `render(envelope)` — the
   library never holds a sequence counter, clock, or comp-IDs. The body type excludes them.
 - **Mutable or immutable**: `message(...)` is a fast, fluent mutable builder for hot loops;
-  `message.immutable(...)` (and `.toImmutable()`) is copy-on-write. Both accept a bulk object
-  (`message('W', { MDReqID: 'r1' })` / `.assign({...})`) and double as a typed **read model**
-  (`msg.get('Symbol')`, `msg.get('NoMDEntries')?.[0]?.MDEntryPx`) for deriving log metadata.
+  `message.immutable(...)` (and `.toImmutable()`) is copy-on-write. Both accept a complete bulk
+  init (`message('A', { EncryptMethod: 0, HeartBtInt: 30 })` — required keys must be named;
+  `.assign({...})` stays partial) and double as a typed **read model** (`msg.get('Symbol')`,
+  `msg.get('NoMDEntries')?.[0]?.MDEntryPx`) for deriving log metadata.
+- **Absent values pass through**: an init/`set` value of `undefined`, `null`, or `''` is skipped
+  at render and reads as unset — `message('A', { …, Username: username })` needs no
+  `if (username)` guard, in the body, in group entries, and in the envelope alike. A required
+  key can be deliberately left off the wire by naming it with `undefined` (dialect quirks); to
+  force a literal empty value onto the wire, drop to the `encode` primitive.
 - The engine façade mirrors it: `createFixEngine<MessageBodies>(dictionary).create(msgType)`.
 
 **Narrowing an unknown message.** At a generic boundary — a `send(message: MessageView<any>)`,
@@ -110,6 +116,34 @@ augmented type and the extended dictionary ship as a pair.
 
 Full docs, examples, and the contribution guide are in the
 [monorepo](https://github.com/boarteam/fix-protocol).
+
+## FIX 5.0 SP2 / FIXT.1.1
+
+FIX 5.0 splits the wire into a session protocol (tag 8 carries `FIXT.1.1`) and an
+application version negotiated via `DefaultApplVerID(1137)` / per-message `ApplVerID(1128)`.
+The engine models that split first-class — every codec entry point accepts either a single
+dictionary or a **transport/application pair**:
+
+```ts
+import { createFixEngine } from '@boarteam/fix';
+import { dictionary as fixt11 } from '@boarteam/fix-dict-fixt11';
+import { dictionary as fix50sp2 } from '@boarteam/fix-dict-fix50sp2';
+
+const fix = createFixEngine({ transport: fixt11, app: fix50sp2 });
+const { message } = fix.parse(raw); // 8=FIXT.1.1 frames, SP2 bodies
+for (const issue of fix.validate(message)) {
+  // issue.layer: 'session' findings → answer with a Reject(3);
+  //              'application' findings → a BusinessMessageReject(j).
+}
+```
+
+Session (admin) messages are transport-owned — an application-only field on one is flagged
+`validate/field-outside-layer` — and multi-version sessions route per message through an
+optional `resolveApp(applVerID)` hook with a caller-supplied `defaultApplVerID` (the engine
+holds no session state). Prefer a single dictionary? `@boarteam/fix-dict-fix50sp2` is the
+pair pre-merged (a drop-in for `createFixEngine(dictionary)`), and
+`mergeFixtDictionaries(transport, app)` builds the same shape from your own app-layer
+dialect.
 
 ## License
 

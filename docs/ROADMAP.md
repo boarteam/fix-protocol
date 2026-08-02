@@ -28,13 +28,24 @@ A few deeply-nested repeating groups are under-specified by the flattened spec s
 dictionary records these as `coverageGaps`, and they do not affect the market-data or session
 message sets.
 
-## Post-0.1 (planned)
+## Shipped since 0.1
 
-- The FIX 5.0 / FIXT.1.1 dictionaries — via the same generate-and-cross-check pipeline (the
-  transport/application-layer split is the remaining design work).
+- **The FIX 5.0 SP2 / FIXT.1.1 dictionaries** — via the same generate-and-cross-check
+  pipeline: `@boarteam/fix-dict-fix50sp2` (self-contained: FIXT envelope + 7 session
+  messages + 108 base-SP2 application messages, 1,452 fields, cross-checked against
+  quickfix-go's independently-maintained SP2 dictionary) and `@boarteam/fix-dict-fixt11`
+  (transport-only). The engine models the transport/application split first-class: every
+  codec entry point accepts a `{ transport, app }` dictionary pair, `validate` attributes
+  findings to the `session` vs `application` layer (choose `Reject(3)` vs
+  `BusinessMessageReject(j)`), and an optional `resolveApp(applVerID)` hook routes
+  multi-version sessions — with no session state held. Conformance includes byte-pinned
+  golden FIXT frames accepted by quickfix-go's own transport/application validator.
+
+## Planned
+
 - A CLI (`parse` / `encode` / `lint` / `gen`).
 - FIX Orchestra as a dictionary source.
-- Richer conditional-rule (`C`) modeling and deeper conformance across the full 93-message set.
+- Richer conditional-rule (`C`) modeling and deeper conformance across the full message sets.
 
 All behind the same public API.
 

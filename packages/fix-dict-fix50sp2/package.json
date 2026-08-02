@@ -1,0 +1,60 @@
+{
+  "name": "@boarteam/fix-dict-fix50sp2",
+  "version": "0.0.0",
+  "description": "FIX 5.0 SP2 over FIXT.1.1 as a self-contained dictionary (fields, components, messages, datatypes, enums) for @boarteam/fix. FIXT session envelope + base-SP2 application layer, generated from QuickFIX/J data dictionaries.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "THIRD-PARTY-NOTICES.txt"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "fix",
+    "fix-protocol",
+    "fix50sp2",
+    "fix5",
+    "fixt",
+    "fixt11",
+    "dictionary",
+    "data-dictionary"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boarteam/fix-protocol.git",
+    "directory": "packages/fix-dict-fix50sp2"
+  },
+  "homepage": "https://github.com/boarteam/fix-protocol#readme",
+  "bugs": "https://github.com/boarteam/fix-protocol/issues",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "@boarteam/fix": "workspace:^"
+  },
+  "devDependencies": {
+    "@boarteam/fix": "workspace:*",
+    "@boarteam/fix-dict-fixt11": "workspace:*",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}

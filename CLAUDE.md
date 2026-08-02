@@ -21,7 +21,10 @@ so expect a reformat pass on commit.
 ## Repo shape
 
 pnpm workspace, vitest, TypeScript. Packages under `packages/`: `fix` (the engine),
-`fix-dict-fix44` / `fix-dict-fix42` (generated dictionary-data packages — the generator
-lives in the sibling `fix-codegen` repo; regenerate rather than hand-editing `index.ts`).
-Gates: `pnpm -r typecheck`, `pnpm test`, `pnpm lint`, `node scripts/check-bundle.mjs`,
-and the FIX42 drift crosscheck.
+`fix-dict-fix44` / `fix-dict-fix42` / `fix-dict-fix50sp2` / `fix-dict-fixt11` (generated
+dictionary-data packages — the generator lives in the sibling `fix-codegen` repo; regenerate
+rather than hand-editing `index.ts`). `fix-dict-fix50sp2` is the self-contained FIX 5.0 SP2
+dict (FIXT.1.1 envelope + session messages + base-SP2 app messages, `applVerID: '9'`);
+`fix-dict-fixt11` is the transport-only FIXT.1.1 dict.
+Gates: `pnpm -r typecheck`, `pnpm test`, `pnpm lint`, `node scripts/check-bundle.mjs`
+(browser-safety + bundle-size tripwires), and the FIX42 + FIX50SP2 drift crosschecks.

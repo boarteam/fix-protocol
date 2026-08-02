@@ -1,4 +1,5 @@
 import type { Dictionary } from '../dictionary/Dictionary';
+import { type FixtDictionaries, isFixtDictionaries, resolveFixt } from '../dictionary/fixt';
 import type { ComponentDef, MemberRef } from '../dictionary/types';
 import { calculateChecksum, bodyLength as byteLength } from './checksum';
 import { SOH } from './tokenize';
@@ -47,13 +48,22 @@ const MSG_TYPE = 35;
  * cannot be rendered as a valid FIX value (non-finite, or one that `String()` would emit
  * in exponent notation — pass such values as pre-formatted strings).
  *
+ * `dict` may also be a FIXT transport/application pair ({@link FixtDictionaries}): the
+ * message is then encoded over the pair's merged view — tag 8 carries the transport's
+ * `FIXT.1.1`, session messages take the transport's definitions, and application bodies
+ * are wrapped in the transport envelope. A supplied `ApplVerID(1128)` field (falling back
+ * to the pair's `defaultApplVerID`) routes a `resolveApp` hook.
+ *
  * @returns the framed message, terminated by a trailing separator.
  */
 export function encode(
   message: EncodeMessage,
-  dict: Dictionary,
+  dictionaries: Dictionary | FixtDictionaries,
   options: EncodeOptions = {},
 ): string {
+  const dict = isFixtDictionaries(dictionaries)
+    ? resolveFixt(dictionaries, applVerIdOf(message)).merged
+    : dictionaries;
   const soh = options.soh ?? SOH;
   const def = dict.messageByMsgType(message.msgType);
   if (!def) {
@@ -114,6 +124,12 @@ function emitMembers(
       }
     }
   }
+}
+
+/** The message's supplied `ApplVerID(1128)` wire value, for pair-mode app routing. */
+function applVerIdOf(message: EncodeMessage): string | undefined {
+  const v = message.fields?.[1128];
+  return v === undefined ? undefined : typeof v === 'string' ? v : String(v);
 }
 
 function formatValue(value: FieldValue): string {

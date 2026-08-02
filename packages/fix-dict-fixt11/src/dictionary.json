@@ -1,0 +1,2008 @@
+{
+  "version": "FIXT.1.1",
+  "beginString": "FIXT.1.1",
+  "source": {
+    "generator": "@boarteam/fix-codegen",
+    "spec": "QuickFIX/J FIXT.1.1 XML data dictionary",
+    "generatedFrom": "quickfix-xml"
+  },
+  "datatypes": {
+    "SeqNum": {
+      "name": "SeqNum",
+      "base": "int",
+      "description": "Sequence of digits without commas or decimals. Value must be positive and may not contain leading zeros."
+    },
+    "String": {
+      "name": "String",
+      "base": "String",
+      "description": "Alpha-numeric free format strings, can include any character or punctuation except the delimiter. All String fields are case sensitive (i.e. morstatt != Morstatt)."
+    },
+    "Length": {
+      "name": "Length",
+      "base": "int",
+      "description": "Sequence of digits without commas or decimals. Value must be positive."
+    },
+    "Boolean": {
+      "name": "Boolean",
+      "base": "char",
+      "description": "One of two values: 'Y' = True/Yes 'N' = False/No"
+    },
+    "UTCTimestamp": {
+      "name": "UTCTimestamp",
+      "base": "String",
+      "formatPattern": "YYYYMMDD-HH:MM:SS[.sss]",
+      "description": "string field representing date and time combination Universal Time Coordinated (UTC), also known as Greenwich Mean Time (GMT). Its value space is described as the combination of date and time of day in the Chapter 5.4 of ISO 8601. Valid values are in the format YYYY-MM-DDTHH:MM:SS.s where YYYY = 0000-9999 year, MM = 01-12 month, DD = 01-31 day, HH = 00-23 hour, MM = 00-59 minute, SS = 00-60 second (60 only if UTC leap second), and optionally one or more digits representing a decimal fraction of a second. The punctuation of \"-\", \":\" and the string value of \"T\" to separate the date and time are required. The \".\" is only required when sub-second time precision is specified. Leap Seconds: Note that UTC includes corrections for leap seconds, which are inserted to account for slowing of the rotation of the earth. Leap second insertion is declared by the International Earth Rotation Service (IERS) and has, since 1972, only occurred on the night of Dec. 31 or Jun 30. The IERS considers March 31 and September 30 as secondary dates for leap second insertion, but has never utilized these dates. During a leap second insertion, a UTCTimestamp field may read \"1998-12-31T23:59:59\", \"1998-12-31T23:59:60\", \"1999-01-01T00:00:00\". (see http://tycho.usno.navy.mil/leapsec.html)"
+    },
+    "data": {
+      "name": "data",
+      "base": "data",
+      "lengthPrefixed": true,
+      "description": "In FIXML, all data type fields are using base64Binary encoding."
+    },
+    "int": {
+      "name": "int",
+      "base": "int",
+      "description": "Sequence of digits without commas or decimals and optional sign character (characters \"-\" and \"0\" -\"9\"). The sign character utilizes one octet (i.e. positive int is \"99999\" while negative int is \"-99999\"). Note that int values may contain leading zeros (e.g. \"00023\" = \"23\")"
+    },
+    "NumInGroup": {
+      "name": "NumInGroup",
+      "base": "int",
+      "description": "Sequence of digits without commas or decimals. Value must be positive ."
+    },
+    "char": {
+      "name": "char",
+      "base": "char",
+      "description": "Single character value, can include any alphanumeric character or punctuation except the delimiter. All char fields are case sensitive (i.e. m != M). By default ISO/IEC 8859-1 (Latin-1). By counterparty agreement, a different single-byte character set may be used."
+    }
+  },
+  "fields": {
+    "7": {
+      "tag": 7,
+      "name": "BeginSeqNo",
+      "type": "SeqNum",
+      "description": "Message sequence number of first message in range to be retransmitted."
+    },
+    "8": {
+      "tag": 8,
+      "name": "BeginString",
+      "type": "String",
+      "description": "Identifies beginning of a new FIX tagvalue encoded message. BeginString(8) contains the protocol versions for versions before FIX.4.4. FIX.4.4 and later BeginString(8) represents the FIX session profile."
+    },
+    "9": {
+      "tag": 9,
+      "name": "BodyLength",
+      "type": "Length",
+      "description": "The message length must be specified in the BodyLength(9) field. The length must be calculated by counting the number of octets in the message following the end of field delimiter (<SOH>) of BodyLength(9), up to and including the end of field delimiter (<SOH>) of the field immediately preceding the CheckSum(10) field."
+    },
+    "10": {
+      "tag": 10,
+      "name": "CheckSum",
+      "type": "String",
+      "description": "Three-octet character representation of the modulo 256 checksum. Checksum(10) must be the last field in the message. The end of field delimiter (<SOH>) of Checksum(10) serves as the end of message delimiter."
+    },
+    "16": {
+      "tag": 16,
+      "name": "EndSeqNo",
+      "type": "SeqNum",
+      "description": "Message sequence number of last message in range to be retransmitted. If request is for a single message, then BeginSeqNo(7) = EndSeqNo(16). If request is for all messages subsequent to a particular message, EndSeqNo(16) = \"0\" (representing infinity)."
+    },
+    "34": {
+      "tag": 34,
+      "name": "MsgSeqNum",
+      "type": "SeqNum",
+      "description": "Message sequence number."
+    },
+    "35": {
+      "tag": 35,
+      "name": "MsgType",
+      "type": "String",
+      "enumValues": [
+        {
+          "value": "0",
+          "name": "HEARTBEAT",
+          "description": "Heartbeat Message"
+        },
+        {
+          "value": "1",
+          "name": "TEST_REQUEST",
+          "description": "TestRequest Message"
+        },
+        {
+          "value": "2",
+          "name": "RESEND_REQUEST",
+          "description": "ResendRequest Message"
+        },
+        {
+          "value": "3",
+          "name": "REJECT",
+          "description": "Reject Message"
+        },
+        {
+          "value": "4",
+          "name": "SEQUENCE_RESET",
+          "description": "SequenceReset Message"
+        },
+        {
+          "value": "5",
+          "name": "LOGOUT",
+          "description": "Logout Message"
+        },
+        {
+          "value": "6",
+          "name": "INDICATION_OF_INTEREST",
+          "description": "INDICATION_OF_INTEREST"
+        },
+        {
+          "value": "7",
+          "name": "ADVERTISEMENT",
+          "description": "ADVERTISEMENT"
+        },
+        {
+          "value": "8",
+          "name": "EXECUTION_REPORT",
+          "description": "EXECUTION_REPORT"
+        },
+        {
+          "value": "9",
+          "name": "ORDER_CANCEL_REJECT",
+          "description": "ORDER_CANCEL_REJECT"
+        },
+        {
+          "value": "A",
+          "name": "LOGON",
+          "description": "Logon Message"
+        },
+        {
+          "value": "B",
+          "name": "NEWS",
+          "description": "NEWS"
+        },
+        {
+          "value": "C",
+          "name": "EMAIL",
+          "description": "EMAIL"
+        },
+        {
+          "value": "D",
+          "name": "ORDER_SINGLE",
+          "description": "ORDER_SINGLE"
+        },
+        {
+          "value": "E",
+          "name": "ORDER_LIST",
+          "description": "ORDER_LIST"
+        },
+        {
+          "value": "F",
+          "name": "ORDER_CANCEL_REQUEST",
+          "description": "ORDER_CANCEL_REQUEST"
+        },
+        {
+          "value": "G",
+          "name": "ORDER_CANCEL_REPLACE_REQUEST",
+          "description": "ORDER_CANCEL_REPLACE_REQUEST"
+        },
+        {
+          "value": "H",
+          "name": "ORDER_STATUS_REQUEST",
+          "description": "ORDER_STATUS_REQUEST"
+        },
+        {
+          "value": "J",
+          "name": "ALLOCATION_INSTRUCTION",
+          "description": "ALLOCATION_INSTRUCTION"
+        },
+        {
+          "value": "K",
+          "name": "LIST_CANCEL_REQUEST",
+          "description": "LIST_CANCEL_REQUEST"
+        },
+        {
+          "value": "L",
+          "name": "LIST_EXECUTE",
+          "description": "LIST_EXECUTE"
+        },
+        {
+          "value": "M",
+          "name": "LIST_STATUS_REQUEST",
+          "description": "LIST_STATUS_REQUEST"
+        },
+        {
+          "value": "N",
+          "name": "LIST_STATUS",
+          "description": "LIST_STATUS"
+        },
+        {
+          "value": "P",
+          "name": "ALLOCATION_INSTRUCTION_ACK",
+          "description": "ALLOCATION_INSTRUCTION_ACK"
+        },
+        {
+          "value": "Q",
+          "name": "DONT_KNOW_TRADE",
+          "description": "DONT_KNOW_TRADE"
+        },
+        {
+          "value": "R",
+          "name": "QUOTE_REQUEST",
+          "description": "QUOTE_REQUEST"
+        },
+        {
+          "value": "S",
+          "name": "QUOTE",
+          "description": "QUOTE"
+        },
+        {
+          "value": "T",
+          "name": "SETTLEMENT_INSTRUCTIONS",
+          "description": "SETTLEMENT_INSTRUCTIONS"
+        },
+        {
+          "value": "V",
+          "name": "MARKET_DATA_REQUEST",
+          "description": "MARKET_DATA_REQUEST"
+        },
+        {
+          "value": "W",
+          "name": "MARKET_DATA_SNAPSHOT_FULL_REFRESH",
+          "description": "MARKET_DATA_SNAPSHOT_FULL_REFRESH"
+        },
+        {
+          "value": "X",
+          "name": "MARKET_DATA_INCREMENTAL_REFRESH",
+          "description": "MARKET_DATA_INCREMENTAL_REFRESH"
+        },
+        {
+          "value": "Y",
+          "name": "MARKET_DATA_REQUEST_REJECT",
+          "description": "MARKET_DATA_REQUEST_REJECT"
+        },
+        {
+          "value": "Z",
+          "name": "QUOTE_CANCEL",
+          "description": "QUOTE_CANCEL"
+        },
+        {
+          "value": "a",
+          "name": "QUOTE_STATUS_REQUEST",
+          "description": "QUOTE_STATUS_REQUEST"
+        },
+        {
+          "value": "b",
+          "name": "MASS_QUOTE_ACKNOWLEDGEMENT",
+          "description": "MASS_QUOTE_ACKNOWLEDGEMENT"
+        },
+        {
+          "value": "c",
+          "name": "SECURITY_DEFINITION_REQUEST",
+          "description": "SECURITY_DEFINITION_REQUEST"
+        },
+        {
+          "value": "d",
+          "name": "SECURITY_DEFINITION",
+          "description": "SECURITY_DEFINITION"
+        },
+        {
+          "value": "e",
+          "name": "SECURITY_STATUS_REQUEST",
+          "description": "SECURITY_STATUS_REQUEST"
+        },
+        {
+          "value": "f",
+          "name": "SECURITY_STATUS",
+          "description": "SECURITY_STATUS"
+        },
+        {
+          "value": "g",
+          "name": "TRADING_SESSION_STATUS_REQUEST",
+          "description": "TRADING_SESSION_STATUS_REQUEST"
+        },
+        {
+          "value": "h",
+          "name": "TRADING_SESSION_STATUS",
+          "description": "TRADING_SESSION_STATUS"
+        },
+        {
+          "value": "i",
+          "name": "MASS_QUOTE",
+          "description": "MASS_QUOTE"
+        },
+        {
+          "value": "j",
+          "name": "BUSINESS_MESSAGE_REJECT",
+          "description": "BusinessMessageReject Message"
+        },
+        {
+          "value": "k",
+          "name": "BID_REQUEST",
+          "description": "BID_REQUEST"
+        },
+        {
+          "value": "l",
+          "name": "BID_RESPONSE",
+          "description": "BID_RESPONSE"
+        },
+        {
+          "value": "m",
+          "name": "LIST_STRIKE_PRICE",
+          "description": "LIST_STRIKE_PRICE"
+        },
+        {
+          "value": "n",
+          "name": "XML_MESSAGE",
+          "description": "XMLnonFIX Message"
+        },
+        {
+          "value": "o",
+          "name": "REGISTRATION_INSTRUCTIONS",
+          "description": "REGISTRATION_INSTRUCTIONS"
+        },
+        {
+          "value": "p",
+          "name": "REGISTRATION_INSTRUCTIONS_RESPONSE",
+          "description": "REGISTRATION_INSTRUCTIONS_RESPONSE"
+        },
+        {
+          "value": "q",
+          "name": "ORDER_MASS_CANCEL_REQUEST",
+          "description": "ORDER_MASS_CANCEL_REQUEST"
+        },
+        {
+          "value": "r",
+          "name": "ORDER_MASS_CANCEL_REPORT",
+          "description": "ORDER_MASS_CANCEL_REPORT"
+        },
+        {
+          "value": "s",
+          "name": "NEW_ORDER_CROSS",
+          "description": "NEW_ORDER_CROSS"
+        },
+        {
+          "value": "t",
+          "name": "CROSS_ORDER_CANCEL_REPLACE_REQUEST",
+          "description": "CROSS_ORDER_CANCEL_REPLACE_REQUEST"
+        },
+        {
+          "value": "u",
+          "name": "CROSS_ORDER_CANCEL_REQUEST",
+          "description": "CROSS_ORDER_CANCEL_REQUEST"
+        },
+        {
+          "value": "v",
+          "name": "SECURITY_TYPE_REQUEST",
+          "description": "SECURITY_TYPE_REQUEST"
+        },
+        {
+          "value": "w",
+          "name": "SECURITY_TYPES",
+          "description": "SECURITY_TYPES"
+        },
+        {
+          "value": "x",
+          "name": "SECURITY_LIST_REQUEST",
+          "description": "SECURITY_LIST_REQUEST"
+        },
+        {
+          "value": "y",
+          "name": "SECURITY_LIST",
+          "description": "SECURITY_LIST"
+        },
+        {
+          "value": "z",
+          "name": "DERIVATIVE_SECURITY_LIST_REQUEST",
+          "description": "DERIVATIVE_SECURITY_LIST_REQUEST"
+        },
+        {
+          "value": "AA",
+          "name": "DERIVATIVE_SECURITY_LIST",
+          "description": "DERIVATIVE_SECURITY_LIST"
+        },
+        {
+          "value": "AB",
+          "name": "NEW_ORDER_MULTILEG",
+          "description": "NEW_ORDER_MULTILEG"
+        },
+        {
+          "value": "AC",
+          "name": "MULTILEG_ORDER_CANCEL_REPLACE",
+          "description": "MULTILEG_ORDER_CANCEL_REPLACE"
+        },
+        {
+          "value": "AD",
+          "name": "TRADE_CAPTURE_REPORT_REQUEST",
+          "description": "TRADE_CAPTURE_REPORT_REQUEST"
+        },
+        {
+          "value": "AE",
+          "name": "TRADE_CAPTURE_REPORT",
+          "description": "TRADE_CAPTURE_REPORT"
+        },
+        {
+          "value": "AF",
+          "name": "ORDER_MASS_STATUS_REQUEST",
+          "description": "ORDER_MASS_STATUS_REQUEST"
+        },
+        {
+          "value": "AG",
+          "name": "QUOTE_REQUEST_REJECT",
+          "description": "QUOTE_REQUEST_REJECT"
+        },
+        {
+          "value": "AH",
+          "name": "RFQ_REQUEST",
+          "description": "RFQ_REQUEST"
+        },
+        {
+          "value": "AI",
+          "name": "QUOTE_STATUS_REPORT",
+          "description": "QUOTE_STATUS_REPORT"
+        },
+        {
+          "value": "AJ",
+          "name": "QUOTE_RESPONSE",
+          "description": "QUOTE_RESPONSE"
+        },
+        {
+          "value": "AK",
+          "name": "CONFIRMATION",
+          "description": "CONFIRMATION"
+        },
+        {
+          "value": "AL",
+          "name": "POSITION_MAINTENANCE_REQUEST",
+          "description": "POSITION_MAINTENANCE_REQUEST"
+        },
+        {
+          "value": "AM",
+          "name": "POSITION_MAINTENANCE_REPORT",
+          "description": "POSITION_MAINTENANCE_REPORT"
+        },
+        {
+          "value": "AN",
+          "name": "REQUEST_FOR_POSITIONS",
+          "description": "REQUEST_FOR_POSITIONS"
+        },
+        {
+          "value": "AO",
+          "name": "REQUEST_FOR_POSITIONS_ACK",
+          "description": "REQUEST_FOR_POSITIONS_ACK"
+        },
+        {
+          "value": "AP",
+          "name": "POSITION_REPORT",
+          "description": "POSITION_REPORT"
+        },
+        {
+          "value": "AQ",
+          "name": "TRADE_CAPTURE_REPORT_REQUEST_ACK",
+          "description": "TRADE_CAPTURE_REPORT_REQUEST_ACK"
+        },
+        {
+          "value": "AR",
+          "name": "TRADE_CAPTURE_REPORT_ACK",
+          "description": "TRADE_CAPTURE_REPORT_ACK"
+        },
+        {
+          "value": "AS",
+          "name": "ALLOCATION_REPORT",
+          "description": "ALLOCATION_REPORT"
+        },
+        {
+          "value": "AT",
+          "name": "ALLOCATION_REPORT_ACK",
+          "description": "ALLOCATION_REPORT_ACK"
+        },
+        {
+          "value": "AU",
+          "name": "CONFIRMATION_ACK",
+          "description": "CONFIRMATION_ACK"
+        },
+        {
+          "value": "AV",
+          "name": "SETTLEMENT_INSTRUCTION_REQUEST",
+          "description": "SETTLEMENT_INSTRUCTION_REQUEST"
+        },
+        {
+          "value": "AW",
+          "name": "ASSIGNMENT_REPORT",
+          "description": "ASSIGNMENT_REPORT"
+        },
+        {
+          "value": "AX",
+          "name": "COLLATERAL_REQUEST",
+          "description": "COLLATERAL_REQUEST"
+        },
+        {
+          "value": "AY",
+          "name": "COLLATERAL_ASSIGNMENT",
+          "description": "COLLATERAL_ASSIGNMENT"
+        },
+        {
+          "value": "AZ",
+          "name": "COLLATERAL_RESPONSE",
+          "description": "COLLATERAL_RESPONSE"
+        },
+        {
+          "value": "CA",
+          "name": "ORDER_MASS_ACTION_REQUEST",
+          "description": "ORDER_MASS_ACTION_REQUEST"
+        },
+        {
+          "value": "CB",
+          "name": "USER_NOTIFICATION",
+          "description": "USER_NOTIFICATION"
+        },
+        {
+          "value": "CC",
+          "name": "STREAM_ASSIGNMENT_REQUEST",
+          "description": "STREAM_ASSIGNMENT_REQUEST"
+        },
+        {
+          "value": "CD",
+          "name": "STREAM_ASSIGNMENT_REPORT",
+          "description": "STREAM_ASSIGNMENT_REPORT"
+        },
+        {
+          "value": "CE",
+          "name": "STREAM_ASSIGNMENT_REPORT_ACK",
+          "description": "STREAM_ASSIGNMENT_REPORT_ACK"
+        },
+        {
+          "value": "BA",
+          "name": "COLLATERAL_REPORT",
+          "description": "COLLATERAL_REPORT"
+        },
+        {
+          "value": "BB",
+          "name": "COLLATERAL_INQUIRY",
+          "description": "COLLATERAL_INQUIRY"
+        },
+        {
+          "value": "BC",
+          "name": "NETWORK_STATUS_REQUEST",
+          "description": "NETWORK_STATUS_REQUEST"
+        },
+        {
+          "value": "BD",
+          "name": "NETWORK_STATUS_RESPONSE",
+          "description": "NETWORK_STATUS_RESPONSE"
+        },
+        {
+          "value": "BE",
+          "name": "USER_REQUEST",
+          "description": "USER_REQUEST"
+        },
+        {
+          "value": "BF",
+          "name": "USER_RESPONSE",
+          "description": "USER_RESPONSE"
+        },
+        {
+          "value": "BG",
+          "name": "COLLATERAL_INQUIRY_ACK",
+          "description": "COLLATERAL_INQUIRY_ACK"
+        },
+        {
+          "value": "BH",
+          "name": "CONFIRMATION_REQUEST",
+          "description": "CONFIRMATION_REQUEST"
+        },
+        {
+          "value": "BI",
+          "name": "TRADING_SESSION_LIST_REQUEST",
+          "description": "TRADING_SESSION_LIST_REQUEST"
+        },
+        {
+          "value": "BJ",
+          "name": "TRADING_SESSION_LIST",
+          "description": "TRADING_SESSION_LIST"
+        },
+        {
+          "value": "BK",
+          "name": "SECURITY_LIST_UPDATE_REPORT",
+          "description": "SECURITY_LIST_UPDATE_REPORT"
+        },
+        {
+          "value": "BL",
+          "name": "ADJUSTED_POSITION_REPORT",
+          "description": "ADJUSTED_POSITION_REPORT"
+        },
+        {
+          "value": "BM",
+          "name": "ALLOCATION_INSTRUCTION_ALERT",
+          "description": "ALLOCATION_INSTRUCTION_ALERT"
+        },
+        {
+          "value": "BN",
+          "name": "EXECUTION_ACKNOWLEDGEMENT",
+          "description": "EXECUTION_ACKNOWLEDGEMENT"
+        },
+        {
+          "value": "BO",
+          "name": "CONTRARY_INTENTION_REPORT",
+          "description": "CONTRARY_INTENTION_REPORT"
+        },
+        {
+          "value": "BP",
+          "name": "SECURITY_DEFINITION_UPDATE_REPORT",
+          "description": "SECURITY_DEFINITION_UPDATE_REPORT"
+        },
+        {
+          "value": "BQ",
+          "name": "SETTLEMENT_OBLIGATION_REPORT",
+          "description": "SETTLEMENT_OBLIGATION_REPORT"
+        },
+        {
+          "value": "BR",
+          "name": "DERIVATIVE_SECURITY_LIST_UPDATE_REPORT",
+          "description": "DERIVATIVE_SECURITY_LIST_UPDATE_REPORT"
+        },
+        {
+          "value": "BS",
+          "name": "TRADING_SESSION_LIST_UPDATER_EPORT",
+          "description": "TRADING_SESSION_LIST_UPDATER_EPORT"
+        },
+        {
+          "value": "BT",
+          "name": "MARKET_DEFINITION_REQUEST",
+          "description": "MARKET_DEFINITION_REQUEST"
+        },
+        {
+          "value": "BU",
+          "name": "MARKET_DEFINITION",
+          "description": "MARKET_DEFINITION"
+        },
+        {
+          "value": "BV",
+          "name": "MARKET_DEFINITION_UPDATE_REPORT",
+          "description": "MARKET_DEFINITION_UPDATE_REPORT"
+        },
+        {
+          "value": "BW",
+          "name": "APPLICATION_MESSAGE_REQUEST",
+          "description": "APPLICATION_MESSAGE_REQUEST"
+        },
+        {
+          "value": "BX",
+          "name": "APPLICATION_MESSAGE_REQUEST_ACK",
+          "description": "APPLICATION_MESSAGE_REQUEST_ACK"
+        },
+        {
+          "value": "BY",
+          "name": "APPLICATION_MESSAGE_REPORT",
+          "description": "APPLICATION_MESSAGE_REPORT"
+        },
+        {
+          "value": "BZ",
+          "name": "ORDER_MASS_ACTION_REPORT",
+          "description": "ORDER_MASS_ACTION_REPORT"
+        }
+      ],
+      "description": "Defines the message type. MsgType(35) is case sensitive."
+    },
+    "36": {
+      "tag": 36,
+      "name": "NewSeqNo",
+      "type": "SeqNum",
+      "description": "New sequence number."
+    },
+    "43": {
+      "tag": 43,
+      "name": "PossDupFlag",
+      "type": "Boolean",
+      "enumValues": [
+        {
+          "value": "N",
+          "name": "ORIGINAL_TRANSMISSION",
+          "description": "Original transmission"
+        },
+        {
+          "value": "Y",
+          "name": "POSSIBLE_DUPLICATE",
+          "description": "Possible duplicate"
+        }
+      ],
+      "description": "Indicates possible retransmission of the message with the sequence number in the MsgSeqNum(34) field."
+    },
+    "45": {
+      "tag": 45,
+      "name": "RefSeqNum",
+      "type": "SeqNum",
+      "description": "Reference message sequence number"
+    },
+    "49": {
+      "tag": 49,
+      "name": "SenderCompID",
+      "type": "String",
+      "description": "Assigned value used to identify peer sending message. SenderCompID(49) and TargetCompID(56) uniquely define a session."
+    },
+    "50": {
+      "tag": 50,
+      "name": "SenderSubID",
+      "type": "String",
+      "description": "Assigned value used to identify specific message originator (desk, trader, etc.)"
+    },
+    "52": {
+      "tag": 52,
+      "name": "SendingTime",
+      "type": "UTCTimestamp",
+      "description": "Time of message transmission (always expressed in UTC (Universal Time Coordinated, also known as \"GMT\")"
+    },
+    "56": {
+      "tag": 56,
+      "name": "TargetCompID",
+      "type": "String",
+      "description": "Assigned value used to identify peer receiving the message. SenderCompID(49) and TargetCompID(56) uniquely define a session."
+    },
+    "57": {
+      "tag": 57,
+      "name": "TargetSubID",
+      "type": "String",
+      "description": "Assigned value used to identify specific individual or unit intended to receive message. \"ADMIN\" reserved for administrative messages not intended for a specific user."
+    },
+    "58": {
+      "tag": 58,
+      "name": "Text",
+      "type": "String",
+      "description": "Free format text string often populated with error messages or warnings."
+    },
+    "89": {
+      "tag": 89,
+      "name": "Signature",
+      "type": "data",
+      "lengthField": 93,
+      "description": "Electronic signature"
+    },
+    "90": {
+      "tag": 90,
+      "name": "SecureDataLen",
+      "type": "Length",
+      "description": "Length in octets of the SecreData(91) field."
+    },
+    "91": {
+      "tag": 91,
+      "name": "SecureData",
+      "type": "data",
+      "lengthField": 90,
+      "description": "Encrypted message contents."
+    },
+    "93": {
+      "tag": 93,
+      "name": "SignatureLength",
+      "type": "Length",
+      "description": "Number of octets in the Signature(89) field."
+    },
+    "95": {
+      "tag": 95,
+      "name": "RawDataLength",
+      "type": "Length",
+      "description": "Number of octets in RawData(96)."
+    },
+    "96": {
+      "tag": 96,
+      "name": "RawData",
+      "type": "data",
+      "lengthField": 95,
+      "description": "Unformatted raw data, can include bitmaps, word processor documents, etc."
+    },
+    "97": {
+      "tag": 97,
+      "name": "PossResend",
+      "type": "Boolean",
+      "enumValues": [
+        {
+          "value": "N",
+          "name": "ORIGINAL_TRANSMISSION",
+          "description": "Original Transmission"
+        },
+        {
+          "value": "Y",
+          "name": "POSSIBLE_RESEND",
+          "description": "Possible Resend"
+        }
+      ],
+      "description": "Indicates that message contain information that may have been sent earlier under another sequence number."
+    },
+    "98": {
+      "tag": 98,
+      "name": "EncryptMethod",
+      "type": "int",
+      "enumValues": [
+        {
+          "value": "0",
+          "name": "NONE_OTHER",
+          "description": "None"
+        },
+        {
+          "value": "1",
+          "name": "PKCS",
+          "description": "PKCS (Proprietary)"
+        },
+        {
+          "value": "2",
+          "name": "DES",
+          "description": "DES (ECB Mode)"
+        },
+        {
+          "value": "3",
+          "name": "PKCS_DES",
+          "description": "PKCS / DES (Proprietary)"
+        },
+        {
+          "value": "4",
+          "name": "PGP_DES",
+          "description": "PGP / DES (Defunct)"
+        },
+        {
+          "value": "5",
+          "name": "PGP_DES_MD5",
+          "description": "PGP / DES-MD5 (See app note on FIX web site)"
+        },
+        {
+          "value": "6",
+          "name": "PEM_DES_MD5",
+          "description": "PEM / DES-MD5 (see app note on FIX web site)"
+        }
+      ],
+      "description": "Method of encryption."
+    },
+    "108": {
+      "tag": 108,
+      "name": "HeartBtInt",
+      "type": "int",
+      "description": "Heartbeat interval (seconds)"
+    },
+    "112": {
+      "tag": 112,
+      "name": "TestReqID",
+      "type": "String",
+      "description": "Identifier included in TestRequest(35=1) message to be returned by the peer in a Heartbeat(35=0) message as a response."
+    },
+    "115": {
+      "tag": 115,
+      "name": "OnBehalfOfCompID",
+      "type": "String",
+      "description": "Assigned value used to identify firm originating message if the message was delivered by a third party i.e. the third party firm identifier would be delivered in the SenderCompID(49) field and the firm originating the message in this field."
+    },
+    "116": {
+      "tag": 116,
+      "name": "OnBehalfOfSubID",
+      "type": "String",
+      "description": "Assigned value used to identify specific message originator (i.e. trader) if the message was delivered by a third party"
+    },
+    "122": {
+      "tag": 122,
+      "name": "OrigSendingTime",
+      "type": "UTCTimestamp",
+      "description": "Original time of message transmission (always expressed in UTC (Universal Time Coordinated, also known as \"GMT\") when transmitting orders as the result of a resend request."
+    },
+    "123": {
+      "tag": 123,
+      "name": "GapFillFlag",
+      "type": "Boolean",
+      "enumValues": [
+        {
+          "value": "N",
+          "name": "SEQUENCE_RESET_IGNORE_MSG_SEQ_NUM",
+          "description": "Sequence Reset, Ignore MsgSeqNum(34)"
+        },
+        {
+          "value": "Y",
+          "name": "GAP_FILL_MESSAGE_MSG_SEQ_NUM_FIELD_VALID",
+          "description": "Gap Fill Message, MsgSeqNum(34) valid and is replacing previously transmitted message."
+        }
+      ],
+      "description": "When set to \"Y\" Indicates that the SequenceReset(35=4) message is replacing session layer or application messages which will not be resent thus filling gaps in the sequence number. When set to \"N\" indicates that the sequence number is being reset to a new value. Any messages with MsgSeqNum(34) less than NewSeqNo(36) will not be resent."
+    },
+    "128": {
+      "tag": 128,
+      "name": "DeliverToCompID",
+      "type": "String",
+      "description": "Assigned value used to identify the firm targeted to receive the message if the message is delivered by a third party i.e. the third party firm identifier would be delivered in the TargetCompID (56) field and the ultimate receiver firm ID in this field."
+    },
+    "129": {
+      "tag": 129,
+      "name": "DeliverToSubID",
+      "type": "String",
+      "description": "Assigned value used to identify specific message recipient (i.e. trader) if the message is delivered by a third party"
+    },
+    "141": {
+      "tag": 141,
+      "name": "ResetSeqNumFlag",
+      "type": "Boolean",
+      "enumValues": [
+        {
+          "value": "N",
+          "name": "NO",
+          "description": "No"
+        },
+        {
+          "value": "Y",
+          "name": "YES_RESET_SEQUENCE_NUMBERS",
+          "description": "Yes, reset sequence numbers"
+        }
+      ],
+      "description": "Indicates that both sides of the FIX session should reset sequence numbers."
+    },
+    "142": {
+      "tag": 142,
+      "name": "SenderLocationID",
+      "type": "String",
+      "description": "Assigned value used to identify specific message originator's location (i.e. geographic location and/or desk, trader)"
+    },
+    "143": {
+      "tag": 143,
+      "name": "TargetLocationID",
+      "type": "String",
+      "description": "Assigned value used to identify specific message destination's location (i.e. geographic location and/or desk, trader)"
+    },
+    "144": {
+      "tag": 144,
+      "name": "OnBehalfOfLocationID",
+      "type": "String",
+      "description": "Assigned value used to identify specific message originator's location (i.e. geographic location and/or desk, trader) if the message was delivered by a third party"
+    },
+    "145": {
+      "tag": 145,
+      "name": "DeliverToLocationID",
+      "type": "String",
+      "description": "Assigned value used to identify specific message recipient's location (i.e. geographic location and/or desk, trader) if the message was delivered by a third party"
+    },
+    "212": {
+      "tag": 212,
+      "name": "XmlDataLen",
+      "type": "Length",
+      "description": "Length in octets of the XmlData(213) field."
+    },
+    "213": {
+      "tag": 213,
+      "name": "XmlData",
+      "type": "data",
+      "lengthField": 212,
+      "description": "Actual XML document (e.g. FIXML, ISO 20022, FpML)."
+    },
+    "347": {
+      "tag": 347,
+      "name": "MessageEncoding",
+      "type": "String",
+      "description": "Type of message encoding used in a message's encoded fields. MessageEncoding(347) must be specified if any fields of datatype *data* are present in the message."
+    },
+    "354": {
+      "tag": 354,
+      "name": "EncodedTextLen",
+      "type": "Length",
+      "description": "Length in octets of EncodedText(355)."
+    },
+    "355": {
+      "tag": 355,
+      "name": "EncodedText",
+      "type": "data",
+      "lengthField": 354,
+      "description": "Encoded representation of the Text(58) field in the encoded format specified via the MessageEncoding(347) field"
+    },
+    "369": {
+      "tag": 369,
+      "name": "LastMsgSeqNumProcessed",
+      "type": "SeqNum",
+      "description": "The last MsgSeqNum(34) value received by the FIX engine and processed by downstream application, such as trading engine or order routing system. Can be specified on every message sent. Useful for detecting a backlog with a counterparty."
+    },
+    "371": {
+      "tag": 371,
+      "name": "RefTagID",
+      "type": "int",
+      "description": "The tag number of the FIX field being referenced."
+    },
+    "372": {
+      "tag": 372,
+      "name": "RefMsgType",
+      "type": "String",
+      "description": "The MsgType(35) of the FIX message being referenced."
+    },
+    "373": {
+      "tag": 373,
+      "name": "SessionRejectReason",
+      "type": "int",
+      "enumValues": [
+        {
+          "value": "0",
+          "name": "INVALID_TAG_NUMBER",
+          "description": "Invalid Tag Number"
+        },
+        {
+          "value": "1",
+          "name": "REQUIRED_TAG_MISSING",
+          "description": "Required Tag Missing"
+        },
+        {
+          "value": "2",
+          "name": "TAG_NOT_DEFINED_FOR_THIS_MESSAGE_TYPE",
+          "description": "Tag not defined for this message type"
+        },
+        {
+          "value": "3",
+          "name": "UNDEFINED_TAG",
+          "description": "Undefined tag"
+        },
+        {
+          "value": "4",
+          "name": "TAG_SPECIFIED_WITHOUT_A_VALUE",
+          "description": "Tag specified without a value"
+        },
+        {
+          "value": "5",
+          "name": "VALUE_IS_INCORRECT",
+          "description": "Value is incorrect (out of range) for this tag"
+        },
+        {
+          "value": "6",
+          "name": "INCORRECT_DATA_FORMAT_FOR_VALUE",
+          "description": "Incorrect data format for value"
+        },
+        {
+          "value": "7",
+          "name": "DECRYPTION_PROBLEM",
+          "description": "Decryption problem"
+        },
+        {
+          "value": "8",
+          "name": "SIGNATURE_PROBLEM",
+          "description": "Signature problem"
+        },
+        {
+          "value": "9",
+          "name": "COMPID_PROBLEM",
+          "description": "CompID problem"
+        },
+        {
+          "value": "10",
+          "name": "SENDINGTIME_ACCURACY_PROBLEM",
+          "description": "SendingTime Accuracy Problem"
+        },
+        {
+          "value": "11",
+          "name": "INVALID_MSGTYPE",
+          "description": "Invalid MsgType"
+        },
+        {
+          "value": "12",
+          "name": "XML_VALIDATION_ERROR",
+          "description": "XML Validation Error"
+        },
+        {
+          "value": "13",
+          "name": "TAG_APPEARS_MORE_THAN_ONCE",
+          "description": "Tag appears more than once"
+        },
+        {
+          "value": "14",
+          "name": "TAG_SPECIFIED_OUT_OF_REQUIRED_ORDER",
+          "description": "Tag specified out of required order"
+        },
+        {
+          "value": "15",
+          "name": "REPEATING_GROUP_FIELDS_OUT_OF_ORDER",
+          "description": "Repeating group fields out of order"
+        },
+        {
+          "value": "16",
+          "name": "INCORRECT_NUMINGROUP_COUNT_FOR_REPEATING_GROUP",
+          "description": "Incorrect NumInGroup count for repeating group"
+        },
+        {
+          "value": "17",
+          "name": "NON_DATA_VALUE_INCLUDES_FIELD_DELIMITER",
+          "description": "Field value contains the field delimiter, the <SOH> character."
+        },
+        {
+          "value": "18",
+          "name": "INVALID_UNSUPPORTED_APPLICATION_VERSION",
+          "description": "Invalid or unsupported Application Version"
+        },
+        {
+          "value": "99",
+          "name": "OTHER",
+          "description": "Other"
+        }
+      ],
+      "description": "Code to identify reason for a session-level Reject message."
+    },
+    "383": {
+      "tag": 383,
+      "name": "MaxMessageSize",
+      "type": "Length",
+      "description": "Maximum number of octets supported for a single message."
+    },
+    "384": {
+      "tag": 384,
+      "name": "NoMsgTypes",
+      "type": "NumInGroup",
+      "isGroupCounter": true,
+      "description": "Number of MsgTypes(35) in repeating group."
+    },
+    "385": {
+      "tag": 385,
+      "name": "MsgDirection",
+      "type": "char",
+      "enumValues": [
+        {
+          "value": "R",
+          "name": "RECEIVE",
+          "description": "Receive"
+        },
+        {
+          "value": "S",
+          "name": "SEND",
+          "description": "Send"
+        }
+      ],
+      "description": "Specifies the direction of the message."
+    },
+    "464": {
+      "tag": 464,
+      "name": "TestMessageIndicator",
+      "type": "Boolean",
+      "enumValues": [
+        {
+          "value": "N",
+          "name": "FALES",
+          "description": "False (production)"
+        },
+        {
+          "value": "Y",
+          "name": "TRUE",
+          "description": "True (test)"
+        }
+      ],
+      "description": "Indicates whether or not this FIX Session is a \"test\" vs. \"production\" connection."
+    },
+    "553": {
+      "tag": 553,
+      "name": "Username",
+      "type": "String",
+      "description": "Userid or username."
+    },
+    "554": {
+      "tag": 554,
+      "name": "Password",
+      "type": "String",
+      "description": "Password or passphrase."
+    },
+    "627": {
+      "tag": 627,
+      "name": "NoHops",
+      "type": "NumInGroup",
+      "isGroupCounter": true,
+      "description": "Number of HopCompID(628) entries in repeating group."
+    },
+    "628": {
+      "tag": 628,
+      "name": "HopCompID",
+      "type": "String",
+      "description": "Assigned value used to identify the third party firm which delivered a specific message either from the firm which originated the message or from another third party (if multiple \"hops\" are performed). It is recommended that this value be the SenderCompID(49) of the third party. Applicable when messages are communicated/re-distributed via third parties which function as service bureaus or \"hubs\". Only applicable if OnBehalfOfCompID(115) is being used."
+    },
+    "629": {
+      "tag": 629,
+      "name": "HopSendingTime",
+      "type": "UTCTimestamp",
+      "description": "Time that HopCompID(628) sent the message. It is recommended that this value be the SendingTime (52) of the message sent by the third party. Applicable when messages are communicated/re-distributed via third parties which function as service bureaus or \"hubs\". Only applicable if OnBehalfOfCompID(115) is being used."
+    },
+    "630": {
+      "tag": 630,
+      "name": "HopRefID",
+      "type": "SeqNum",
+      "description": "Reference identifier assigned by HopCompID(628) associated with the message sent. It is recommended that this value be the MsgSeqNum(34) of the message sent by the third party. Applicable when messages are communicated/re-distributed via third parties which function as service bureaus or \"hubs\". Only applicable if OnBehalfOfCompID(115) is being used."
+    },
+    "789": {
+      "tag": 789,
+      "name": "NextExpectedMsgSeqNum",
+      "type": "SeqNum",
+      "description": "Next expected MsgSeqNum(34) value to be received."
+    },
+    "925": {
+      "tag": 925,
+      "name": "NewPassword",
+      "type": "String",
+      "description": "New Password or passphrase."
+    },
+    "1128": {
+      "tag": 1128,
+      "name": "ApplVerID",
+      "type": "String",
+      "enumValues": [
+        {
+          "value": "0",
+          "name": "FIX27",
+          "description": "FIX27"
+        },
+        {
+          "value": "1",
+          "name": "FIX30",
+          "description": "FIX30"
+        },
+        {
+          "value": "2",
+          "name": "FIX40",
+          "description": "FIX40"
+        },
+        {
+          "value": "3",
+          "name": "FIX41",
+          "description": "FIX41"
+        },
+        {
+          "value": "4",
+          "name": "FIX42",
+          "description": "FIX42"
+        },
+        {
+          "value": "5",
+          "name": "FIX43",
+          "description": "FIX43"
+        },
+        {
+          "value": "6",
+          "name": "FIX44",
+          "description": "FIX44"
+        },
+        {
+          "value": "7",
+          "name": "FIX50",
+          "description": "FIX50"
+        },
+        {
+          "value": "8",
+          "name": "FIX50SP1",
+          "description": "FIX50SP1"
+        },
+        {
+          "value": "9",
+          "name": "FIX50SP2",
+          "description": "FIX50SP2"
+        },
+        {
+          "value": "10",
+          "name": "FIXLatest",
+          "description": "FIXLatest"
+        }
+      ],
+      "description": "Specifies application version."
+    },
+    "1129": {
+      "tag": 1129,
+      "name": "CstmApplVerID",
+      "type": "String",
+      "description": "Custom application version for a FIX service offering."
+    },
+    "1130": {
+      "tag": 1130,
+      "name": "RefApplVerID",
+      "type": "String",
+      "description": "The FIX application layer version."
+    },
+    "1131": {
+      "tag": 1131,
+      "name": "RefCstmApplVerID",
+      "type": "String",
+      "description": "Reference to a custom application version identifier associated with a message."
+    },
+    "1137": {
+      "tag": 1137,
+      "name": "DefaultApplVerID",
+      "type": "String",
+      "description": "Specifies the FIX application version identifier. If DefaultApplVerID(1137) is not present, the default application level is assumed to be FIXLatest (value 10)"
+    },
+    "1156": {
+      "tag": 1156,
+      "name": "ApplExtID",
+      "type": "int",
+      "description": "The extension pack number associated with an application message."
+    },
+    "1400": {
+      "tag": 1400,
+      "name": "EncryptedPasswordMethod",
+      "type": "int",
+      "description": "Enumeration defining the encryption method used to encrypt password fields. At this time there are no encryption methods defined by FIX within the FIX session layer."
+    },
+    "1401": {
+      "tag": 1401,
+      "name": "EncryptedPasswordLen",
+      "type": "Length",
+      "description": "Length in octets of the EncryptedPassword(1402) field."
+    },
+    "1402": {
+      "tag": 1402,
+      "name": "EncryptedPassword",
+      "type": "data",
+      "lengthField": 1401,
+      "description": "Encrypted password - encrypted via the method specified in the field EncryptedPasswordMethod(1400)"
+    },
+    "1403": {
+      "tag": 1403,
+      "name": "EncryptedNewPasswordLen",
+      "type": "Length",
+      "description": "Length of the EncryptedNewPassword(1404) field"
+    },
+    "1404": {
+      "tag": 1404,
+      "name": "EncryptedNewPassword",
+      "type": "data",
+      "lengthField": 1403,
+      "description": "Encrypted new password - encrypted via the method specified in the field EncryptedPasswordMethod(1400)"
+    },
+    "1406": {
+      "tag": 1406,
+      "name": "RefApplExtID",
+      "type": "int",
+      "description": "The extension pack number associated with an application message."
+    },
+    "1407": {
+      "tag": 1407,
+      "name": "DefaultApplExtID",
+      "type": "int",
+      "description": "The extension pack number that is the default for a FIX session."
+    },
+    "1408": {
+      "tag": 1408,
+      "name": "DefaultCstmApplVerID",
+      "type": "String",
+      "description": "The default custom application version ID that is the default for a session."
+    },
+    "1409": {
+      "tag": 1409,
+      "name": "SessionStatus",
+      "type": "int",
+      "enumValues": [
+        {
+          "value": "0",
+          "name": "SESSION_ACTIVE",
+          "description": "Session active"
+        },
+        {
+          "value": "1",
+          "name": "SESSION_PASSWORD_CHANGED",
+          "description": "Session password changed"
+        },
+        {
+          "value": "2",
+          "name": "SESSION_PASSWORD_DUE_TO_EXPIRE",
+          "description": "Session password due to expire"
+        },
+        {
+          "value": "3",
+          "name": "NEW_SESSION_PASSWORD_DOES_NOT_COMPLY_WITH_POLICY",
+          "description": "New session password does not comply with policy"
+        },
+        {
+          "value": "4",
+          "name": "SESSION_LOGOUT_COMPLETE",
+          "description": "Session logout complete"
+        },
+        {
+          "value": "5",
+          "name": "INVALID_USERNAME_OR_PASSWORD",
+          "description": "Invalid username or password"
+        },
+        {
+          "value": "6",
+          "name": "ACCOUNT_LOCKED",
+          "description": "Account locked"
+        },
+        {
+          "value": "7",
+          "name": "LOGONS_ARE_NOT_ALLOWED_AT_THIS_TIME",
+          "description": "Logons are not allowed at this time"
+        },
+        {
+          "value": "8",
+          "name": "PASSWORD_EXPIRED",
+          "description": "Password expired"
+        }
+      ],
+      "description": "Status of a FIX session"
+    },
+    "1410": {
+      "tag": 1410,
+      "name": "DefaultVerIndicator",
+      "type": "Boolean"
+    }
+  },
+  "components": {
+    "Standard Message Header": {
+      "name": "Standard Message Header",
+      "members": [
+        {
+          "kind": "field",
+          "tag": 8,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 9,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 35,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 1128,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1156,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1129,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 49,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 56,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 115,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 128,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 90,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 91,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 34,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 50,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 142,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 57,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 143,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 116,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 144,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 129,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 145,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 43,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 97,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 52,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 122,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 212,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 213,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 347,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 369,
+          "reqd": "N"
+        },
+        {
+          "kind": "component",
+          "name": "HopGrp",
+          "reqd": "N"
+        }
+      ]
+    },
+    "Standard Message Trailer": {
+      "name": "Standard Message Trailer",
+      "members": [
+        {
+          "kind": "field",
+          "tag": 93,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 89,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 10,
+          "reqd": "Y"
+        }
+      ]
+    },
+    "HopGrp": {
+      "name": "HopGrp",
+      "members": [
+        {
+          "kind": "group",
+          "counterTag": 627,
+          "reqd": "N",
+          "members": [
+            {
+              "kind": "field",
+              "tag": 628,
+              "reqd": "N"
+            },
+            {
+              "kind": "field",
+              "tag": 629,
+              "reqd": "N"
+            },
+            {
+              "kind": "field",
+              "tag": 630,
+              "reqd": "N"
+            }
+          ]
+        }
+      ]
+    },
+    "MsgTypeGrp": {
+      "name": "MsgTypeGrp",
+      "members": [
+        {
+          "kind": "group",
+          "counterTag": 384,
+          "reqd": "N",
+          "members": [
+            {
+              "kind": "field",
+              "tag": 372,
+              "reqd": "N"
+            },
+            {
+              "kind": "field",
+              "tag": 385,
+              "reqd": "N"
+            },
+            {
+              "kind": "field",
+              "tag": 1130,
+              "reqd": "N"
+            },
+            {
+              "kind": "field",
+              "tag": 1406,
+              "reqd": "N"
+            },
+            {
+              "kind": "field",
+              "tag": 1131,
+              "reqd": "N"
+            },
+            {
+              "kind": "field",
+              "tag": 1410,
+              "reqd": "N"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "messages": [
+    {
+      "name": "Heartbeat",
+      "msgType": "0",
+      "category": "admin",
+      "members": [
+        {
+          "kind": "component",
+          "name": "Standard Message Header",
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 112,
+          "reqd": "N"
+        },
+        {
+          "kind": "component",
+          "name": "Standard Message Trailer",
+          "reqd": "Y"
+        }
+      ]
+    },
+    {
+      "name": "TestRequest",
+      "msgType": "1",
+      "category": "admin",
+      "members": [
+        {
+          "kind": "component",
+          "name": "Standard Message Header",
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 112,
+          "reqd": "Y"
+        },
+        {
+          "kind": "component",
+          "name": "Standard Message Trailer",
+          "reqd": "Y"
+        }
+      ]
+    },
+    {
+      "name": "ResendRequest",
+      "msgType": "2",
+      "category": "admin",
+      "members": [
+        {
+          "kind": "component",
+          "name": "Standard Message Header",
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 7,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 16,
+          "reqd": "Y"
+        },
+        {
+          "kind": "component",
+          "name": "Standard Message Trailer",
+          "reqd": "Y"
+        }
+      ]
+    },
+    {
+      "name": "Reject",
+      "msgType": "3",
+      "category": "admin",
+      "members": [
+        {
+          "kind": "component",
+          "name": "Standard Message Header",
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 45,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 371,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 372,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1130,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1406,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1131,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 373,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 58,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 354,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 355,
+          "reqd": "N"
+        },
+        {
+          "kind": "component",
+          "name": "Standard Message Trailer",
+          "reqd": "Y"
+        }
+      ]
+    },
+    {
+      "name": "SequenceReset",
+      "msgType": "4",
+      "category": "admin",
+      "members": [
+        {
+          "kind": "component",
+          "name": "Standard Message Header",
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 123,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 36,
+          "reqd": "Y"
+        },
+        {
+          "kind": "component",
+          "name": "Standard Message Trailer",
+          "reqd": "Y"
+        }
+      ]
+    },
+    {
+      "name": "Logout",
+      "msgType": "5",
+      "category": "admin",
+      "members": [
+        {
+          "kind": "component",
+          "name": "Standard Message Header",
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 1409,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 58,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 354,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 355,
+          "reqd": "N"
+        },
+        {
+          "kind": "component",
+          "name": "Standard Message Trailer",
+          "reqd": "Y"
+        }
+      ]
+    },
+    {
+      "name": "Logon",
+      "msgType": "A",
+      "category": "admin",
+      "members": [
+        {
+          "kind": "component",
+          "name": "Standard Message Header",
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 98,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 108,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 95,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 96,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 141,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 789,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 383,
+          "reqd": "N"
+        },
+        {
+          "kind": "component",
+          "name": "MsgTypeGrp",
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 464,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 553,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 554,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 925,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1400,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1401,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1402,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1403,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1404,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1409,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1137,
+          "reqd": "Y"
+        },
+        {
+          "kind": "field",
+          "tag": 1407,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 1408,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 58,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 354,
+          "reqd": "N"
+        },
+        {
+          "kind": "field",
+          "tag": 355,
+          "reqd": "N"
+        },
+        {
+          "kind": "component",
+          "name": "Standard Message Trailer",
+          "reqd": "Y"
+        }
+      ]
+    }
+  ],
+  "coverageGaps": [
+    {
+      "kind": "missing-description",
+      "where": "field 1410",
+      "detail": "DefaultVerIndicator has no Orchestra-sourced description (FIXTSession EP247)."
+    },
+    {
+      "kind": "missing-enum-descriptions",
+      "where": "1 enumerated fields",
+      "detail": "107/175 enum values have no Orchestra-sourced description; most affected: MsgType (107)."
+    }
+  ]
+}

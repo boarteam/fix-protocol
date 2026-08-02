@@ -1,8 +1,9 @@
 import type { ParsedField, ParsedGroupEntry, ParsedMessage } from '../codec/parse';
 import { FLOAT_RE, INT_RE } from '../codec/datatypes';
 import type { Dictionary, ResolvedDatatype } from '../dictionary/Dictionary';
+import { type FixtDictionaries, isFixtDictionaries, resolveFixt } from '../dictionary/fixt';
 import type { FieldDef, MemberRef } from '../dictionary/types';
-import { type FixIssue, issue } from '../errors';
+import { type FixIssue, type FixLayer, issue } from '../errors';
 import {
   CONDITIONALLY_REQUIRED_FIELD_MISSING,
   type ConditionalRule,
@@ -50,6 +51,13 @@ const DATE_RE = /^\d{8}$/;
 const MONTH_YEAR_RE = /^\d{4}(?:0[1-9]|1[0-2])(?:(?:0[1-9]|[12]\d|3[01])|w[1-5])?$/;
 const CURRENCY_RE = /^[A-Za-z]{3}$/;
 const COUNTRY_RE = /^[A-Za-z]{2}$/;
+// FIX 5.0 TZ types: local time with an optional ISO 8601 zone designator (`Z` or `±hh[:mm]`).
+// Seconds and sub-second precision are optional (EPs and venues vary), mirroring the lenient
+// fractional-seconds stance of the UTC types above.
+const TZ_SUFFIX = /(?:Z|[+-]\d{2}(?::\d{2})?)?$/.source;
+const TZ_TIMESTAMP_RE = new RegExp(`^\\d{8}-\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d+)?)?${TZ_SUFFIX}`);
+const TZ_TIME_RE = new RegExp(`^\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d+)?)?${TZ_SUFFIX}`);
+const LANGUAGE_RE = /^[A-Za-z]{2}$/;
 
 /**
  * Datatype names that carry a lexical format the parser keeps verbatim. {@link checkFormat}
@@ -62,10 +70,14 @@ const FORMAT_NAMES = new Set([
   'UTCDateOnly',
   'UTCDate', // FIX 4.2 spelling of UTCDateOnly
   'LocalMktDate',
+  'LocalMktTime', // FIX 5.0: local-market wall-clock time, same lexical shape as UTCTimeOnly
   'month-year',
   'MonthYear', // FIX 4.2 spelling of month-year
   'Currency',
   'Country',
+  'TZTimestamp', // FIX 5.0: timestamp with optional ISO 8601 zone designator
+  'TZTimeOnly', // FIX 5.0: time-of-day with optional ISO 8601 zone designator
+  'Language', // FIX 5.0: ISO 639-1 code (heuristic, like Currency/Country)
 ]);
 
 /**
@@ -110,11 +122,32 @@ const MAX_NESTING_DEPTH = 256;
  * validate-only. Concatenate both lists for the full picture and dedupe by `(refTagID, path)`
  * if the numeric double-report is unwanted.
  *
+ * `dict` may also be a FIXT transport/application pair ({@link FixtDictionaries}). The
+ * message is then validated against the pair's merged view AND every issue is attributed to
+ * a layer ({@link FixIssue.layer}): findings on a session (admin) message or on transport
+ * envelope fields are `session` (answer with a session `Reject(3)`), the rest are
+ * `application` (answer with a `BusinessMessageReject(j)`). Admin messages additionally get
+ * a session-layer purity check — an application-only field on a session message is flagged
+ * `validate/field-outside-layer`, mirroring how FIXT engines validate admin traffic against
+ * the transport dictionary alone. A `resolveApp` hook routes the app dictionary by the
+ * message's `ApplVerID(1128)`, falling back to the pair's `defaultApplVerID`.
+ *
  * @param message A {@link ParsedMessage} (typically from {@link ../codec/parse.parse}).
  * @param dict The dictionary to validate against.
  * @param options See {@link ValidateOptions}.
  */
 export function validate(
+  message: ParsedMessage,
+  dict: Dictionary | FixtDictionaries,
+  options: ValidateOptions = {},
+): FixIssue[] {
+  if (isFixtDictionaries(dict)) {
+    return validateFixt(message, dict, options);
+  }
+  return validateSingle(message, dict, options);
+}
+
+function validateSingle(
   message: ParsedMessage,
   dict: Dictionary,
   options: ValidateOptions = {},
@@ -153,6 +186,96 @@ export function validate(
   runConditionalRules(message, def, dict, rules, issues);
 
   return issues;
+}
+
+// --- FIXT pair mode: merged verdict + layer attribution ----------------------------------
+
+const APPL_VER_ID = 1128;
+const TAG_NOT_DEFINED_FOR_THIS_MESSAGE_TYPE = 2;
+
+/** Validate against the pair's merged view, then attribute each issue to its FIXT layer. */
+function validateFixt(
+  message: ParsedMessage,
+  pair: FixtDictionaries,
+  options: ValidateOptions,
+): FixIssue[] {
+  const resolved = resolveFixt(pair, message.fields[APPL_VER_ID]?.raw);
+  const issues = validateSingle(message, resolved.merged, options);
+
+  const def = message.msgType ? resolved.merged.messageByMsgType(message.msgType) : undefined;
+  if (!def) {
+    // An unknown application MsgType is answered with a BusinessMessageReject(j) — the
+    // session layer only owns the MsgTypes the transport dictionary defines.
+    for (const i of issues) {
+      i.layer = 'application';
+    }
+    return issues;
+  }
+
+  if (def.category === 'admin') {
+    // Session messages are transport-owned: every finding maps to a session Reject(3),
+    // and application-layer fields have no business being on them at all.
+    for (const i of issues) {
+      i.layer = 'session';
+    }
+    checkLayerPurity(message, resolved.transport, resolved.merged, issues);
+    return issues;
+  }
+
+  // Application message: envelope findings belong to the session layer, body findings to
+  // the application layer. Attribution is by tag — the transport's expanded header/trailer
+  // tag set — with whole-message findings (no refTagID) owned by the application layer.
+  for (const i of issues) {
+    i.layer =
+      i.refTagID !== undefined && resolved.envelopeTags.has(i.refTagID) ? 'session' : 'application';
+  }
+  return issues;
+}
+
+/** Flag every application-only field present anywhere on a session (admin) message. */
+function checkLayerPurity(
+  container: Container,
+  transport: Dictionary,
+  merged: Dictionary,
+  issues: FixIssue[],
+  pathPrefix = '',
+  depth = 0,
+): void {
+  if (depth > MAX_NESTING_DEPTH) {
+    return;
+  }
+  for (const pf of Object.values(container.fields)) {
+    // Known to the merged (app) side but not to the transport: an app-layer field on a
+    // session message. A tag neither side knows is parse's `unknown-tag` finding, not ours.
+    if (transport.fieldByTag(pf.tag) === undefined && merged.fieldByTag(pf.tag) !== undefined) {
+      const name = merged.fieldByTag(pf.tag)!.name;
+      issues.push(
+        issue(
+          'validate/field-outside-layer',
+          `Field ${name} (${pf.tag}) is an application-layer field; it is not defined for session messages.`,
+          {
+            refTagID: pf.tag,
+            path: `${pathPrefix}${name}`,
+            sessionRejectReason: TAG_NOT_DEFINED_FOR_THIS_MESSAGE_TYPE,
+            layer: 'session' satisfies FixLayer,
+          },
+        ),
+      );
+    }
+  }
+  for (const [counter, entries] of Object.entries(container.groups)) {
+    const counterName = merged.fieldByTag(Number(counter))?.name ?? counter;
+    entries.forEach((entry, i) =>
+      checkLayerPurity(
+        entry,
+        transport,
+        merged,
+        issues,
+        `${pathPrefix}${counterName}[${i}].`,
+        depth + 1,
+      ),
+    );
+  }
 }
 
 // --- value checks (enum / format / empty / data→Length) --------------------------------
@@ -309,9 +432,20 @@ function checkFormat(
     case 'UTCDate':
     case 'LocalMktDate':
       return DATE_RE.test(raw) ? undefined : badFormat(field, raw, named, path);
+    case 'LocalMktTime':
+      return UTC_TIME_RE.test(raw) ? undefined : badFormat(field, raw, 'LocalMktTime', path);
+    case 'TZTimestamp':
+      return TZ_TIMESTAMP_RE.test(raw) ? undefined : badFormat(field, raw, 'TZTimestamp', path);
+    case 'TZTimeOnly':
+      return TZ_TIME_RE.test(raw) ? undefined : badFormat(field, raw, 'TZTimeOnly', path);
     case 'month-year':
     case 'MonthYear':
       return MONTH_YEAR_RE.test(raw) ? undefined : badFormat(field, raw, named, path);
+    case 'Language':
+      // ISO 639-1 is a heuristic, not a closed set in the dictionary: warn, don't reject.
+      return LANGUAGE_RE.test(raw)
+        ? undefined
+        : badFormat(field, raw, 'Language (ISO 639-1)', path, 'warning');
     case 'Currency':
       // ISO 4217 is a heuristic, not a closed set in the dictionary: warn, don't reject.
       return CURRENCY_RE.test(raw)

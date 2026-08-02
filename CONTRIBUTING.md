@@ -37,10 +37,11 @@ Before opening a PR, the full gate should be green:
 pnpm -r build && pnpm -r typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm check:bundle
 ```
 
-## The dictionary is generated — never hand-edit it
+## The dictionaries are generated — never hand-edit them
 
-`packages/fix-dict-fix44/src/dictionary.json` and `index.ts` are **generated** from the FIX 4.4
-specification and committed here as data. Do not edit them by hand.
+Every dict package's `src/dictionary.json` and `src/index.ts` — in `fix-dict-fix44`,
+`fix-dict-fix42`, `fix-dict-fix50sp2`, and `fix-dict-fixt11` — is **generated** from the
+corresponding FIX specification sources and committed here as data. Do not edit them by hand.
 
 The generator is maintained alongside the FIX spec, outside this repository. To change the
 dictionary, regenerate it with that tooling and commit the reconciled result — open an issue if
@@ -48,8 +49,9 @@ you need a regeneration you can't produce yourself.
 
 ## Changesets (versioning)
 
-Published packages (`@boarteam/fix`, `@boarteam/fix-dict-fix44`) use
-[Changesets](https://github.com/changesets/changesets). If your change affects either, add one:
+Published packages (`@boarteam/fix` and the `@boarteam/fix-dict-*` dictionaries — `fix44`,
+`fix42`, `fix50sp2`, `fixt11`) use
+[Changesets](https://github.com/changesets/changesets). If your change affects any of them, add one:
 
 ```bash
 pnpm changeset

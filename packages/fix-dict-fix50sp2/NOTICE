@@ -1,0 +1,25 @@
+@boarteam/fix-dict-fix50sp2
+Copyright 2026 Boar Team
+
+This product includes software developed at Boar Team.
+
+The FIX 5.0 SP2 / FIXT.1.1 dictionary structure shipped in
+@boarteam/fix-dict-fix50sp2 (tag numbers, field and enum names, datatypes,
+message and component structure, and required-ness) is generated from the
+QuickFIX/J project's FIX50SP2.xml and FIXT11.xml data dictionaries
+(https://github.com/quickfix-j/quickfixj), distributed under the QuickFIX
+Software License. This product includes software developed by
+quickfixengine.org (http://www.quickfixengine.org/) and the QuickFIX/J project.
+
+Field, enum, and datatype descriptions are derived from the FIX Orchestra
+"orchestrations" repository (OrchestraFIXLatest.xml and FIXTSession.xml),
+© Copyright FIX Protocol Limited, published by FIX Trading Community under the
+Apache License, Version 2.0 (per the repository's LICENSE and README grant),
+and reshaped into this dictionary's JSON form. See
+https://github.com/FIXTradingCommunity/orchestrations.
+
+Portions of the FIX specification are "Copyright FIX Protocol Limited". "FIX"
+and "Financial Information eXchange" are trademarks of FIX Protocol Limited.
+This project is an independent open-source implementation and is not affiliated
+with, sponsored by, or endorsed by FIX Protocol Limited, the QuickFIX project,
+or the QuickFIX/J project.

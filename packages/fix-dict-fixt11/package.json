@@ -1,0 +1,58 @@
+{
+  "name": "@boarteam/fix-dict-fixt11",
+  "version": "0.0.0",
+  "description": "FIXT.1.1 transport-layer dictionary (session envelope + admin messages) for @boarteam/fix. The session half of the transport/application split introduced by FIX 5.0; generated from the QuickFIX/J FIXT11 data dictionary.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "THIRD-PARTY-NOTICES.txt"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "fix",
+    "fix-protocol",
+    "fixt",
+    "fixt11",
+    "session-layer",
+    "dictionary",
+    "data-dictionary"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boarteam/fix-protocol.git",
+    "directory": "packages/fix-dict-fixt11"
+  },
+  "homepage": "https://github.com/boarteam/fix-protocol#readme",
+  "bugs": "https://github.com/boarteam/fix-protocol/issues",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "@boarteam/fix": "workspace:^"
+  },
+  "devDependencies": {
+    "@boarteam/fix": "workspace:*",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}
