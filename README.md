@@ -383,8 +383,8 @@ What it owns instead: decoding and validating messages you already have, encodin
 | Package                                                                                    | Version | What it is                                                                                     |
 | ------------------------------------------------------------------------------------------ | ------- | ---------------------------------------------------------------------------------------------- |
 | [`@boarteam/fix`](https://www.npmjs.com/package/@boarteam/fix)                             | 0.4.0   | The engine: tokenize / parse / validate / encode + the dictionary runtime + the FIXT pair API. |
-| [`@boarteam/fix-dict-fix44`](https://www.npmjs.com/package/@boarteam/fix-dict-fix44)       | 2.0.1   | Full FIX 4.4 dictionary as data. Peer-depends on `@boarteam/fix`.                              |
-| [`@boarteam/fix-dict-fix42`](https://www.npmjs.com/package/@boarteam/fix-dict-fix42)       | 2.0.1   | Full FIX 4.2 dictionary as data. Peer-depends on `@boarteam/fix`.                              |
+| [`@boarteam/fix-dict-fix44`](https://www.npmjs.com/package/@boarteam/fix-dict-fix44)       | 3.0.0   | Full FIX 4.4 dictionary as data. Peer-depends on `@boarteam/fix`.                              |
+| [`@boarteam/fix-dict-fix42`](https://www.npmjs.com/package/@boarteam/fix-dict-fix42)       | 3.0.0   | Full FIX 4.2 dictionary as data. Peer-depends on `@boarteam/fix`.                              |
 | [`@boarteam/fix-dict-fix50sp2`](https://www.npmjs.com/package/@boarteam/fix-dict-fix50sp2) | 1.0.0   | FIX 5.0 SP2 over FIXT.1.1, self-contained (envelope + session + app messages).                 |
 | [`@boarteam/fix-dict-fixt11`](https://www.npmjs.com/package/@boarteam/fix-dict-fixt11)     | 1.0.0   | FIXT.1.1 transport-only dictionary (envelope + session messages), for the pair API.            |
 
