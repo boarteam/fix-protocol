@@ -1,6 +1,6 @@
 {
   "name": "@boarteam/fix-dict-fixt11",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "FIXT.1.1 transport-layer dictionary (session envelope + admin messages) for @boarteam/fix. The session half of the transport/application split introduced by FIX 5.0; generated from the QuickFIX/J FIXT11 data dictionary.",
   "license": "Apache-2.0",
   "type": "module",

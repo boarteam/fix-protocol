@@ -1,5 +1,12 @@
 # @boarteam/fix-dict-fix50sp2
 
+## 2.0.0
+
+### Patch Changes
+
+- Updated dependencies [769679e]
+  - @boarteam/fix@0.5.0
+
 ## 1.0.0
 
 ### Major Changes
