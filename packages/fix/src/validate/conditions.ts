@@ -37,7 +37,7 @@ export interface ConditionalContext {
  * dictionary that lacks the fields it references (return `[]`), so a rule written for FIX
  * 4.4 is harmless on a custom dialect.
  *
- * Supply extra rules via {@link ../validate/validate.ValidateOptions.conditionalRules}.
+ * Supply extra rules via {@link ValidateOptions.conditionalRules}.
  */
 export type ConditionalRule = (ctx: ConditionalContext) => FixIssue[];
 

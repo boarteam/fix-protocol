@@ -8,6 +8,7 @@ function toBytes(input: string | Uint8Array): Uint8Array {
   return typeof input === 'string' ? encoder.encode(input) : input;
 }
 
+/** Options for {@link splitMessages} and {@link scanFields}. */
 export interface FrameOptions {
   /** Field separator. Defaults to {@link SOH}. Must be a single byte (e.g. `SOH` or `'|'`). */
   soh?: string;

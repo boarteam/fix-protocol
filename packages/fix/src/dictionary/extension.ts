@@ -3,11 +3,11 @@
  * (fields, enum values, components, messages, and placements into existing structures)
  * that drives BOTH layers of dictionary extensibility:
  *
- * - the runtime merge — {@link ./extendDictionary.extendDictionary} applies the
- *   declaration to a {@link ./types.DictionaryJSON} and reports `extend/*` issues;
+ * - the runtime merge — {@link extendDictionary} applies the
+ *   declaration to a {@link DictionaryJSON} and reports `extend/*` issues;
  * - the typing bridge — {@link tagsOf}/{@link msgTypesOf} derive literal `name → tag` /
  *   `name → msgType` maps from the same declaration, ready for
- *   {@link ./extendTags.extendTags}/{@link ./extendTags.invertTags}.
+ *   {@link extendTags}/{@link invertTags}.
  *
  * Everything is keyed by NAME (tags live in values): the record shape makes the
  * key/tag-mismatch and duplicate-name-in-extension authoring errors unrepresentable,
@@ -66,6 +66,7 @@ export type MemberSpec =
 
 /** Members to add to one repeating group's entry body. */
 export interface GroupExtension {
+  /** The members to add to the entry body, in order. */
   readonly append: readonly MemberSpec[];
   /**
    * Anchor member (field/component/group-counter name) to insert immediately AFTER;
@@ -165,6 +166,7 @@ export type MsgTypesOf<E extends DictionaryExtension> = Readonly<{
  * widened before reaching {@link defineExtension}. Not meant to be used directly.
  */
 export interface WidenedExtensionError {
+  /** The remedy, carried in the property NAME so it reads in full inside editor hovers. */
   readonly 'ERROR: extension literals were widened': 'declare the extension inline at the defineExtension call site (or as const) so tags stay literal types like 1007';
 }
 

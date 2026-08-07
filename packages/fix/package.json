@@ -21,7 +21,7 @@
     "NOTICE"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node scripts/emit-api.mjs",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [

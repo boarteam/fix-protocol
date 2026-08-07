@@ -29,6 +29,7 @@ export class Dictionary {
   // `null` caches a known-miss so an unknown datatype name is not re-resolved each call.
   readonly #resolvedDatatypes = new Map<string, ResolvedDatatype | null>();
 
+  /** Build the index over `json`. Prefer {@link loadDictionary}, which reads better at call sites. */
   constructor(json: DictionaryJSON) {
     this.json = json;
     for (const field of Object.values(json.fields)) {
@@ -264,7 +265,7 @@ function hasOwn(obj: object, key: string): boolean {
 
 /**
  * Build a {@link Dictionary} runtime index from its JSON form. Does not validate the
- * JSON; run {@link ./validateDictionary.validateDictionary} first if the source is
+ * JSON; run {@link validateDictionary} first if the source is
  * untrusted.
  */
 export function loadDictionary(json: DictionaryJSON): Dictionary {

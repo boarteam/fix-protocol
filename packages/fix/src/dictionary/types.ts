@@ -6,7 +6,7 @@
  * from a spec source) and the `@boarteam/fix` engine (which runs over it). It is pure
  * data — no methods, no classes — so it round-trips through `JSON.stringify`/`parse` and
  * can be authored, diffed, and shipped as a `.json`/`.ts` file. The runtime index built
- * over it lives in {@link ./Dictionary}.
+ * over it lives in {@link Dictionary}.
  *
  * Design notes:
  * - Repeating-group nesting is represented structurally ({@link GroupMember.members}),
@@ -88,6 +88,7 @@ export interface FieldDef {
 
 /** A plain field reference within a message, component, or group body. */
 export interface FieldMember {
+  /** Discriminant: a plain field reference. */
   kind: 'field';
   /** The referenced {@link FieldDef.tag}. */
   tag: number;
@@ -97,6 +98,7 @@ export interface FieldMember {
 
 /** A reference to a reusable component block; the runtime expands it in place. */
 export interface ComponentMember {
+  /** Discriminant: a component reference. */
   kind: 'component';
   /** The referenced {@link ComponentDef.name}. */
   name: string;
@@ -105,11 +107,13 @@ export interface ComponentMember {
 }
 
 /**
- * A repeating group: a `NumInGroup` counter field ({@link counterTag}) followed by
- * {@link count} repetitions of {@link members}. The delimiter (first) field is not stored
- * — the runtime resolves it by walking {@link members} (through any leading component).
+ * A repeating group: a `NumInGroup` counter field ({@link counterTag}) followed by as many
+ * repetitions of {@link members} as the counter's wire value declares. The delimiter
+ * (first) field is not stored — the runtime resolves it by walking {@link members}
+ * (through any leading component).
  */
 export interface GroupMember {
+  /** Discriminant: a repeating group. */
   kind: 'group';
   /** The counter field's tag (a `NumInGroup` field). */
   counterTag: number;

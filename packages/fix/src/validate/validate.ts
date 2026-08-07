@@ -92,7 +92,7 @@ const MAX_NESTING_DEPTH = 256;
  * Validate a parsed FIX message against a dictionary, returning diagnostics as data. **Never
  * throws** — every conformance problem is a returned {@link FixIssue}.
  *
- * The checks are the dictionary-conformance complement to {@link ../codec/parse.parse}, which
+ * The checks are the dictionary-conformance complement to {@link parse}, which
  * owns wire decoding (framing, group reconstruction, numeric/Boolean coercion, group-count
  * consistency). `validate` adds, over the structured message:
  * - **presence** — every required (`reqd: 'Y'`) field/group is present, gated by its
@@ -132,7 +132,7 @@ const MAX_NESTING_DEPTH = 256;
  * the transport dictionary alone. A `resolveApp` hook routes the app dictionary by the
  * message's `ApplVerID(1128)`, falling back to the pair's `defaultApplVerID`.
  *
- * @param message A {@link ParsedMessage} (typically from {@link ../codec/parse.parse}).
+ * @param message A {@link ParsedMessage} (typically from {@link parse}).
  * @param dict The dictionary to validate against.
  * @param options See {@link ValidateOptions}.
  */

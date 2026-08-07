@@ -28,3 +28,8 @@ dict (FIXT.1.1 envelope + session messages + base-SP2 app messages, `applVerID: 
 `fix-dict-fixt11` is the transport-only FIXT.1.1 dict.
 Gates: `pnpm -r typecheck`, `pnpm test`, `pnpm lint`, `node scripts/check-bundle.mjs`
 (browser-safety + bundle-size tripwires), and the FIX42 + FIX50SP2 drift crosschecks.
+`packages/fix` build also emits `dist/api.json` and holds the public surface to its
+contract (doc coverage, `{@link}` integrity, curated grouping, since-map, API diff vs
+the last release — see `docs/api-json.md`); an API-changing PR needs a changeset of
+the matching level, and a new export must be placed in `packages/fix/api/groups.json`
+and `api/since.json` (`"next"`).

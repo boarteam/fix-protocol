@@ -25,6 +25,7 @@ export interface EncodeMessage {
   groups?: Record<number, GroupEntry[]>;
 }
 
+/** Options for {@link encode}. */
 export interface EncodeOptions {
   /** Field separator for the output. Defaults to {@link SOH}. */
   soh?: string;

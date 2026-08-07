@@ -1,0 +1,136 @@
+[
+  {
+    "id": "engine",
+    "title": "Engine & constants",
+    "symbols": ["createFixEngine", "FixEngine", "EngineOptions", "SOH", "VERSION"]
+  },
+  {
+    "id": "parse",
+    "title": "Parsing",
+    "symbols": [
+      "parse",
+      "parseAll",
+      "ParseOptions",
+      "ParseResult",
+      "ParsedMessage",
+      "ParsedField",
+      "ParsedGroupEntry",
+      "toEncodeMessage",
+      "decodeValue",
+      "DecodeResult",
+      "DecodedValue",
+      "tokenize",
+      "TokenizeOptions",
+      "Token",
+      "scanFields",
+      "splitMessages",
+      "FrameOptions"
+    ]
+  },
+  {
+    "id": "validate",
+    "title": "Validation & issues",
+    "symbols": [
+      "validate",
+      "ValidateOptions",
+      "FixIssue",
+      "FixSeverity",
+      "FixLayer",
+      "KnownIssueCode",
+      "ConditionalRule",
+      "ConditionalContext",
+      "DEFAULT_CONDITIONAL_RULES"
+    ]
+  },
+  {
+    "id": "encode",
+    "title": "Encoding",
+    "symbols": [
+      "encode",
+      "EncodeMessage",
+      "EncodeOptions",
+      "GroupEntry",
+      "FieldValue",
+      "calculateChecksum",
+      "bodyLength"
+    ]
+  },
+  {
+    "id": "typed-messages",
+    "title": "Typed messages",
+    "symbols": [
+      "createMessage",
+      "createImmutableMessage",
+      "messageFactory",
+      "MessageFactory",
+      "MessageView",
+      "MutableMessage",
+      "ImmutableMessage",
+      "MessageInit",
+      "FieldInit",
+      "Envelope",
+      "UntypedBody",
+      "messageTypeGuard",
+      "MessageTypeGuard",
+      "MessageOf"
+    ]
+  },
+  {
+    "id": "dictionaries",
+    "title": "Dictionaries",
+    "symbols": [
+      "DictionaryJSON",
+      "Dictionary",
+      "loadDictionary",
+      "validateDictionary",
+      "FixtDictionaries",
+      "isFixtDictionaries",
+      "mergeFixtDictionaries",
+      "FieldDef",
+      "DataTypeDef",
+      "ResolvedDatatype",
+      "EnumValue",
+      "ComponentDef",
+      "MessageDef",
+      "MessageCategory",
+      "MemberRef",
+      "FieldMember",
+      "ComponentMember",
+      "GroupMember",
+      "Reqd",
+      "BaseType",
+      "CoverageGap"
+    ]
+  },
+  {
+    "id": "extend",
+    "title": "Dictionary extensions",
+    "symbols": [
+      "defineExtension",
+      "extendDictionary",
+      "ExtendResult",
+      "DictionaryExtension",
+      "ExtensionFieldDef",
+      "ExtensionEnumValue",
+      "MemberSpec",
+      "GroupExtension",
+      "MessageExtension",
+      "NewMessageSpec",
+      "ComponentExtension",
+      "tagsOf",
+      "msgTypesOf",
+      "TagsOf",
+      "MsgTypesOf",
+      "extendTags",
+      "extendMsgTypes",
+      "invertTags",
+      "invertMsgTypes",
+      "ExtendTags",
+      "ExtendMsgTypes",
+      "InvertTags",
+      "InvertMsgTypes",
+      "GuardWidening",
+      "WidenedExtensionError"
+    ]
+  }
+]

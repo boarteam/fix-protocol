@@ -1,6 +1,6 @@
 /**
  * A typed, self-rendering Message object — the ergonomic, statically-typed counterpart to
- * the low-level {@link ./codec/encode.encode} primitive.
+ * the low-level {@link encode} primitive.
  *
  * Where `encode(EncodeMessage)` takes an untyped, tag-keyed bag (any tag may go anywhere,
  * enum/datatype correctness caught only later by `validate`), a Message is created for a
@@ -9,7 +9,7 @@
  * generated `MessageBodies`). It:
  *
  * 1. statically knows that message's settable fields/groups and their value types;
- * 2. renders itself to framed wire by invoking {@link ./codec/encode.encode} internally —
+ * 2. renders itself to framed wire by invoking {@link encode} internally —
  *    **byte-identical** to a hand-built `encode` of equivalent content (it forks none of
  *    the ordering/framing/checksum logic);
  * 3. doubles as a typed read model ({@link MessageView.get}/{@link MessageView.has}), so
@@ -85,7 +85,9 @@ export type FieldInit<V> = V extends readonly (infer E extends object)[]
  * conditional session fields (`SenderSubID`, …) can be passed straight through.
  */
 export interface Envelope {
+  /** A header/trailer field addressed by its spec NAME, e.g. `SenderCompID`. */
   readonly [field: string]: FieldValue | null | undefined;
+  /** The same field addressed by its numeric TAG, e.g. `49`. */
   readonly [tag: number]: FieldValue | null | undefined;
 }
 
@@ -102,7 +104,7 @@ export interface MessageView<B extends object> {
   has(name: keyof B & string): boolean;
   /**
    * The tag-keyed {@link EncodeMessage} this body renders to (the escape hatch to the
-   * low-level {@link ./codec/encode.encode} primitive). Framing/envelope fields are not
+   * low-level {@link encode} primitive). Framing/envelope fields are not
    * included — they are supplied to {@link render}.
    */
   toEncodeMessage(): EncodeMessage;
@@ -110,7 +112,7 @@ export interface MessageView<B extends object> {
   toJSON(): Partial<MessageInit<B>>;
   /**
    * Render to a complete, framed FIX string. The body is merged with the supplied
-   * {@link Envelope} and passed to {@link ./codec/encode.encode}: fields land in their
+   * {@link Envelope} and passed to {@link encode}: fields land in their
    * dictionary-prescribed positions (envelope fields in the header, body fields in the
    * body), so the output is byte-identical to `encode` of equivalent content. On a tag
    * collision the body value wins over the envelope.

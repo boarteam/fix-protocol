@@ -9,7 +9,7 @@ const BASE_TYPES = new Set<BaseType>(['int', 'float', 'char', 'String', 'data'])
  * real counter fields with a resolvable delimiter, enum values are unique, and the
  * datatype derivation tree is acyclic. Returns a (possibly empty) list of {@link FixIssue}s
  * — it **never throws**, even on a corrupt/untrusted object missing whole collections, so
- * it is safe to run as the gate before {@link ./Dictionary.loadDictionary}. An empty
+ * it is safe to run as the gate before {@link loadDictionary}. An empty
  * result means the dictionary is internally consistent and safe to load.
  *
  * This checks *internal consistency*, not conformance to any particular FIX version.
