@@ -145,6 +145,16 @@ pair pre-merged (a drop-in for `createFixEngine(dictionary)`), and
 `mergeFixtDictionaries(transport, app)` builds the same shape from your own app-layer
 dialect.
 
+## API reference & `dist/api.json`
+
+Every export is documented, signature by signature, in the generated
+[API reference](https://boar.team/fix/docs/api/), and the tarball ships the model it is
+rendered from: `dist/api.json` — export names, verbatim signatures, doc comments, source
+positions, and the version each export first shipped in. The emitter gates this package's
+own CI (doc coverage, `{@link}` integrity, SemVer-checked API diffs), so the model is held
+to the code, not the other way round. Schema and guarantees:
+[`docs/api-json.md`](https://github.com/boarteam/fix-protocol/blob/main/docs/api-json.md).
+
 ## License
 
 [Apache-2.0](./LICENSE) © Boar Team. See [`NOTICE`](./NOTICE). "FIX" is a trademark of FIX

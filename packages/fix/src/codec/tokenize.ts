@@ -13,6 +13,7 @@ export const SOH = '\x01';
  */
 export type Token = [tag: number, value: string];
 
+/** Options for {@link tokenize}. */
 export interface TokenizeOptions {
   /** Field separator. Defaults to {@link SOH}. Pass `'|'` to read pipe-delimited logs. */
   soh?: string;

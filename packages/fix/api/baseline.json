@@ -1,0 +1,2303 @@
+{
+  "note": "Structural API of the last published release — regenerate with scripts/refresh-api-baseline.mjs after each release.",
+  "version": "0.4.0",
+  "symbols": [
+    {
+      "id": "BaseType",
+      "kind": "type",
+      "signature": "type BaseType = 'int' | 'float' | 'char' | 'String' | 'data'",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": ["int", "float", "char", "String", "data"]
+    },
+    {
+      "id": "ComponentDef",
+      "kind": "interface",
+      "signature": "interface ComponentDef",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "name",
+          "kind": "property",
+          "optional": false,
+          "text": "name: string"
+        },
+        {
+          "name": "members",
+          "kind": "property",
+          "optional": false,
+          "text": "members: MemberRef[]"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "ComponentExtension",
+      "kind": "type",
+      "signature": "type ComponentExtension = {\n    readonly members: readonly MemberSpec[];\n} | {\n    readonly append?: readonly MemberSpec[];\n    readonly after?: string;\n    readonly groups?: Readonly<Record<string, GroupExtension>>;\n}",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "ComponentMember",
+      "kind": "interface",
+      "signature": "interface ComponentMember",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "kind",
+          "kind": "property",
+          "optional": false,
+          "text": "kind: 'component'"
+        },
+        {
+          "name": "name",
+          "kind": "property",
+          "optional": false,
+          "text": "name: string"
+        },
+        {
+          "name": "reqd",
+          "kind": "property",
+          "optional": false,
+          "text": "reqd: Reqd"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "ConditionalContext",
+      "kind": "interface",
+      "signature": "interface ConditionalContext",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "message",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly message: ParsedMessage"
+        },
+        {
+          "name": "def",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly def: MessageDef"
+        },
+        {
+          "name": "dict",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly dict: Dictionary"
+        },
+        {
+          "name": "field",
+          "kind": "method",
+          "optional": false,
+          "text": "field(tag: number): string | undefined"
+        },
+        {
+          "name": "has",
+          "kind": "method",
+          "optional": false,
+          "text": "has(tag: number): boolean"
+        },
+        {
+          "name": "fieldByName",
+          "kind": "method",
+          "optional": false,
+          "text": "fieldByName(name: string): string | undefined"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "ConditionalRule",
+      "kind": "type",
+      "signature": "type ConditionalRule = (ctx: ConditionalContext) => FixIssue[]",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "CoverageGap",
+      "kind": "interface",
+      "signature": "interface CoverageGap",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "kind",
+          "kind": "property",
+          "optional": false,
+          "text": "kind: string"
+        },
+        {
+          "name": "where",
+          "kind": "property",
+          "optional": false,
+          "text": "where: string"
+        },
+        {
+          "name": "detail",
+          "kind": "property",
+          "optional": false,
+          "text": "detail: string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "DEFAULT_CONDITIONAL_RULES",
+      "kind": "const",
+      "signature": "const DEFAULT_CONDITIONAL_RULES: readonly ConditionalRule[]",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "DataTypeDef",
+      "kind": "interface",
+      "signature": "interface DataTypeDef",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "name",
+          "kind": "property",
+          "optional": false,
+          "text": "name: string"
+        },
+        {
+          "name": "base",
+          "kind": "property",
+          "optional": false,
+          "text": "base: BaseType"
+        },
+        {
+          "name": "parent",
+          "kind": "property",
+          "optional": true,
+          "text": "parent?: string"
+        },
+        {
+          "name": "formatPattern",
+          "kind": "property",
+          "optional": true,
+          "text": "formatPattern?: string"
+        },
+        {
+          "name": "lengthPrefixed",
+          "kind": "property",
+          "optional": true,
+          "text": "lengthPrefixed?: boolean"
+        },
+        {
+          "name": "multiValueDelimiter",
+          "kind": "property",
+          "optional": true,
+          "text": "multiValueDelimiter?: string"
+        },
+        {
+          "name": "description",
+          "kind": "property",
+          "optional": true,
+          "text": "description?: string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "DecodeResult",
+      "kind": "interface",
+      "signature": "interface DecodeResult",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "value",
+          "kind": "property",
+          "optional": false,
+          "text": "value: DecodedValue"
+        },
+        {
+          "name": "issues",
+          "kind": "property",
+          "optional": false,
+          "text": "issues: FixIssue[]"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "DecodedValue",
+      "kind": "type",
+      "signature": "type DecodedValue = number | boolean | string | string[]",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "Dictionary",
+      "kind": "class",
+      "signature": "class Dictionary",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "json",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly json: DictionaryJSON"
+        },
+        {
+          "name": "constructor",
+          "kind": "constructor",
+          "optional": false,
+          "text": "constructor(json: DictionaryJSON)"
+        },
+        {
+          "name": "version",
+          "kind": "get",
+          "optional": false,
+          "text": "get version(): string"
+        },
+        {
+          "name": "beginString",
+          "kind": "get",
+          "optional": false,
+          "text": "get beginString(): string"
+        },
+        {
+          "name": "applVerID",
+          "kind": "get",
+          "optional": false,
+          "text": "get applVerID(): string | undefined"
+        },
+        {
+          "name": "fieldByTag",
+          "kind": "method",
+          "optional": false,
+          "text": "fieldByTag(tag: number): FieldDef | undefined"
+        },
+        {
+          "name": "fieldByName",
+          "kind": "method",
+          "optional": false,
+          "text": "fieldByName(name: string): FieldDef | undefined"
+        },
+        {
+          "name": "messageByMsgType",
+          "kind": "method",
+          "optional": false,
+          "text": "messageByMsgType(msgType: string): MessageDef | undefined"
+        },
+        {
+          "name": "messageByName",
+          "kind": "method",
+          "optional": false,
+          "text": "messageByName(name: string): MessageDef | undefined"
+        },
+        {
+          "name": "component",
+          "kind": "method",
+          "optional": false,
+          "text": "component(name: string): ComponentDef | undefined"
+        },
+        {
+          "name": "datatype",
+          "kind": "method",
+          "optional": false,
+          "text": "datatype(name: string): DataTypeDef | undefined"
+        },
+        {
+          "name": "resolveDatatype",
+          "kind": "method",
+          "optional": false,
+          "text": "resolveDatatype(name: string): ResolvedDatatype | undefined"
+        },
+        {
+          "name": "isGroupCounter",
+          "kind": "method",
+          "optional": false,
+          "text": "isGroupCounter(tag: number): boolean"
+        },
+        {
+          "name": "groupDelimiterTag",
+          "kind": "method",
+          "optional": false,
+          "text": "groupDelimiterTag(group: GroupMember): number | undefined"
+        },
+        {
+          "name": "allowedTags",
+          "kind": "method",
+          "optional": false,
+          "text": "allowedTags(msgType: string): ReadonlySet<number>"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "DictionaryExtension",
+      "kind": "interface",
+      "signature": "interface DictionaryExtension",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "id",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly id?: string"
+        },
+        {
+          "name": "fields",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly fields?: Readonly<Record<string, ExtensionFieldDef>>"
+        },
+        {
+          "name": "enums",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly enums?: Readonly<Record<string, readonly ExtensionEnumValue[]>>"
+        },
+        {
+          "name": "components",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly components?: Readonly<Record<string, ComponentExtension>>"
+        },
+        {
+          "name": "messages",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly messages?: Readonly<Record<string, MessageExtension | NewMessageSpec>>"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "DictionaryJSON",
+      "kind": "interface",
+      "signature": "interface DictionaryJSON",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "version",
+          "kind": "property",
+          "optional": false,
+          "text": "version: string"
+        },
+        {
+          "name": "beginString",
+          "kind": "property",
+          "optional": false,
+          "text": "beginString: string"
+        },
+        {
+          "name": "applVerID",
+          "kind": "property",
+          "optional": true,
+          "text": "applVerID?: string"
+        },
+        {
+          "name": "source",
+          "kind": "property",
+          "optional": true,
+          "text": "source?: {\n    generator: string;\n    spec: string;\n    generatedFrom?: string;\n}"
+        },
+        {
+          "name": "datatypes",
+          "kind": "property",
+          "optional": false,
+          "text": "datatypes: Record<string, DataTypeDef>"
+        },
+        {
+          "name": "fields",
+          "kind": "property",
+          "optional": false,
+          "text": "fields: Record<number, FieldDef>"
+        },
+        {
+          "name": "components",
+          "kind": "property",
+          "optional": false,
+          "text": "components: Record<string, ComponentDef>"
+        },
+        {
+          "name": "messages",
+          "kind": "property",
+          "optional": false,
+          "text": "messages: MessageDef[]"
+        },
+        {
+          "name": "coverageGaps",
+          "kind": "property",
+          "optional": true,
+          "text": "coverageGaps?: CoverageGap[]"
+        },
+        {
+          "name": "extensions",
+          "kind": "property",
+          "optional": true,
+          "text": "extensions?: string[]"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "EncodeMessage",
+      "kind": "interface",
+      "signature": "interface EncodeMessage",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "msgType",
+          "kind": "property",
+          "optional": false,
+          "text": "msgType: string"
+        },
+        {
+          "name": "fields",
+          "kind": "property",
+          "optional": true,
+          "text": "fields?: Record<number, FieldValue>"
+        },
+        {
+          "name": "groups",
+          "kind": "property",
+          "optional": true,
+          "text": "groups?: Record<number, GroupEntry[]>"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "EncodeOptions",
+      "kind": "interface",
+      "signature": "interface EncodeOptions",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "soh",
+          "kind": "property",
+          "optional": true,
+          "text": "soh?: string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "EngineOptions",
+      "kind": "interface",
+      "signature": "interface EngineOptions",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "soh",
+          "kind": "property",
+          "optional": true,
+          "text": "soh?: string"
+        },
+        {
+          "name": "checkFraming",
+          "kind": "property",
+          "optional": true,
+          "text": "checkFraming?: boolean"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "EnumValue",
+      "kind": "interface",
+      "signature": "interface EnumValue",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "value",
+          "kind": "property",
+          "optional": false,
+          "text": "value: string"
+        },
+        {
+          "name": "name",
+          "kind": "property",
+          "optional": false,
+          "text": "name: string"
+        },
+        {
+          "name": "description",
+          "kind": "property",
+          "optional": false,
+          "text": "description: string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "Envelope",
+      "kind": "interface",
+      "signature": "interface Envelope",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "[field: string]",
+          "kind": "index",
+          "optional": false,
+          "text": "readonly [field: string]: FieldValue | null | undefined"
+        },
+        {
+          "name": "[tag: number]",
+          "kind": "index",
+          "optional": false,
+          "text": "readonly [tag: number]: FieldValue | null | undefined"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "ExtendMsgTypes",
+      "kind": "type",
+      "signature": "type ExtendMsgTypes<B extends Record<string, string>, T extends Record<string, string>> = Readonly<Omit<B, keyof T> & T>",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "ExtendResult",
+      "kind": "interface",
+      "signature": "interface ExtendResult",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "dictionary",
+          "kind": "property",
+          "optional": false,
+          "text": "dictionary: DictionaryJSON"
+        },
+        {
+          "name": "issues",
+          "kind": "property",
+          "optional": false,
+          "text": "issues: FixIssue[]"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "ExtendTags",
+      "kind": "type",
+      "signature": "type ExtendTags<B extends Record<string, number>, T extends Record<string, number>> = Readonly<Omit<B, keyof T> & T>",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "ExtensionEnumValue",
+      "kind": "interface",
+      "signature": "interface ExtensionEnumValue",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "value",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly value: string"
+        },
+        {
+          "name": "name",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly name: string"
+        },
+        {
+          "name": "description",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly description?: string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "ExtensionFieldDef",
+      "kind": "interface",
+      "signature": "interface ExtensionFieldDef",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "tag",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly tag: number"
+        },
+        {
+          "name": "type",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly type: string"
+        },
+        {
+          "name": "enumValues",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly enumValues?: readonly ExtensionEnumValue[]"
+        },
+        {
+          "name": "lengthField",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly lengthField?: number"
+        },
+        {
+          "name": "description",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly description?: string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "FieldDef",
+      "kind": "interface",
+      "signature": "interface FieldDef",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "tag",
+          "kind": "property",
+          "optional": false,
+          "text": "tag: number"
+        },
+        {
+          "name": "name",
+          "kind": "property",
+          "optional": false,
+          "text": "name: string"
+        },
+        {
+          "name": "type",
+          "kind": "property",
+          "optional": false,
+          "text": "type: string"
+        },
+        {
+          "name": "enumValues",
+          "kind": "property",
+          "optional": true,
+          "text": "enumValues?: EnumValue[]"
+        },
+        {
+          "name": "isGroupCounter",
+          "kind": "property",
+          "optional": true,
+          "text": "isGroupCounter?: boolean"
+        },
+        {
+          "name": "lengthField",
+          "kind": "property",
+          "optional": true,
+          "text": "lengthField?: number"
+        },
+        {
+          "name": "description",
+          "kind": "property",
+          "optional": true,
+          "text": "description?: string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "FieldInit",
+      "kind": "type",
+      "signature": "type FieldInit<V> = V extends readonly (infer E extends object)[] ? readonly MessageInit<E>[] : V",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "FieldMember",
+      "kind": "interface",
+      "signature": "interface FieldMember",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "kind",
+          "kind": "property",
+          "optional": false,
+          "text": "kind: 'field'"
+        },
+        {
+          "name": "tag",
+          "kind": "property",
+          "optional": false,
+          "text": "tag: number"
+        },
+        {
+          "name": "reqd",
+          "kind": "property",
+          "optional": false,
+          "text": "reqd: Reqd"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "FieldValue",
+      "kind": "type",
+      "signature": "type FieldValue = string | number | boolean",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "FixEngine",
+      "kind": "interface",
+      "signature": "interface FixEngine<Bodies = Record<string, UntypedBody>>",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "dictionary",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly dictionary: Dictionary"
+        },
+        {
+          "name": "transport",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly transport?: Dictionary"
+        },
+        {
+          "name": "app",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly app?: Dictionary"
+        },
+        {
+          "name": "parse",
+          "kind": "method",
+          "optional": false,
+          "text": "parse(raw: string | Uint8Array, options?: ParseOptions): ParseResult"
+        },
+        {
+          "name": "parseAll",
+          "kind": "method",
+          "optional": false,
+          "text": "parseAll(raw: string | Uint8Array, options?: ParseOptions): ParseResult[]"
+        },
+        {
+          "name": "encode",
+          "kind": "method",
+          "optional": false,
+          "text": "encode(message: EncodeMessage, options?: EncodeOptions): string"
+        },
+        {
+          "name": "validate",
+          "kind": "method",
+          "optional": false,
+          "text": "validate(message: ParsedMessage, options?: ValidateOptions): FixIssue[]"
+        },
+        {
+          "name": "create",
+          "kind": "method",
+          "optional": false,
+          "text": "create<M extends keyof Bodies & string>(msgType: M, init?: MessageInit<Bodies[M] & object>): MutableMessage<Bodies[M] & object>"
+        },
+        {
+          "name": "createImmutable",
+          "kind": "method",
+          "optional": false,
+          "text": "createImmutable<M extends keyof Bodies & string>(msgType: M, init?: MessageInit<Bodies[M] & object>): ImmutableMessage<Bodies[M] & object>"
+        },
+        {
+          "name": "is",
+          "kind": "property",
+          "optional": false,
+          "text": "is: MessageTypeGuard<Bodies>"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "FixIssue",
+      "kind": "interface",
+      "signature": "interface FixIssue",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "code",
+          "kind": "property",
+          "optional": false,
+          "text": "code: KnownIssueCode | (string & {})"
+        },
+        {
+          "name": "severity",
+          "kind": "property",
+          "optional": false,
+          "text": "severity: FixSeverity"
+        },
+        {
+          "name": "message",
+          "kind": "property",
+          "optional": false,
+          "text": "message: string"
+        },
+        {
+          "name": "path",
+          "kind": "property",
+          "optional": true,
+          "text": "path?: string"
+        },
+        {
+          "name": "refTagID",
+          "kind": "property",
+          "optional": true,
+          "text": "refTagID?: number"
+        },
+        {
+          "name": "refSeqNum",
+          "kind": "property",
+          "optional": true,
+          "text": "refSeqNum?: number"
+        },
+        {
+          "name": "refMsgType",
+          "kind": "property",
+          "optional": true,
+          "text": "refMsgType?: string"
+        },
+        {
+          "name": "sessionRejectReason",
+          "kind": "property",
+          "optional": true,
+          "text": "sessionRejectReason?: number"
+        },
+        {
+          "name": "layer",
+          "kind": "property",
+          "optional": true,
+          "text": "layer?: FixLayer"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "FixLayer",
+      "kind": "type",
+      "signature": "type FixLayer = 'session' | 'application'",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": ["session", "application"]
+    },
+    {
+      "id": "FixSeverity",
+      "kind": "type",
+      "signature": "type FixSeverity = 'error' | 'warning' | 'info'",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": ["error", "warning", "info"]
+    },
+    {
+      "id": "FixtDictionaries",
+      "kind": "interface",
+      "signature": "interface FixtDictionaries",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "transport",
+          "kind": "property",
+          "optional": false,
+          "text": "transport: Dictionary | DictionaryJSON"
+        },
+        {
+          "name": "app",
+          "kind": "property",
+          "optional": false,
+          "text": "app: Dictionary | DictionaryJSON"
+        },
+        {
+          "name": "resolveApp",
+          "kind": "property",
+          "optional": true,
+          "text": "resolveApp?: (applVerID: string) => Dictionary | DictionaryJSON | undefined"
+        },
+        {
+          "name": "defaultApplVerID",
+          "kind": "property",
+          "optional": true,
+          "text": "defaultApplVerID?: string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "FrameOptions",
+      "kind": "interface",
+      "signature": "interface FrameOptions",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "soh",
+          "kind": "property",
+          "optional": true,
+          "text": "soh?: string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "GroupEntry",
+      "kind": "interface",
+      "signature": "interface GroupEntry",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "fields",
+          "kind": "property",
+          "optional": true,
+          "text": "fields?: Record<number, FieldValue>"
+        },
+        {
+          "name": "groups",
+          "kind": "property",
+          "optional": true,
+          "text": "groups?: Record<number, GroupEntry[]>"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "GroupExtension",
+      "kind": "interface",
+      "signature": "interface GroupExtension",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "append",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly append: readonly MemberSpec[]"
+        },
+        {
+          "name": "after",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly after?: string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "GroupMember",
+      "kind": "interface",
+      "signature": "interface GroupMember",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "kind",
+          "kind": "property",
+          "optional": false,
+          "text": "kind: 'group'"
+        },
+        {
+          "name": "counterTag",
+          "kind": "property",
+          "optional": false,
+          "text": "counterTag: number"
+        },
+        {
+          "name": "reqd",
+          "kind": "property",
+          "optional": false,
+          "text": "reqd: Reqd"
+        },
+        {
+          "name": "members",
+          "kind": "property",
+          "optional": false,
+          "text": "members: MemberRef[]"
+        },
+        {
+          "name": "bodyFromCanonical",
+          "kind": "property",
+          "optional": true,
+          "text": "bodyFromCanonical?: boolean"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "GuardWidening",
+      "kind": "type",
+      "signature": "type GuardWidening<E extends DictionaryExtension> = (TagsOf<E>[keyof TagsOf<E>] extends never ? unknown : number extends TagsOf<E>[keyof TagsOf<E>] ? WidenedExtensionError : unknown) & (MsgTypesOf<E>[keyof MsgTypesOf<E>] extends never ? unknown : string extends MsgTypesOf<E>[keyof MsgTypesOf<E>] ? WidenedExtensionError : unknown)",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "ImmutableMessage",
+      "kind": "interface",
+      "signature": "interface ImmutableMessage<B extends object>",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "with",
+          "kind": "method",
+          "optional": false,
+          "text": "with<K extends keyof B & string>(name: K, value: FieldInit<B[K]> | null | undefined): ImmutableMessage<B>"
+        },
+        {
+          "name": "merge",
+          "kind": "method",
+          "optional": false,
+          "text": "merge(fields: Partial<MessageInit<B>>): ImmutableMessage<B>"
+        },
+        {
+          "name": "without",
+          "kind": "method",
+          "optional": false,
+          "text": "without(name: keyof B & string): ImmutableMessage<B>"
+        },
+        {
+          "name": "toMutable",
+          "kind": "method",
+          "optional": false,
+          "text": "toMutable(): MutableMessage<B>"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "InvertMsgTypes",
+      "kind": "type",
+      "signature": "type InvertMsgTypes<T extends Record<string, string>> = {\n    readonly [K in keyof T as T[K] & string]: K & string;\n} & {\n    readonly [msgType: string]: (keyof T & string) | undefined;\n}",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "InvertTags",
+      "kind": "type",
+      "signature": "type InvertTags<T extends Record<string, number>> = {\n    readonly [K in keyof T as T[K] & number]: K & string;\n} & {\n    readonly [tag: number]: (keyof T & string) | undefined;\n}",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "KnownIssueCode",
+      "kind": "type",
+      "signature": "type KnownIssueCode = 'dict/missing-version' | 'dict/missing-begin-string' | 'dict/missing-datatypes' | 'dict/missing-fields' | 'dict/missing-components' | 'dict/missing-messages' | 'dict/datatype-cycle' | 'dict/datatype-missing-parent' | 'dict/datatype-bad-base' | 'dict/field-key-mismatch' | 'dict/field-bad-tag' | 'dict/field-unknown-type' | 'dict/duplicate-field-name' | 'dict/duplicate-enum-value' | 'dict/message-missing-msgtype' | 'dict/duplicate-msgtype' | 'dict/duplicate-message-name' | 'dict/unknown-field-ref' | 'dict/unknown-component-ref' | 'dict/component-cycle' | 'dict/unknown-group-counter' | 'dict/non-counter-group-head' | 'dict/empty-group' | 'dict/unresolvable-group-delimiter' | 'parse/empty-input' | 'parse/malformed-field' | 'parse/missing-begin-string' | 'parse/missing-body-length' | 'parse/missing-msgtype' | 'parse/framing-order' | 'parse/begin-string-mismatch' | 'parse/unknown-msgtype' | 'parse/missing-checksum' | 'parse/checksum-mismatch' | 'parse/body-length-mismatch' | 'parse/unknown-tag' | 'parse/tag-not-in-message' | 'parse/duplicate-tag' | 'parse/duplicate-group' | 'parse/invalid-group-count' | 'parse/group-count-mismatch' | 'parse/data-length-mismatch' | 'parse/unknown-datatype' | 'parse/invalid-int' | 'parse/invalid-float' | 'parse/invalid-boolean' | 'parse/number-precision' | 'validate/unknown-msgtype' | 'validate/required-field-missing' | 'validate/required-group-missing' | 'validate/empty-value' | 'validate/value-not-in-enum' | 'validate/invalid-value' | 'validate/conditional-required' | 'validate/field-outside-layer' | 'extend/field-tag-collision' | 'extend/field-name-collision' | 'extend/field-bad-tag' | 'extend/field-unknown-type' | 'extend/tag-outside-user-range' | 'extend/data-length-unwired' | 'extend/enum-unknown-field' | 'extend/enum-value-conflict' | 'extend/component-collision' | 'extend/component-cycle' | 'extend/msgtype-collision' | 'extend/message-name-collision' | 'extend/header-trailer-injected' | 'extend/header-trailer-missing' | 'extend/target-not-found' | 'extend/unknown-member' | 'extend/member-not-found' | 'extend/duplicate-member' | 'extend/counter-not-marked' | 'extend/group-delimiter-shift' | 'extend/ambiguous-boundary' | 'extend/unresolvable-group-delimiter' | 'extend/data-length-not-placed' | 'extend/counter-as-field' | 'extend/invalid-spec' | 'extend/delimiter-defined' | 'extend/component-fanout'",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": [
+        "dict/missing-version",
+        "dict/missing-begin-string",
+        "dict/missing-datatypes",
+        "dict/missing-fields",
+        "dict/missing-components",
+        "dict/missing-messages",
+        "dict/datatype-cycle",
+        "dict/datatype-missing-parent",
+        "dict/datatype-bad-base",
+        "dict/field-key-mismatch",
+        "dict/field-bad-tag",
+        "dict/field-unknown-type",
+        "dict/duplicate-field-name",
+        "dict/duplicate-enum-value",
+        "dict/message-missing-msgtype",
+        "dict/duplicate-msgtype",
+        "dict/duplicate-message-name",
+        "dict/unknown-field-ref",
+        "dict/unknown-component-ref",
+        "dict/component-cycle",
+        "dict/unknown-group-counter",
+        "dict/non-counter-group-head",
+        "dict/empty-group",
+        "dict/unresolvable-group-delimiter",
+        "parse/empty-input",
+        "parse/malformed-field",
+        "parse/missing-begin-string",
+        "parse/missing-body-length",
+        "parse/missing-msgtype",
+        "parse/framing-order",
+        "parse/begin-string-mismatch",
+        "parse/unknown-msgtype",
+        "parse/missing-checksum",
+        "parse/checksum-mismatch",
+        "parse/body-length-mismatch",
+        "parse/unknown-tag",
+        "parse/tag-not-in-message",
+        "parse/duplicate-tag",
+        "parse/duplicate-group",
+        "parse/invalid-group-count",
+        "parse/group-count-mismatch",
+        "parse/data-length-mismatch",
+        "parse/unknown-datatype",
+        "parse/invalid-int",
+        "parse/invalid-float",
+        "parse/invalid-boolean",
+        "parse/number-precision",
+        "validate/unknown-msgtype",
+        "validate/required-field-missing",
+        "validate/required-group-missing",
+        "validate/empty-value",
+        "validate/value-not-in-enum",
+        "validate/invalid-value",
+        "validate/conditional-required",
+        "validate/field-outside-layer",
+        "extend/field-tag-collision",
+        "extend/field-name-collision",
+        "extend/field-bad-tag",
+        "extend/field-unknown-type",
+        "extend/tag-outside-user-range",
+        "extend/data-length-unwired",
+        "extend/enum-unknown-field",
+        "extend/enum-value-conflict",
+        "extend/component-collision",
+        "extend/component-cycle",
+        "extend/msgtype-collision",
+        "extend/message-name-collision",
+        "extend/header-trailer-injected",
+        "extend/header-trailer-missing",
+        "extend/target-not-found",
+        "extend/unknown-member",
+        "extend/member-not-found",
+        "extend/duplicate-member",
+        "extend/counter-not-marked",
+        "extend/group-delimiter-shift",
+        "extend/ambiguous-boundary",
+        "extend/unresolvable-group-delimiter",
+        "extend/data-length-not-placed",
+        "extend/counter-as-field",
+        "extend/invalid-spec",
+        "extend/delimiter-defined",
+        "extend/component-fanout"
+      ]
+    },
+    {
+      "id": "MemberRef",
+      "kind": "type",
+      "signature": "type MemberRef = FieldMember | ComponentMember | GroupMember",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "MemberSpec",
+      "kind": "type",
+      "signature": "type MemberSpec = string | {\n    readonly field: string;\n    readonly reqd?: Reqd;\n} | {\n    readonly component: string;\n    readonly reqd?: Reqd;\n} | {\n    /** A NEW nested repeating group; `group` names its counter field. */\n    readonly group: string;\n    readonly reqd?: Reqd;\n    readonly members: readonly MemberSpec[];\n}",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "MessageCategory",
+      "kind": "type",
+      "signature": "type MessageCategory = 'admin' | 'app'",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": ["admin", "app"]
+    },
+    {
+      "id": "MessageDef",
+      "kind": "interface",
+      "signature": "interface MessageDef",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "name",
+          "kind": "property",
+          "optional": false,
+          "text": "name: string"
+        },
+        {
+          "name": "msgType",
+          "kind": "property",
+          "optional": false,
+          "text": "msgType: string"
+        },
+        {
+          "name": "category",
+          "kind": "property",
+          "optional": false,
+          "text": "category: MessageCategory"
+        },
+        {
+          "name": "members",
+          "kind": "property",
+          "optional": false,
+          "text": "members: MemberRef[]"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "MessageExtension",
+      "kind": "interface",
+      "signature": "interface MessageExtension",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "msgType",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly msgType?: never"
+        },
+        {
+          "name": "append",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly append?: readonly MemberSpec[]"
+        },
+        {
+          "name": "after",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly after?: string"
+        },
+        {
+          "name": "groups",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly groups?: Readonly<Record<string, GroupExtension>>"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "MessageFactory",
+      "kind": "interface",
+      "signature": "interface MessageFactory<Bodies>",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "",
+          "kind": "call",
+          "optional": false,
+          "text": "<M extends keyof Bodies & string>(msgType: M, init?: MessageInit<Bodies[M] & object>): MutableMessage<Bodies[M] & object>"
+        },
+        {
+          "name": "immutable",
+          "kind": "method",
+          "optional": false,
+          "text": "immutable<M extends keyof Bodies & string>(msgType: M, init?: MessageInit<Bodies[M] & object>): ImmutableMessage<Bodies[M] & object>"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "MessageInit",
+      "kind": "type",
+      "signature": "type MessageInit<B> = {\n    [K in keyof B]: FieldInit<B[K]> | null | undefined;\n}",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "MessageOf",
+      "kind": "type",
+      "signature": "type MessageOf<Bodies, M extends keyof Bodies & string> = MessageView<Bodies[M] & object>",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "MessageTypeGuard",
+      "kind": "type",
+      "signature": "type MessageTypeGuard<Bodies> = <M extends keyof Bodies & string>(message: MessageView<any>, msgType: M) => message is MessageView<Bodies[M] & object>",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "MessageView",
+      "kind": "interface",
+      "signature": "interface MessageView<B extends object>",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "msgType",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly msgType: string"
+        },
+        {
+          "name": "get",
+          "kind": "method",
+          "optional": false,
+          "text": "get<K extends keyof B & string>(name: K): B[K] | undefined"
+        },
+        {
+          "name": "has",
+          "kind": "method",
+          "optional": false,
+          "text": "has(name: keyof B & string): boolean"
+        },
+        {
+          "name": "toEncodeMessage",
+          "kind": "method",
+          "optional": false,
+          "text": "toEncodeMessage(): EncodeMessage"
+        },
+        {
+          "name": "toJSON",
+          "kind": "method",
+          "optional": false,
+          "text": "toJSON(): Partial<MessageInit<B>>"
+        },
+        {
+          "name": "render",
+          "kind": "method",
+          "optional": false,
+          "text": "render(envelope?: Envelope, options?: EncodeOptions): string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "MsgTypesOf",
+      "kind": "type",
+      "signature": "type MsgTypesOf<E extends DictionaryExtension> = Readonly<{\n    [K in keyof MsgsOf<E> & string as MsgsOf<E>[K] extends {\n        msgType: string;\n    } ? K : never]: MsgsOf<E>[K] extends {\n        msgType: infer M extends string;\n    } ? M : never;\n}>",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "MutableMessage",
+      "kind": "interface",
+      "signature": "interface MutableMessage<B extends object>",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "set",
+          "kind": "method",
+          "optional": false,
+          "text": "set<K extends keyof B & string>(name: K, value: FieldInit<B[K]> | null | undefined): this"
+        },
+        {
+          "name": "assign",
+          "kind": "method",
+          "optional": false,
+          "text": "assign(fields: Partial<MessageInit<B>>): this"
+        },
+        {
+          "name": "delete",
+          "kind": "method",
+          "optional": false,
+          "text": "delete(name: keyof B & string): this"
+        },
+        {
+          "name": "toImmutable",
+          "kind": "method",
+          "optional": false,
+          "text": "toImmutable(): ImmutableMessage<B>"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "NewMessageSpec",
+      "kind": "interface",
+      "signature": "interface NewMessageSpec",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "msgType",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly msgType: string"
+        },
+        {
+          "name": "category",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly category?: MessageCategory"
+        },
+        {
+          "name": "members",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly members: readonly MemberSpec[]"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "ParseOptions",
+      "kind": "interface",
+      "signature": "interface ParseOptions",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "soh",
+          "kind": "property",
+          "optional": true,
+          "text": "soh?: string"
+        },
+        {
+          "name": "checkFraming",
+          "kind": "property",
+          "optional": true,
+          "text": "checkFraming?: boolean"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "ParseResult",
+      "kind": "interface",
+      "signature": "interface ParseResult",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "message",
+          "kind": "property",
+          "optional": false,
+          "text": "message: ParsedMessage"
+        },
+        {
+          "name": "issues",
+          "kind": "property",
+          "optional": false,
+          "text": "issues: FixIssue[]"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "ParsedField",
+      "kind": "interface",
+      "signature": "interface ParsedField",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "tag",
+          "kind": "property",
+          "optional": false,
+          "text": "tag: number"
+        },
+        {
+          "name": "name",
+          "kind": "property",
+          "optional": true,
+          "text": "name?: string"
+        },
+        {
+          "name": "raw",
+          "kind": "property",
+          "optional": false,
+          "text": "raw: string"
+        },
+        {
+          "name": "value",
+          "kind": "property",
+          "optional": false,
+          "text": "value: DecodedValue"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "ParsedGroupEntry",
+      "kind": "interface",
+      "signature": "interface ParsedGroupEntry",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "fields",
+          "kind": "property",
+          "optional": false,
+          "text": "fields: Record<number, ParsedField>"
+        },
+        {
+          "name": "groups",
+          "kind": "property",
+          "optional": false,
+          "text": "groups: Record<number, ParsedGroupEntry[]>"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "ParsedMessage",
+      "kind": "interface",
+      "signature": "interface ParsedMessage",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "msgType",
+          "kind": "property",
+          "optional": false,
+          "text": "msgType: string"
+        },
+        {
+          "name": "name",
+          "kind": "property",
+          "optional": true,
+          "text": "name?: string"
+        },
+        {
+          "name": "beginString",
+          "kind": "property",
+          "optional": true,
+          "text": "beginString?: string"
+        },
+        {
+          "name": "framed",
+          "kind": "property",
+          "optional": false,
+          "text": "framed: boolean"
+        },
+        {
+          "name": "fields",
+          "kind": "property",
+          "optional": false,
+          "text": "fields: Record<number, ParsedField>"
+        },
+        {
+          "name": "groups",
+          "kind": "property",
+          "optional": false,
+          "text": "groups: Record<number, ParsedGroupEntry[]>"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "Reqd",
+      "kind": "type",
+      "signature": "type Reqd = 'Y' | 'N' | 'C'",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": ["Y", "N", "C"]
+    },
+    {
+      "id": "ResolvedDatatype",
+      "kind": "interface",
+      "signature": "interface ResolvedDatatype",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "base",
+          "kind": "property",
+          "optional": false,
+          "text": "base: BaseType"
+        },
+        {
+          "name": "isBoolean",
+          "kind": "property",
+          "optional": false,
+          "text": "isBoolean: boolean"
+        },
+        {
+          "name": "multiValueDelimiter",
+          "kind": "property",
+          "optional": true,
+          "text": "multiValueDelimiter?: string"
+        },
+        {
+          "name": "lengthPrefixed",
+          "kind": "property",
+          "optional": false,
+          "text": "lengthPrefixed: boolean"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "SOH",
+      "kind": "const",
+      "signature": "const SOH = \"\\u0001\"",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "TagsOf",
+      "kind": "type",
+      "signature": "type TagsOf<E extends DictionaryExtension> = Readonly<{\n    [K in keyof FieldsOf<E> & string]: FieldsOf<E>[K] extends {\n        tag: infer T extends number;\n    } ? T : never;\n}>",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "Token",
+      "kind": "type",
+      "signature": "type Token = [tag: number, value: string]",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "TokenizeOptions",
+      "kind": "interface",
+      "signature": "interface TokenizeOptions",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "soh",
+          "kind": "property",
+          "optional": true,
+          "text": "soh?: string"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "UntypedBody",
+      "kind": "type",
+      "signature": "type UntypedBody = Record<string, FieldValue | readonly UntypedBody[]>",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "VERSION",
+      "kind": "const",
+      "signature": "const VERSION = \"0.4.0\"",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "ValidateOptions",
+      "kind": "interface",
+      "signature": "interface ValidateOptions",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "conditionalRules",
+          "kind": "property",
+          "optional": true,
+          "text": "conditionalRules?: ConditionalRule[]"
+        },
+        {
+          "name": "useDefaultConditionalRules",
+          "kind": "property",
+          "optional": true,
+          "text": "useDefaultConditionalRules?: boolean"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "WidenedExtensionError",
+      "kind": "interface",
+      "signature": "interface WidenedExtensionError",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "'ERROR: extension literals were widened'",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly 'ERROR: extension literals were widened': 'declare the extension inline at the defineExtension call site (or as const) so tags stay literal types like 1007'"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "bodyLength",
+      "kind": "function",
+      "signature": "function bodyLength(body: string | Uint8Array): number",
+      "params": [
+        {
+          "name": "body",
+          "type": "string | Uint8Array",
+          "optional": false
+        }
+      ],
+      "returns": "number",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "calculateChecksum",
+      "kind": "function",
+      "signature": "function calculateChecksum(message: string | Uint8Array): string",
+      "params": [
+        {
+          "name": "message",
+          "type": "string | Uint8Array",
+          "optional": false
+        }
+      ],
+      "returns": "string",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "createFixEngine",
+      "kind": "function",
+      "signature": "function createFixEngine<Bodies = Record<string, UntypedBody>>(dictionary: Dictionary | DictionaryJSON | FixtDictionaries, options?: EngineOptions): FixEngine<Bodies>",
+      "params": [
+        {
+          "name": "dictionary",
+          "type": "Dictionary | DictionaryJSON | FixtDictionaries",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "EngineOptions",
+          "optional": true
+        }
+      ],
+      "returns": "FixEngine<Bodies>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "createImmutableMessage",
+      "kind": "function",
+      "signature": "function createImmutableMessage<B extends object = UntypedBody>(msgType: string, dict: Dictionary | DictionaryJSON, init?: MessageInit<B>): ImmutableMessage<B>",
+      "params": [
+        {
+          "name": "msgType",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "dict",
+          "type": "Dictionary | DictionaryJSON",
+          "optional": false
+        },
+        {
+          "name": "init",
+          "type": "MessageInit<B>",
+          "optional": true
+        }
+      ],
+      "returns": "ImmutableMessage<B>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "createMessage",
+      "kind": "function",
+      "signature": "function createMessage<B extends object = UntypedBody>(msgType: string, dict: Dictionary | DictionaryJSON, init?: MessageInit<B>): MutableMessage<B>",
+      "params": [
+        {
+          "name": "msgType",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "dict",
+          "type": "Dictionary | DictionaryJSON",
+          "optional": false
+        },
+        {
+          "name": "init",
+          "type": "MessageInit<B>",
+          "optional": true
+        }
+      ],
+      "returns": "MutableMessage<B>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "decodeValue",
+      "kind": "function",
+      "signature": "function decodeValue(raw: string, field: FieldDef, dict: Dictionary, path?: string): DecodeResult",
+      "params": [
+        {
+          "name": "raw",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "field",
+          "type": "FieldDef",
+          "optional": false
+        },
+        {
+          "name": "dict",
+          "type": "Dictionary",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "optional": true
+        }
+      ],
+      "returns": "DecodeResult",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "defineExtension",
+      "kind": "function",
+      "signature": "function defineExtension<const E extends DictionaryExtension>(ext: E & GuardWidening<E>): E",
+      "params": [
+        {
+          "name": "ext",
+          "type": "E & GuardWidening<E>",
+          "optional": false
+        }
+      ],
+      "returns": "E",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "encode",
+      "kind": "function",
+      "signature": "function encode(message: EncodeMessage, dictionaries: Dictionary | FixtDictionaries, options?: EncodeOptions): string",
+      "params": [
+        {
+          "name": "message",
+          "type": "EncodeMessage",
+          "optional": false
+        },
+        {
+          "name": "dictionaries",
+          "type": "Dictionary | FixtDictionaries",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "EncodeOptions",
+          "optional": true
+        }
+      ],
+      "returns": "string",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "extendDictionary",
+      "kind": "function",
+      "signature": "function extendDictionary(base: DictionaryJSON, ...extensions: DictionaryExtension[]): ExtendResult",
+      "params": [
+        {
+          "name": "base",
+          "type": "DictionaryJSON",
+          "optional": false
+        },
+        {
+          "name": "extensions",
+          "type": "DictionaryExtension[]",
+          "optional": false
+        }
+      ],
+      "returns": "ExtendResult",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "extendMsgTypes",
+      "kind": "function",
+      "signature": "function extendMsgTypes<B extends Record<string, string>, const T extends Record<string, string>>(base: B, ext: T): ExtendMsgTypes<B, T>",
+      "params": [
+        {
+          "name": "base",
+          "type": "B",
+          "optional": false
+        },
+        {
+          "name": "ext",
+          "type": "T",
+          "optional": false
+        }
+      ],
+      "returns": "ExtendMsgTypes<B, T>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "extendTags",
+      "kind": "function",
+      "signature": "function extendTags<B extends Record<string, number>, const T extends Record<string, number>>(base: B, ext: T): ExtendTags<B, T>",
+      "params": [
+        {
+          "name": "base",
+          "type": "B",
+          "optional": false
+        },
+        {
+          "name": "ext",
+          "type": "T",
+          "optional": false
+        }
+      ],
+      "returns": "ExtendTags<B, T>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "invertMsgTypes",
+      "kind": "function",
+      "signature": "function invertMsgTypes<const T extends Record<string, string>>(msgTypes: T): InvertMsgTypes<T>",
+      "params": [
+        {
+          "name": "msgTypes",
+          "type": "T",
+          "optional": false
+        }
+      ],
+      "returns": "InvertMsgTypes<T>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "invertTags",
+      "kind": "function",
+      "signature": "function invertTags<const T extends Record<string, number>>(tags: T): InvertTags<T>",
+      "params": [
+        {
+          "name": "tags",
+          "type": "T",
+          "optional": false
+        }
+      ],
+      "returns": "InvertTags<T>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "isFixtDictionaries",
+      "kind": "function",
+      "signature": "function isFixtDictionaries(d: Dictionary | DictionaryJSON | FixtDictionaries): d is FixtDictionaries",
+      "params": [
+        {
+          "name": "d",
+          "type": "Dictionary | DictionaryJSON | FixtDictionaries",
+          "optional": false
+        }
+      ],
+      "returns": "d is FixtDictionaries",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "loadDictionary",
+      "kind": "function",
+      "signature": "function loadDictionary(json: DictionaryJSON): Dictionary",
+      "params": [
+        {
+          "name": "json",
+          "type": "DictionaryJSON",
+          "optional": false
+        }
+      ],
+      "returns": "Dictionary",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "mergeFixtDictionaries",
+      "kind": "function",
+      "signature": "function mergeFixtDictionaries(transport: Dictionary | DictionaryJSON, app: Dictionary | DictionaryJSON): DictionaryJSON",
+      "params": [
+        {
+          "name": "transport",
+          "type": "Dictionary | DictionaryJSON",
+          "optional": false
+        },
+        {
+          "name": "app",
+          "type": "Dictionary | DictionaryJSON",
+          "optional": false
+        }
+      ],
+      "returns": "DictionaryJSON",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "messageFactory",
+      "kind": "function",
+      "signature": "function messageFactory<Bodies>(dict: Dictionary | DictionaryJSON): MessageFactory<Bodies>",
+      "params": [
+        {
+          "name": "dict",
+          "type": "Dictionary | DictionaryJSON",
+          "optional": false
+        }
+      ],
+      "returns": "MessageFactory<Bodies>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "messageTypeGuard",
+      "kind": "function",
+      "signature": "function messageTypeGuard<Bodies>(): MessageTypeGuard<Bodies>",
+      "params": [],
+      "returns": "MessageTypeGuard<Bodies>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "msgTypesOf",
+      "kind": "function",
+      "signature": "function msgTypesOf<const E extends DictionaryExtension>(ext: E): MsgTypesOf<E>",
+      "params": [
+        {
+          "name": "ext",
+          "type": "E",
+          "optional": false
+        }
+      ],
+      "returns": "MsgTypesOf<E>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "parse",
+      "kind": "function",
+      "signature": "function parse(raw: string | Uint8Array, dict: Dictionary | FixtDictionaries, options?: ParseOptions): ParseResult",
+      "params": [
+        {
+          "name": "raw",
+          "type": "string | Uint8Array",
+          "optional": false
+        },
+        {
+          "name": "dict",
+          "type": "Dictionary | FixtDictionaries",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "ParseOptions",
+          "optional": true
+        }
+      ],
+      "returns": "ParseResult",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "parseAll",
+      "kind": "function",
+      "signature": "function parseAll(raw: string | Uint8Array, dict: Dictionary | FixtDictionaries, options?: ParseOptions): ParseResult[]",
+      "params": [
+        {
+          "name": "raw",
+          "type": "string | Uint8Array",
+          "optional": false
+        },
+        {
+          "name": "dict",
+          "type": "Dictionary | FixtDictionaries",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "ParseOptions",
+          "optional": true
+        }
+      ],
+      "returns": "ParseResult[]",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "scanFields",
+      "kind": "function",
+      "signature": "function scanFields(raw: string | Uint8Array, dict: Dictionary, options?: FrameOptions): Token[]",
+      "params": [
+        {
+          "name": "raw",
+          "type": "string | Uint8Array",
+          "optional": false
+        },
+        {
+          "name": "dict",
+          "type": "Dictionary",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "FrameOptions",
+          "optional": true
+        }
+      ],
+      "returns": "Token[]",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "splitMessages",
+      "kind": "function",
+      "signature": "function splitMessages(raw: string | Uint8Array, options?: FrameOptions): Uint8Array[]",
+      "params": [
+        {
+          "name": "raw",
+          "type": "string | Uint8Array",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "FrameOptions",
+          "optional": true
+        }
+      ],
+      "returns": "Uint8Array[]",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "tagsOf",
+      "kind": "function",
+      "signature": "function tagsOf<const E extends DictionaryExtension>(ext: E): TagsOf<E>",
+      "params": [
+        {
+          "name": "ext",
+          "type": "E",
+          "optional": false
+        }
+      ],
+      "returns": "TagsOf<E>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "toEncodeMessage",
+      "kind": "function",
+      "signature": "function toEncodeMessage(message: ParsedMessage): EncodeMessage",
+      "params": [
+        {
+          "name": "message",
+          "type": "ParsedMessage",
+          "optional": false
+        }
+      ],
+      "returns": "EncodeMessage",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "tokenize",
+      "kind": "function",
+      "signature": "function tokenize(raw: string | Uint8Array, options?: TokenizeOptions): Token[]",
+      "params": [
+        {
+          "name": "raw",
+          "type": "string | Uint8Array",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "TokenizeOptions",
+          "optional": true
+        }
+      ],
+      "returns": "Token[]",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "validate",
+      "kind": "function",
+      "signature": "function validate(message: ParsedMessage, dict: Dictionary | FixtDictionaries, options?: ValidateOptions): FixIssue[]",
+      "params": [
+        {
+          "name": "message",
+          "type": "ParsedMessage",
+          "optional": false
+        },
+        {
+          "name": "dict",
+          "type": "Dictionary | FixtDictionaries",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "ValidateOptions",
+          "optional": true
+        }
+      ],
+      "returns": "FixIssue[]",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "validateDictionary",
+      "kind": "function",
+      "signature": "function validateDictionary(json: DictionaryJSON): FixIssue[]",
+      "params": [
+        {
+          "name": "json",
+          "type": "DictionaryJSON",
+          "optional": false
+        }
+      ],
+      "returns": "FixIssue[]",
+      "members": [],
+      "unionOf": null
+    }
+  ]
+}

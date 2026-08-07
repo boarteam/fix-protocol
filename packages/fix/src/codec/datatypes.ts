@@ -18,7 +18,9 @@ export type DecodedValue = number | boolean | string | string[];
 
 /** The result of coercing one wire value: the decoded value plus any diagnostics. */
 export interface DecodeResult {
+  /** The coerced value; equals the raw string whenever coercion could not apply. */
   value: DecodedValue;
+  /** Diagnostics raised by the coercion; empty when the value read clean. */
   issues: FixIssue[];
 }
 

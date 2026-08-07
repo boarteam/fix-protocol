@@ -64,10 +64,13 @@ export interface ParsedMessage {
 
 /** The result of {@link parse}: the structured message plus any diagnostics. */
 export interface ParseResult {
+  /** The structured message, built as far as the bytes allowed. */
   message: ParsedMessage;
+  /** Every problem found on the way — framing, structure, value coercion. Never thrown. */
   issues: FixIssue[];
 }
 
+/** Options for {@link parse} and {@link parseAll}. */
 export interface ParseOptions {
   /** Field separator. Defaults to {@link SOH}. Pass `'|'` to read pipe-delimited logs. */
   soh?: string;

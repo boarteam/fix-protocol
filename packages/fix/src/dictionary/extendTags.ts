@@ -8,7 +8,7 @@
  * `name → msgType` records, independent of any dictionary. They intentionally emit
  * no issues — a name or tag collision in a map is a data-level problem that
  * `extendDictionary` reports when the same extension is applied to a
- * {@link ./types.DictionaryJSON}; the map layer mirrors object-spread semantics
+ * {@link DictionaryJSON}; the map layer mirrors object-spread semantics
  * (later entry wins) so types and runtime never disagree.
  *
  * Venue packages that emit declaration files should annotate their exports with the
