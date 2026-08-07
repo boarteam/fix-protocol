@@ -1,5 +1,12 @@
 # @boarteam/fix-dict-fix44
 
+## 4.0.0
+
+### Patch Changes
+
+- Updated dependencies [769679e]
+  - @boarteam/fix@0.5.0
+
 ## 3.0.0
 
 ### Patch Changes
