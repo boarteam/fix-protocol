@@ -9,6 +9,8 @@ TestRequest(1), ResendRequest(2), Reject(3), SequenceReset(4), Logout(5), and Lo
 with its required `DefaultApplVerID(1137)`. Generated from the QuickFIX/J `FIXT11.xml`
 data dictionary — never hand-maintained.
 
+📖 **[Documentation](https://boar.team/fix/docs/)** · 🔀 **[The FIXT pair API](https://boar.team/fix/docs/dictionaries/)** · ▶️ **[Playground](https://boar.team/fix/playground/)** · 💻 **[GitHub](https://github.com/boarteam/fix-protocol)**
+
 Use it for transport-layer tooling (session-message construction and validation, layer
 attribution) or pair it with an application dictionary. For a batteries-included FIX 5.0
 SP2 dictionary that already contains this envelope, use

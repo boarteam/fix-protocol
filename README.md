@@ -4,8 +4,11 @@
 
 [![npm version](https://img.shields.io/npm/v/@boarteam/fix.svg)](https://www.npmjs.com/package/@boarteam/fix)
 [![CI](https://github.com/boarteam/fix-protocol/actions/workflows/ci.yml/badge.svg)](https://github.com/boarteam/fix-protocol/actions/workflows/ci.yml)
+[![docs](https://img.shields.io/badge/docs-boar.team%2Ffix-0a7ea4)](https://boar.team/fix/docs/)
 [![dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](#why-zero-dependencies-matters)
 [![license](https://img.shields.io/npm/l/@boarteam/fix.svg)](LICENSE)
+
+📖 **[Documentation](https://boar.team/fix/docs/)** · 🧭 **[API reference](https://boar.team/fix/docs/api/)** · ▶️ **[Playground](https://boar.team/fix/playground/)** · 📚 **[FIX reference](https://boar.team/fix/)**
 
 <p align="center">
   <img src=".github/demo.gif" width="900" alt="Terminal recording: a raw FIX 4.4 log line is piped into @boarteam/fix and decoded in narrated stages — named, typed fields, the NoMDEntries repeating group expanded into nested Bid/Offer objects, then a clean parse + validate verdict. Next a corrupted Execution Report is piped in and still parses without throwing: the bad float, wrong checksum, and invalid OrdStatus enum all come back as structured diagnostics from parse() and validate(). The same pure engine runs unchanged in a browser tab or in Node.">
@@ -84,7 +87,7 @@ The decoded `message` — note the `268` repeating group is an **array of nested
 // ...plus validate/required-field-missing for any absent required fields.
 ```
 
-That is the whole pitch: paste a message, get the structure and every defect, in the browser, with zero dependencies. No socket, no sequence numbers, no `connect()`.
+That is the whole pitch: paste a message, get the structure and every defect, in the browser, with zero dependencies. No socket, no sequence numbers, no `connect()`. Try it without installing anything — the [playground](https://boar.team/fix/playground/) runs this engine client-side; the guides and API reference are at [boar.team/fix/docs](https://boar.team/fix/docs/).
 
 ---
 
@@ -128,6 +131,30 @@ Swap in `@boarteam/fix-dict-fix42` for FIX 4.2, or `@boarteam/fix-dict-fix50sp2`
 
 ---
 
+## Documentation
+
+The full documentation lives at **[boar.team/fix/docs](https://boar.team/fix/docs/)** — every code sample on it is compiled and executed against the released package at build time, so the docs cannot drift from the library.
+
+| Guide                                                        | What it covers                                                                                 |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| [Parse](https://boar.team/fix/docs/parse/)                   | `parse` / `parseAll`, raw vs typed values, repeating groups, pipe-delimited logs, never-throws |
+| [Validate](https://boar.team/fix/docs/validate/)             | The `FixIssue` shape, stable issue codes as the SemVer contract, severities, layers            |
+| [Encode](https://boar.team/fix/docs/encode/)                 | Tag-keyed encode, dictionary field order, byte-accurate `BodyLength` / `CheckSum`              |
+| [Typed messages](https://boar.team/fix/docs/typed-messages/) | The `message()` builder, compile-error safety, `render()`, immutability, type guards           |
+| [Extend a dictionary](https://boar.team/fix/docs/extend/)    | Venue-custom tags with `defineExtension` — cTrader's `1007`/`1008` as the worked example       |
+| [Dictionaries](https://boar.team/fix/docs/dictionaries/)     | Choosing FIX 4.4, 4.2 or 5.0 SP2, the FIXT pair API, free functions and output shapes          |
+
+Alongside the guides:
+
+- **[API reference](https://boar.team/fix/docs/api/)** — every export, signature by signature, generated from the `dist/api.json` model this package ships (see [`docs/api-json.md`](docs/api-json.md)), with source links and a "since" badge per export.
+- **[Diagnostics catalogue](https://boar.team/fix/diagnostics/)** — every `parse/*`, `validate/*`, `dict/*` and `extend/*` issue code the engine can emit, each with its usual cause. Build-time checked against the installed package, so it is never out of date.
+- **[Playground](https://boar.team/fix/playground/)** — paste a raw message and decode it in the browser, running this engine client-side.
+- **[FIX reference](https://boar.team/fix/)** — the browsable dictionary behind it all: [tags](https://boar.team/fix/tags/), [messages](https://boar.team/fix/messages/), [components](https://boar.team/fix/components/), [datatypes](https://boar.team/fix/datatypes/), and per-dialect views for [FIX 4.4](https://boar.team/fix/dialect/4-4/), [FIX 4.2](https://boar.team/fix/dialect/4-2/) and [FIX 5.0 SP2](https://boar.team/fix/dialect/5-0-sp2/).
+
+The rest of this README is the short tour.
+
+---
+
 ## Usage
 
 ### Create an engine
@@ -168,6 +195,8 @@ for (const entry of message.groups[268] ?? []) {
 
 Use `parseAll` for a stream of concatenated messages (e.g. a log file).
 
+→ Full guide: [Parsing FIX messages](https://boar.team/fix/docs/parse/).
+
 ### Validate
 
 `validate` checks presence (required fields), enum membership, datatypes, and conditional-required rules against the dictionary, returning a `FixIssue[]`:
@@ -180,6 +209,8 @@ for (const issue of problems) {
 ```
 
 Every `FixIssue` carries a **stable `code`** (e.g. `validate/value-not-in-enum`, `parse/checksum-mismatch`), a `severity` (`error | warning | info`), a human `message`, and — where relevant — a `path`, `refTagID`, `refSeqNum`, `refMsgType`, or `sessionRejectReason`. The codes are part of the SemVer contract; the human message is not.
+
+→ Full guide: [Validating FIX messages](https://boar.team/fix/docs/validate/). Every issue code the engine can emit is catalogued, with its usual cause, in the [diagnostics reference](https://boar.team/fix/diagnostics/).
 
 ### Encode
 
@@ -205,6 +236,8 @@ const wire = fix.encode({
 ```
 
 `encode` emits fields in dictionary order and computes `BeginString (8)`, `BodyLength (9)`, and `CheckSum (10)` byte-accurately. It is pure — **you** supply the session fields (sequence number, sending time); the engine never invents them.
+
+→ Full guide: [Encoding FIX messages](https://boar.team/fix/docs/encode/).
 
 ### Typed messages
 
@@ -242,6 +275,8 @@ if (isMessageType(message, MsgType.MarketDataSnapshotFullRefresh)) {
   }
 }
 ```
+
+→ Full guide: [Typed messages](https://boar.team/fix/docs/typed-messages/).
 
 ### Reading pipe-delimited logs
 
@@ -311,9 +346,13 @@ a package that emits `.d.ts` — annotate the exports with the provided alias ty
 instead of structurally inlining the 900-key base map. The same pattern scales to publishable
 venue packages (e.g. a future `@boarteam/fix-dict-fix44-ctrader`).
 
+→ Full guide: [Extending a dictionary](https://boar.team/fix/docs/extend/).
+
 ### Lower-level building blocks
 
 If you do not want the engine wrapper, the same capabilities are exported as free functions: `parse`, `parseAll`, `encode`, `validate`, `tokenize`, `splitMessages`, `decodeValue`, `calculateChecksum`, `bodyLength`, `loadDictionary`, `Dictionary`, `validateDictionary`, the typed-message helpers (`messageFactory`, `messageTypeGuard`, `createMessage`, `createImmutableMessage`), and the dictionary-extension helpers (`extendDictionary`, `defineExtension`, `tagsOf`, `msgTypesOf`, `extendTags`, `invertTags`, `extendMsgTypes`, `invertMsgTypes`).
+
+Every one of them is documented, signature by signature, in the [API reference](https://boar.team/fix/docs/api/).
 
 ### Output shapes
 
@@ -332,7 +371,7 @@ For a library that sits in a trading firm's toolchain, the dependency tree _is_ 
 
 ## Coverage & correctness
 
-The dictionaries ship as data, generated by the separate `@boarteam/fix-codegen` generator from permissively-licensed sources. The counts below are read directly from the shipped dictionary files.
+The dictionaries ship as data, generated by the separate `@boarteam/fix-codegen` generator from permissively-licensed sources. The counts below are read directly from the shipped dictionary files, and each dialect is browsable field-by-field on the [FIX reference](https://boar.team/fix/dialects/) — the [coverage page](https://boar.team/fix/coverage/) renders the declared gaps below from the same shipped data.
 
 ### FIX 4.4 — `@boarteam/fix-dict-fix44`
 
@@ -389,6 +428,8 @@ What it owns instead: decoding and validating messages you already have, encodin
 | [`@boarteam/fix-dict-fixt11`](https://www.npmjs.com/package/@boarteam/fix-dict-fixt11)     | 1.0.0   | FIXT.1.1 transport-only dictionary (envelope + session messages), for the pair API.            |
 
 All packages: zero runtime dependencies, dual ESM + CJS, Node ≥ 18, browser + Node, Apache-2.0. The dictionary packages also export `dictionary`, `Tags` (name → tag), `MsgType` (name → msgtype), and `DICTIONARY_VERSION` (e.g. `"FIX.4.4"`, `"FIX.5.0SP2"`).
+
+Which dictionary to pick, and how the FIXT pair fits together: [Dictionaries guide](https://boar.team/fix/docs/dictionaries/). To browse the data itself before installing anything, each dialect has a reference view — [FIX 4.4](https://boar.team/fix/dialect/4-4/), [FIX 4.2](https://boar.team/fix/dialect/4-2/), [FIX 5.0 SP2](https://boar.team/fix/dialect/5-0-sp2/) — and there is a [4.4 vs 4.2 diff](https://boar.team/fix/4-4-vs-4-2/).
 
 ---
 

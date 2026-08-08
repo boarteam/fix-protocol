@@ -90,6 +90,24 @@ submit the contribution under the project's license. CI enforces this on every P
 Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)
 (`feat:`, `fix:`, `docs:`, `chore:`, with an optional scope like `feat(parse):`).
 
+## Documentation
+
+User-facing documentation — the guides, the generated API reference, the issue-code catalogue,
+the playground and the browsable dictionary reference — lives at
+<https://boar.team/fix/docs/>. Two parts of it are produced **from this repository**, so they are
+contributed here:
+
+- **The [API reference](https://boar.team/fix/docs/api/)** is rendered from `dist/api.json`, which
+  the `packages/fix` build extracts from the TSDoc comments on the public exports. Improving an
+  export's docs means editing its doc comment in `packages/fix/src` — CI already fails on an
+  undocumented export or a broken `{@link}`. See [`docs/api-json.md`](docs/api-json.md).
+- **The [diagnostics catalogue](https://boar.team/fix/diagnostics/)** lists every issue code the
+  engine ships; the list itself comes from the released package, so a new or renamed code lands
+  there automatically (the site's build fails until its prose covers it).
+
+The prose guides are authored in the site's own repository. If one is wrong or missing something,
+open an [issue](https://github.com/boarteam/fix-protocol/issues) here and we will route it.
+
 ## Reporting bugs & security issues
 
 Use the issue templates for bugs and features. For **security vulnerabilities**, do not open a

@@ -39,7 +39,7 @@
     "url": "git+https://github.com/boarteam/fix-protocol.git",
     "directory": "packages/fix-dict-fixt11"
   },
-  "homepage": "https://github.com/boarteam/fix-protocol#readme",
+  "homepage": "https://boar.team/fix/docs/",
   "bugs": "https://github.com/boarteam/fix-protocol/issues",
   "publishConfig": {
     "access": "public"

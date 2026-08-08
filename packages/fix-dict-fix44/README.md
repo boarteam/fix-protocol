@@ -4,6 +4,8 @@ The **complete FIX 4.4 dictionary as data** (912 fields / 93 messages / 105 comp
 datatypes) for the [`@boarteam/fix`](https://www.npmjs.com/package/@boarteam/fix) engine.
 Generated directly from the QuickFIX `FIX44.xml` data dictionary — never hand-maintained.
 
+📖 **[Documentation](https://boar.team/fix/docs/)** · 📚 **[Browse FIX 4.4](https://boar.team/fix/dialect/4-4/)** · ▶️ **[Playground](https://boar.team/fix/playground/)** · 💻 **[GitHub](https://github.com/boarteam/fix-protocol)**
+
 Stable and actively developed. See the
 [project README](https://github.com/boarteam/fix-protocol#readme) for coverage and declared
 coverage gaps.
@@ -50,8 +52,8 @@ group/component `interface`s (`SecListGrp_NoRelatedSymEntry`, `InstrumentFields`
 extensions patch via declaration merging. For the read side it exports `isMessageType` — a type
 guard that narrows a `MessageView<any>` of unknown type to a specific message's body keyed on its
 `MsgType` value (so `get()` becomes typed) — and `MessageOf<M>`, the matching annotation alias.
-See the [`@boarteam/fix` README](https://www.npmjs.com/package/@boarteam/fix) for the
-typed-message API.
+The typed-message API is documented in full in the
+[Typed messages guide](https://boar.team/fix/docs/typed-messages/).
 
 Requires `@boarteam/fix` as a peer dependency.
 
