@@ -30,6 +30,8 @@ import {
   diffAgainstBaseline,
   pendingChangesetLevel,
   versionDelta,
+  extractExamples,
+  exampleAnnotations,
   LEVEL,
 } from './api-model.mjs';
 
@@ -55,6 +57,19 @@ const { symbols, problems } = extractSurface();
 const coverage = checkDocCoverage(symbols);
 problems.push(...coverage.problems);
 problems.push(...checkLinks(symbols));
+
+/* @example blocks are executable claims: shape-checked here, EXECUTED by
+ * examples/api-doctest.test.ts (the repo's test gate). Both must hold for the
+ * emitted `examplesVerified` flag to mean anything. */
+const doctest = extractExamples(symbols);
+problems.push(...doctest.problems);
+for (const example of doctest.examples) {
+  if (exampleAnnotations(example.code).length === 0) {
+    problems.push(
+      `${example.id}: no \`// → \` output annotations — an example must assert what it prints`,
+    );
+  }
+}
 
 const grouped = new Map();
 for (const group of groups) {
@@ -112,6 +127,10 @@ const api = {
   schema: 1,
   package: pkg.name,
   version: pkg.version,
+  /* Every @example block is shape-gated above and executed with asserted
+   * output by examples/api-doctest.test.ts in this repo's CI — consumers may
+   * render them as verified. Additive field; schema stays 1. */
+  examplesVerified: true,
   groups: groups.map((g) => ({ id: g.id, title: g.title, symbols: g.symbols })),
   symbols: symbols.map((s) => ({
     ...s,
@@ -126,6 +145,7 @@ const withSource = api.symbols.filter((s) => s.source).length;
 console.log(
   `[api] dist/api.json — ${api.symbols.length} symbols · ${groups.length} groups · ` +
     `${withSource}/${api.symbols.length} source-mapped · ` +
+    `${doctest.examples.length} doctested @example block(s) · ` +
     `params documented ${coverage.paramsDocumented}/${coverage.paramsTotal} (reported, not gated)`,
 );
 if (diff.changes.length) {

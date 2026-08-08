@@ -396,3 +396,57 @@ export function pendingChangesetLevel(changesetDir = join(REPO_DIR, '.changeset'
 }
 
 export { LEVEL };
+
+/* --------------------------------------------------------------- examples */
+
+/**
+ * Every `@example` block in the surface as a runnable unit: the caption from
+ * the tag line plus the body of the SINGLE fenced code block the section must
+ * consist of. Anything else in the section — stray prose, a second fence, no
+ * fence at all — is a shape problem, and both the emit and the doctest refuse
+ * it: an example that cannot be executed verbatim documents nothing.
+ */
+export function extractExamples(symbols) {
+  const examples = [];
+  const problems = [];
+  const scan = (doc, where) => {
+    const lines = doc.split('\n');
+    let section = null;
+    const sections = [];
+    for (const line of lines) {
+      const tag = /^@([A-Za-z]+)[ \t]*(.*)$/.exec(line);
+      if (tag) {
+        section = tag[1] === 'example' ? { caption: tag[2].trim(), lines: [] } : null;
+        if (section) sections.push(section);
+        continue;
+      }
+      section?.lines.push(line);
+    }
+    sections.forEach((s, i) => {
+      const body = s.lines.join('\n').trim();
+      const fence = /^```([A-Za-z]*)\n([\s\S]*?)\n```$/.exec(body);
+      const id = `${where} @example ${i + 1}`;
+      if (!fence) {
+        problems.push(`${id}: must consist of exactly one fenced code block`);
+        return;
+      }
+      examples.push({ id, where, caption: s.caption, lang: fence[1] || 'ts', code: fence[2] });
+    });
+  };
+  for (const s of symbols) {
+    scan(s.doc, s.id);
+    for (const m of s.members ?? []) scan(m.doc, `${s.id}.${m.name || m.kind}`);
+  }
+  return { examples, problems };
+}
+
+/**
+ * The `// → ` output annotations of an example, in order. Only the line form
+ * exists here — a `/* → *\/` block would close the enclosing JSDoc comment.
+ * The doctest asserts the example's stdout equals these lines exactly.
+ */
+export function exampleAnnotations(code) {
+  const out = [];
+  for (const m of code.matchAll(/\/\/ → (.*)$/gm)) out.push(m[1].trimEnd());
+  return out;
+}

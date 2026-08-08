@@ -15,6 +15,7 @@ beside is exactly the drift this file exists to rule out.
   "schema": 1,
   "package": "@boarteam/fix",
   "version": "0.5.0",
+  "examplesVerified": true, // every @example executed + output-asserted (≥ 0.5.1)
   "groups": [{ "id": "parse", "title": "Parsing", "symbols": ["parse", "…"] }],
   "symbols": [
     {
@@ -62,10 +63,35 @@ Facts a consumer may rely on:
 | Grouping       | An export is missing from `packages/fix/api/groups.json`, or listed twice. Placement is curation, not a heuristic.                                                                                                                      |
 | Since          | An export has no `packages/fix/api/since.json` entry (`"next"` marks unreleased), or an entry names a non-export.                                                                                                                       |
 | API diff       | The structural surface differs from `packages/fix/api/baseline.json` (the last published release) beyond what the version bump in `package.json` **or a pending changeset** allows: additions need ≥ minor, removals/alterations major. |
+| Doctest        | An `@example` section is not exactly one annotated fence (emit), or the block fails to run / prints something other than its `// → ` annotations (`examples/api-doctest.test.ts`, `pnpm test`).                                         |
 
 Doc-text-only changes pass at any level — prose is not surface. "Structural"
 means: export list, kinds, signatures, parameter names/types/optionality,
 returns, member list/text, and literal-union contents.
+
+## The `@example` doctest (`examplesVerified`)
+
+`@example` blocks are executable claims, held by two gates:
+
+- **Shape, at emit:** each `@example` section is exactly one fenced code block
+  carrying at least one `// → ` output annotation — an example that asserts
+  nothing proves nothing. (Only the line annotation form exists here; a
+  `/* → */` block would close the enclosing JSDoc comment.)
+- **Execution, in CI:** `examples/api-doctest.test.ts` runs every block
+  verbatim with plain `node` from `examples/` (the workspace links make
+  `import '@boarteam/fix'` resolve like a consumer's install) and asserts the
+  stdout equals the annotations line for line.
+
+Authoring rules that follow: blocks are runnable ESM **JavaScript** (node
+executes them un-transpiled — type annotations don't run), self-contained
+(declare your own wire strings; encode them to get correct framing), and
+deterministic (no clocks, no randomness). Prose comments inside a block must
+not begin with `// → ` — that prefix is reserved for asserted output.
+
+`examplesVerified: true` in the artifact is the render permission consumers
+key on: boar.team withholds example rendering from any version that does not
+carry it. The claim's chain of trust is the repo's CI — the doctest gates
+every PR into `main`, and releases build from `main`.
 
 ## Release-time maintenance
 
