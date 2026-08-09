@@ -5,6 +5,8 @@ A **dictionary-driven FIX protocol toolkit** for TypeScript — parse, validate,
 or Node. This is the engine; pair it with a dictionary such as
 [`@boarteam/fix-dict-fix44`](https://www.npmjs.com/package/@boarteam/fix-dict-fix44).
 
+📖 **[Documentation](https://boar.team/fix/docs/)** · 🧭 **[API reference](https://boar.team/fix/docs/api/)** · ▶️ **[Playground](https://boar.team/fix/playground/)** · 💻 **[GitHub](https://github.com/boarteam/fix-protocol)**
+
 On a 0.x line: the foundation is solid and well-tested, and the API may still refine ahead of
 1.0. See the [project README](https://github.com/boarteam/fix-protocol#readme) for coverage,
 testing, and the roadmap — [feedback](https://github.com/boarteam/fix-protocol/issues) welcome.
@@ -114,7 +116,7 @@ patch the shared interface via declaration merging (single venue) or an override
 intersection (multiple venues), then rebind `messageFactory<MessageBodies>(extended)`. The
 augmented type and the extended dictionary ship as a pair.
 
-Full docs, examples, and the contribution guide are in the
+Examples and the contribution guide live in the
 [monorepo](https://github.com/boarteam/fix-protocol).
 
 ## FIX 5.0 SP2 / FIXT.1.1
@@ -145,7 +147,21 @@ pair pre-merged (a drop-in for `createFixEngine(dictionary)`), and
 `mergeFixtDictionaries(transport, app)` builds the same shape from your own app-layer
 dialect.
 
-## API reference & `dist/api.json`
+## Documentation
+
+The full documentation is at **[boar.team/fix/docs](https://boar.team/fix/docs/)** — guides for
+[parsing](https://boar.team/fix/docs/parse/), [validation](https://boar.team/fix/docs/validate/),
+[encoding](https://boar.team/fix/docs/encode/),
+[typed messages](https://boar.team/fix/docs/typed-messages/),
+[dictionary extensions](https://boar.team/fix/docs/extend/) and
+[choosing a dictionary](https://boar.team/fix/docs/dictionaries/). Every sample on those pages is
+compiled and executed against the released package at build time, so they cannot drift from what
+you install. Alongside them: a [catalogue of every issue code](https://boar.team/fix/diagnostics/)
+`parse` and `validate` can emit, a browser
+[playground](https://boar.team/fix/playground/) running this engine client-side, and a browsable
+[FIX dictionary reference](https://boar.team/fix/).
+
+### API reference & `dist/api.json`
 
 Every export is documented, signature by signature, in the generated
 [API reference](https://boar.team/fix/docs/api/), and the tarball ships the model it is

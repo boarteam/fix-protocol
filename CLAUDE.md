@@ -18,6 +18,15 @@ check that fails any PR commit lacking a `Signed-off-by:` trailer. So:
 A `pre-commit` hook (simple-git-hooks → lint-staged → prettier) reformats staged files,
 so expect a reformat pass on commit.
 
+## Where the docs live
+
+User-facing documentation is published at <https://boar.team/fix/docs/> (guides, the generated
+API reference at `/fix/docs/api/`, the issue-code catalogue at `/fix/diagnostics/`, the playground
+at `/fix/playground/`, and the browsable dictionary reference at `/fix/`). The site is built from a
+separate repository; this repo owns the two generated inputs — the TSDoc comments behind
+`dist/api.json` and the shipped issue-code catalogue. READMEs and `package.json` `homepage` fields
+point there, so keep new links consistent with that set.
+
 ## Repo shape
 
 pnpm workspace, vitest, TypeScript. Packages under `packages/`: `fix` (the engine),

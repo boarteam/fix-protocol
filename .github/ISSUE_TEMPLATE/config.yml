@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Documentation
+    url: https://boar.team/fix/docs/
+    about: Guides, the generated API reference, the issue-code catalogue and a browser playground.
   - name: Security report
     url: https://github.com/boarteam/fix-protocol/security/advisories/new
     about: Please report vulnerabilities privately. See SECURITY.md — do not open a public issue.

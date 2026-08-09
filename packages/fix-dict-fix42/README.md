@@ -5,6 +5,8 @@ The **complete FIX 4.2 dictionary as data** (405 fields / 46 messages / 21 datat
 official FIX 4.2 specification (FIX Repository, 2010 Edition) and cross-checked against the
 QuickFIX `FIX42.xml` dictionary by a CI drift gate — never hand-maintained.
 
+📖 **[Documentation](https://boar.team/fix/docs/)** · 📚 **[Browse FIX 4.2](https://boar.team/fix/dialect/4-2/)** · ▶️ **[Playground](https://boar.team/fix/playground/)** · 💻 **[GitHub](https://github.com/boarteam/fix-protocol)**
+
 Stable and actively developed. See the
 [project README](https://github.com/boarteam/fix-protocol#readme) for coverage, the cross-check
 report, and declared coverage gaps.
@@ -32,8 +34,8 @@ It also exports the typed encode-side API: `message` (a factory bound to this di
 plus augmentable per-container group/component `interface`s. For the read side it exports
 `isMessageType` (a type guard that narrows a `MessageView<any>` of unknown type to a specific
 message's body, keyed on its `MsgType` value) and `MessageOf<M>` (the matching annotation alias).
-See the [`@boarteam/fix` README](https://www.npmjs.com/package/@boarteam/fix) for the
-typed-message API.
+The typed-message API is documented in full in the
+[Typed messages guide](https://boar.team/fix/docs/typed-messages/).
 
 Requires `@boarteam/fix` as a peer dependency.
 

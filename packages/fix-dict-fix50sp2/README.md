@@ -9,6 +9,8 @@ same single-dictionary API the 4.2/4.4 dicts use. Generated from the QuickFIX/J
 `FIX50SP2.xml` + `FIXT11.xml` data dictionaries and cross-checked against quickfix-go's
 independently-maintained `FIX50SP2.xml` by a CI drift gate — never hand-maintained.
 
+📖 **[Documentation](https://boar.team/fix/docs/)** · 📚 **[Browse FIX 5.0 SP2](https://boar.team/fix/dialect/5-0-sp2/)** · ▶️ **[Playground](https://boar.team/fix/playground/)** · 💻 **[GitHub](https://github.com/boarteam/fix-protocol)**
+
 FIX 5.0 messages travel over FIXT.1.1: tag 8 carries `FIXT.1.1`, and the application
 version rides on `DefaultApplVerID(1137)` (required on Logon; `9` = FIX 5.0 SP2) with the
 optional per-message header override `ApplVerID(1128)`. This dictionary models exactly
