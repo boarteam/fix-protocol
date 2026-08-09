@@ -1,6 +1,6 @@
 {
   "note": "Structural API of the last published release — regenerate with scripts/refresh-api-baseline.mjs after each release.",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "symbols": [
     {
       "id": "BaseType",
