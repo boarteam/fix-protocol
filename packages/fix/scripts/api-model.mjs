@@ -272,7 +272,12 @@ export function checkLinks(symbols) {
 
 /* --------------------------------------------------------- doc coverage */
 
-/** Undocumented exports and members fail; params/returns are reported only. */
+/**
+ * Full doc coverage, all of it failing: exported symbols, members, every
+ * function parameter (`@param name …`) and every function's `@returns`. The
+ * params/returns half was report-only until the 51-parameter backlog was
+ * closed; it gates now so the next gap fails the PR that opens it.
+ */
 export function checkDocCoverage(symbols) {
   const problems = [];
   let paramsDocumented = 0;
@@ -285,6 +290,10 @@ export function checkDocCoverage(symbols) {
     for (const p of s.params ?? []) {
       paramsTotal++;
       if (new RegExp(`^@param\\s+${p.name}\\b`, 'm').test(s.doc)) paramsDocumented++;
+      else problems.push(`${s.id}: parameter \`${p.name}\` has no @param doc`);
+    }
+    if (s.kind === 'function' && !/^@returns\b/m.test(s.doc)) {
+      problems.push(`${s.id}: function has no @returns doc`);
     }
   }
   return { problems, paramsDocumented, paramsTotal };

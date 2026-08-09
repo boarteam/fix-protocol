@@ -97,6 +97,10 @@ export interface FixEngine<Bodies = Record<string, UntypedBody>> {
  * (examples/api-doctest.test.ts), which fails when a block does not run or does not
  * print what it claims.
  *
+ * @param dictionary A {@link Dictionary} index, a raw {@link DictionaryJSON}, or a FIXT transport/application pair.
+ * @param options Per-engine defaults ({@link EngineOptions}), overridable on each call.
+ * @returns A pure, reusable engine bound to the dictionary.
+ *
  * @example
  * ```ts
  * import { createFixEngine } from '@boarteam/fix';

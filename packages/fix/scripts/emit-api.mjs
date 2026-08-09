@@ -4,8 +4,8 @@
  * for this package (after tsup), so every PR that touches the surface meets
  * the gates in CI:
  *
- *   - doc coverage: an exported symbol or member without a doc comment fails
- *     (parameters/returns are reported, not enforced — the backlog is real);
+ *   - doc coverage: an exported symbol, member, function parameter or return
+ *     without TSDoc fails — the full surface, no report-only tier left;
  *   - link integrity: every {@link} must resolve (see docs/api-json.md);
  *   - grouping: every export placed in exactly one curated group (api/groups.json);
  *   - since: every export has an entry in api/since.json ('next' = unreleased);
@@ -146,7 +146,7 @@ console.log(
   `[api] dist/api.json — ${api.symbols.length} symbols · ${groups.length} groups · ` +
     `${withSource}/${api.symbols.length} source-mapped · ` +
     `${doctest.examples.length} doctested @example block(s) · ` +
-    `params documented ${coverage.paramsDocumented}/${coverage.paramsTotal} (reported, not gated)`,
+    `params documented ${coverage.paramsDocumented}/${coverage.paramsTotal} + @returns (gated)`,
 );
 if (diff.changes.length) {
   console.log(

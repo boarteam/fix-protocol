@@ -29,6 +29,8 @@ export interface FrameOptions {
  * Leading/trailing bytes outside any `8=…10=` frame are ignored. Never throws.
  *
  * @returns one `Uint8Array` per detected message, in order; empty for empty input.
+ * @param raw The buffer to split, as a string or UTF-8 bytes.
+ * @param options Separator override ({@link FrameOptions}).
  */
 export function splitMessages(raw: string | Uint8Array, options: FrameOptions = {}): Uint8Array[] {
   const bytes = toBytes(raw);
@@ -81,6 +83,7 @@ export function splitMessages(raw: string | Uint8Array, options: FrameOptions = 
  * @param raw The single message as a string or UTF-8 bytes.
  * @param dict The dictionary, used to locate `Length`→`data` field pairs.
  * @param options Optional separator override.
+ * @returns Ordered `[tag, value]` tokens, with `data` payloads read length-exactly.
  */
 export function scanFields(
   raw: string | Uint8Array,

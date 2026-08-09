@@ -400,6 +400,10 @@ function resolveDict(dict: Dictionary | DictionaryJSON): Dictionary {
  * loose {@link UntypedBody}; pass a generated per-message body type (or use the dict
  * package's typed `message` factory / a `createFixEngine<Bodies>` engine) for field-level
  * type safety.
+ * @param msgType The `MsgType` (tag 35) value the message is created for.
+ * @param dict The dictionary that defines the message and renders it.
+ * @param init Optional complete body init (see {@link MessageInit}); omit to build incrementally.
+ * @returns A mutable, fluent builder typed to `B`.
  */
 export function createMessage<B extends object = UntypedBody>(
   msgType: string,
@@ -409,7 +413,14 @@ export function createMessage<B extends object = UntypedBody>(
   return new MutableMessageImpl<B>(resolveDict(dict), msgType, init ? { ...init } : {});
 }
 
-/** Create an {@link ImmutableMessage} for a `MsgType`. See {@link createMessage}. */
+/**
+ * Create an {@link ImmutableMessage} for a `MsgType`. See {@link createMessage}.
+ *
+ * @param msgType The `MsgType` (tag 35) value the message is created for.
+ * @param dict The dictionary that defines the message and renders it.
+ * @param init Optional complete body init (see {@link MessageInit}); omit to build incrementally.
+ * @returns An immutable message; every edit returns a new instance.
+ */
 export function createImmutableMessage<B extends object = UntypedBody>(
   msgType: string,
   dict: Dictionary | DictionaryJSON,
@@ -428,6 +439,8 @@ export function createImmutableMessage<B extends object = UntypedBody>(
  * message('W').set('MDReqID', 'r1');        // typed to MarketDataSnapshotFullRefresh
  * message.immutable(MsgType.Logon).with(...);
  * ```
+ * @param dict The dictionary every created message is bound to.
+ * @returns The typed factory the dict packages re-export as `message`.
  */
 export function messageFactory<Bodies>(dict: Dictionary | DictionaryJSON): MessageFactory<Bodies> {
   const d = resolveDict(dict);
@@ -490,6 +503,7 @@ export type MessageOf<Bodies, M extends keyof Bodies & string> = MessageView<Bod
  *
  * Pure and side-effect-free: the only runtime work is `message.msgType === msgType`, so it holds
  * no dictionary, session, or transport state.
+ * @returns The narrowing guard; its runtime is a plain `msgType` compare.
  */
 export function messageTypeGuard<Bodies>(): MessageTypeGuard<Bodies> {
   return <M extends keyof Bodies & string>(

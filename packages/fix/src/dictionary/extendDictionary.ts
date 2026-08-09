@@ -67,6 +67,9 @@ export interface ExtendResult {
  * }
  * const engine = createFixEngine(dictionary);
  * ```
+ * @param base The dictionary to extend; never mutated.
+ * @param extensions Extension declarations, applied left to right.
+ * @returns The merged dictionary plus `extend/*` diagnostics.
  */
 export function extendDictionary(
   base: DictionaryJSON,

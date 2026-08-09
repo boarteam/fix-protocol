@@ -135,6 +135,7 @@ const MAX_NESTING_DEPTH = 256;
  * @param message A {@link ParsedMessage} (typically from {@link parse}).
  * @param dict The dictionary to validate against.
  * @param options See {@link ValidateOptions}.
+ * @returns Every conformance finding, as data; empty when the message obeys the dictionary.
  */
 export function validate(
   message: ParsedMessage,

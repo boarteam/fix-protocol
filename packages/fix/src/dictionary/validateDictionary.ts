@@ -13,6 +13,8 @@ const BASE_TYPES = new Set<BaseType>(['int', 'float', 'char', 'String', 'data'])
  * result means the dictionary is internally consistent and safe to load.
  *
  * This checks *internal consistency*, not conformance to any particular FIX version.
+ * @param json The dictionary object to check; arbitrary malformed input is tolerated.
+ * @returns The internal-consistency findings; empty means safe to load.
  */
 export function validateDictionary(json: DictionaryJSON): FixIssue[] {
   const issues: FixIssue[] = [];

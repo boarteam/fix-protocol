@@ -58,6 +58,7 @@ export const FLOAT_RE = /^[+-]?(?:\d+\.?\d*|\.\d+)$/;
  * @param field The field definition that types the value.
  * @param dict The dictionary, used to resolve the datatype's base and flags.
  * @param path Dotted location for any reported issue (e.g. `"NoMDEntries[1].MDEntryPx"`).
+ * @returns The coerced value plus any diagnostics; the raw string is kept on coercion failure.
  */
 export function decodeValue(
   raw: string,

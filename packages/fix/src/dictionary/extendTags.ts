@@ -67,6 +67,9 @@ export type InvertMsgTypes<T extends Record<string, string>> = {
  * Note: literals survive only for call-site object literals (or `as const`
  * values) — an extension pre-declared as `Record<string, number>` is already
  * widened and yields `number`-typed entries.
+ * @param base The shipped `Tags` map to extend.
+ * @param ext Venue entries; on a name collision the extension wins.
+ * @returns The merged map, literal types preserved.
  */
 export function extendTags<
   B extends Record<string, number>,
@@ -85,6 +88,8 @@ export function extendTags<
  * such collisions are *reported*. For a standalone bijection guarantee, assert
  * `Object.keys(invertTags(m)).length === Object.keys(m).length` in a test, as the
  * shipped packages' `names.test.ts` does.
+ * @param tags The `name → tag` map to invert.
+ * @returns The `tag → name` reverse, typed as {@link InvertTags}.
  */
 export function invertTags<const T extends Record<string, number>>(tags: T): InvertTags<T> {
   const out: Record<number, string> = {};
@@ -102,6 +107,9 @@ export function invertTags<const T extends Record<string, number>>(tags: T): Inv
  * const MsgType = extendMsgTypes(Fix44MsgType, { CTraderPing: 'UP1' });
  * MsgType.CTraderPing; // typed 'UP1'
  * ```
+ * @param base The shipped `MsgType` map to extend.
+ * @param ext Venue entries; on a name collision the extension wins.
+ * @returns The merged map, literal types preserved.
  */
 export function extendMsgTypes<
   B extends Record<string, string>,
@@ -113,6 +121,8 @@ export function extendMsgTypes<
 /**
  * Build the `msgType → name` reverse of a `MsgType` map — the string-valued
  * mirror of {@link invertTags}.
+ * @param msgTypes The `name → msgType` map to invert.
+ * @returns The `msgType → name` reverse, typed as {@link InvertMsgTypes}.
  */
 export function invertMsgTypes<const T extends Record<string, string>>(
   msgTypes: T,

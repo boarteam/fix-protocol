@@ -56,6 +56,9 @@ const MSG_TYPE = 35;
  * to the pair's `defaultApplVerID`) routes a `resolveApp` hook.
  *
  * @returns the framed message, terminated by a trailing separator.
+ * @param message The MsgType plus tag-keyed fields and groups to render.
+ * @param dictionaries The dictionary — or FIXT transport/application pair — that prescribes field order.
+ * @param options Output separator ({@link EncodeOptions}).
  */
 export function encode(
   message: EncodeMessage,
