@@ -92,21 +92,35 @@ export interface FixEngine<Bodies = Record<string, UntypedBody>> {
  * {@link FixEngine.validate} (see {@link FixIssue.layer}). The returned engine is pure and
  * reusable across messages.
  *
+ * The `// →` annotations below are asserted outputs, not aspirations: every `@example`
+ * block is executed against the built packages by the doctest gate
+ * (examples/api-doctest.test.ts), which fails when a block does not run or does not
+ * print what it claims.
+ *
  * @example
  * ```ts
  * import { createFixEngine } from '@boarteam/fix';
  * import { dictionary } from '@boarteam/fix-dict-fix44';
+ *
  * const fix = createFixEngine(dictionary);
- * const { message, issues } = fix.parse(raw);
+ * const raw = '8=FIX.4.4|9=58|35=A|49=BUY|56=SELL|34=1|52=20260807-12:00:00|98=0|108=30|10=164|';
+ * const { message, issues } = fix.parse(raw, { soh: '|' });
+ * console.log(message.name, issues.length); // → Logon 0
  * ```
  *
  * @example FIXT.1.1 pair (layer-attributed validation)
  * ```ts
+ * import { createFixEngine } from '@boarteam/fix';
  * import { dictionary as fixt11 } from '@boarteam/fix-dict-fixt11';
  * import { dictionary as fix50sp2 } from '@boarteam/fix-dict-fix50sp2';
+ *
  * const fix = createFixEngine({ transport: fixt11, app: fix50sp2 });
- * const issues = fix.validate(fix.parse(raw).message);
- * const sessionFindings = issues.filter((i) => i.layer === 'session'); // → Reject(3)
+ * // A FIXT Logon missing its required EncryptMethod(98) — a session-layer defect,
+ * // so the finding says: answer with a session Reject(3), not a BusinessMessageReject.
+ * const raw = '8=FIXT.1.1|9=60|35=A|49=BUY|56=SELL|34=1|52=20260807-12:00:00|108=30|1137=9|10=079|';
+ * const issues = fix.validate(fix.parse(raw, { soh: '|' }).message);
+ * const sessionFindings = issues.filter((i) => i.layer === 'session');
+ * console.log(sessionFindings.map((i) => `${i.code}(${i.refTagID})`)); // → [ 'validate/required-field-missing(98)' ]
  * ```
  */
 export function createFixEngine<Bodies = Record<string, UntypedBody>>(
