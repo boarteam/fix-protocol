@@ -267,6 +267,9 @@ function hasOwn(obj: object, key: string): boolean {
  * Build a {@link Dictionary} runtime index from its JSON form. Does not validate the
  * JSON; run {@link validateDictionary} first if the source is
  * untrusted.
+ *
+ * @param json The dictionary data to index.
+ * @returns The immutable runtime index over `json`.
  */
 export function loadDictionary(json: DictionaryJSON): Dictionary {
   return new Dictionary(json);

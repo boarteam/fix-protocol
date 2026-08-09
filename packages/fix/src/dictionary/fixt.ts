@@ -53,7 +53,12 @@ export interface FixtDictionaries {
   defaultApplVerID?: string;
 }
 
-/** Whether a dictionaries argument is the FIXT transport/app pair form. */
+/**
+ * Whether a dictionaries argument is the FIXT transport/app pair form.
+ *
+ * @param d The dictionaries argument any codec entry point accepts.
+ * @returns Whether `d` is the FIXT transport/application pair form.
+ */
 export function isFixtDictionaries(
   d: Dictionary | DictionaryJSON | FixtDictionaries,
 ): d is FixtDictionaries {
@@ -178,6 +183,9 @@ function detectEnvelope(d: DictionaryJSON): { header?: string; trailer?: string 
  * "Lossy" refers to the layering, not the data: the merged form cannot attribute a field to
  * the session vs application layer any more — use the {@link FixtDictionaries} pair with
  * `validate` for layer-attributed diagnostics.
+ * @param transport The FIXT.1.1 session dictionary — envelope plus admin messages.
+ * @param app The application dictionary; envelope-less messages are wrapped with the transport’s header/trailer.
+ * @returns A fresh, self-contained merged {@link DictionaryJSON}.
  */
 export function mergeFixtDictionaries(
   transport: Dictionary | DictionaryJSON,

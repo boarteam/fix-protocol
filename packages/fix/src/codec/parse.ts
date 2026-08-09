@@ -112,6 +112,10 @@ const CHECK_SUM = 10;
  * comparing against the transport's `FIXT.1.1`. With a `resolveApp` hook, each message's
  * `ApplVerID(1128)` (falling back to the pair's `defaultApplVerID`) routes it to the right
  * application dictionary.
+ * @param raw One message as a string or UTF-8 bytes; extra frames are ignored (use {@link parseAll}).
+ * @param dict The dictionary — or FIXT pair — that names fields and drives group reconstruction.
+ * @param options Separator and framing checks ({@link ParseOptions}).
+ * @returns The structured message plus every diagnostic, as data.
  */
 export function parse(
   raw: string | Uint8Array,
@@ -128,6 +132,10 @@ export function parse(
 /**
  * Parse every message in a buffer of concatenated frames. Returns one {@link ParseResult}
  * per message, in order; an empty array for empty input. Never throws.
+ * @param raw The whole buffer, one or many concatenated frames.
+ * @param dict The dictionary — or FIXT pair — each frame is parsed against.
+ * @param options Separator and framing checks, applied to every frame.
+ * @returns One {@link ParseResult} per detected message, in wire order.
  */
 export function parseAll(
   raw: string | Uint8Array,
@@ -177,6 +185,8 @@ function effectiveDict(
  * {@link encode}, using each field's verbatim {@link ParsedField.raw} value so the
  * round-trip preserves the exact wire content. Framing fields (8/9/10) are carried but
  * ignored by the encoder, which recomputes them.
+ * @param message The parsed message to convert.
+ * @returns A tag-keyed {@link EncodeMessage} carrying each field’s verbatim raw value.
  */
 export function toEncodeMessage(message: ParsedMessage): EncodeMessage {
   return {

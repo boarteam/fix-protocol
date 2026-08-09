@@ -206,6 +206,8 @@ export type GuardWidening<E extends DictionaryExtension> = (TagsOf<E>[keyof Tags
  *   },
  * });
  * ```
+ * @param ext The extension declaration, written inline so its literals stay narrow.
+ * @returns The same object, its literal types pinned.
  */
 export function defineExtension<const E extends DictionaryExtension>(ext: E & GuardWidening<E>): E {
   return ext;
@@ -218,6 +220,8 @@ export function defineExtension<const E extends DictionaryExtension>(ext: E & Gu
  * ```ts
  * export const Tags = extendTags(Fix44Tags, tagsOf(ctrader)); // Tags.SymbolName: 1007
  * ```
+ * @param ext The extension declaration to derive from.
+ * @returns The literal `name → tag` map of the extension’s fields.
  */
 export function tagsOf<const E extends DictionaryExtension>(ext: E): TagsOf<E> {
   const out: Record<string, number> = {};
@@ -230,6 +234,8 @@ export function tagsOf<const E extends DictionaryExtension>(ext: E): TagsOf<E> {
 /**
  * Derive the literal `name → msgType` map of an extension's NEW messages, typed as
  * {@link MsgTypesOf}. Message patches (entries without `msgType`) are skipped.
+ * @param ext The extension declaration to derive from.
+ * @returns The literal `name → msgType` map of the extension’s NEW messages.
  */
 export function msgTypesOf<const E extends DictionaryExtension>(ext: E): MsgTypesOf<E> {
   const out: Record<string, string> = {};
