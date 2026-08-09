@@ -93,18 +93,29 @@ key on: boar.team withholds example rendering from any version that does not
 carry it. The claim's chain of trust is the repo's CI — the doctest gates
 every PR into `main`, and releases build from `main`.
 
-## Release-time maintenance
+## Release-time maintenance (automated)
 
-After each publish of `@boarteam/fix`, from the released commit:
+The baseline refresh rides inside the changesets **"Version Packages" PR** —
+no post-release chore PR exists. The root `version-packages` script (which the
+release workflow's changesets action invokes) chains three steps:
+
+1. `changeset version` — consume changesets, bump `package.json`s;
+2. `pnpm --filter @boarteam/fix build` — rebuild, re-running the emit gates
+   against the _old_ baseline (the version delta equals the consumed
+   changesets' level by construction, so a legitimate surface passes);
+3. `scripts/refresh-api-baseline.mjs` — re-stamp `api/baseline.json` from the
+   just-built surface at the _new_ version and freeze `"next"` since-entries.
+
+All three land in the bot's release PR, so the commit that publishes is the
+commit whose baseline already describes it — at publish time the gate compares
+the surface against itself. A release that does not touch `@boarteam/fix`
+leaves both files byte-identical (the refresh is a no-op at an unchanged
+version).
+
+The manual form remains for recovery (e.g. a baseline regenerated outside a
+release):
 
 ```bash
 pnpm --filter @boarteam/fix build
 node packages/fix/scripts/refresh-api-baseline.mjs
 ```
-
-This freezes `"next"` since-entries to the released version and makes the new
-release the diff baseline. (Until it runs, the gate diffs against the previous
-release with the version delta widening what is allowed — safe, just less
-precise.) The published artifact itself is always correct without this step:
-at publish time `package.json` already carries the new version, so `"next"`
-resolves to it inside the emitted `api.json`.
