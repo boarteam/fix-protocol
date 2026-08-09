@@ -1,5 +1,27 @@
 # @boarteam/fix
 
+## 0.5.1
+
+### Patch Changes
+
+- 849b88f: Doctest the `@example` blocks and say so in the artifact.
+
+  Every `@example` in the public doc comments is now an executable claim: the blocks were
+  rewritten to be self-contained (real framed wire strings, `// →` output annotations) and
+  `examples/api-doctest.test.ts` runs each one verbatim with plain `node` against the built
+  workspace packages, asserting the stdout equals the annotations. The emit additionally
+  shape-gates every block (exactly one fence, at least one annotation), and `dist/api.json`
+  now carries `examplesVerified: true` — the render permission consumers key on before
+  showing examples. Additive field; schema stays 1.
+
+- 22e859c: Point readers at the documentation site.
+
+  Every package now advertises <https://boar.team/fix/docs/> as its `homepage` (npm renders it as
+  the package's primary link) and opens its README with a docs / API-reference / playground row.
+  The engine README gains a section listing the six guides, the generated API reference, the issue-code
+  diagnostics catalogue and the browsable FIX dictionary reference; each dictionary README links the
+  reference view for its own dialect. Docs-only — no code, types, or dictionary data changed.
+
 ## 0.5.0
 
 ### Minor Changes
