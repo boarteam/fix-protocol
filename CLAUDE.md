@@ -42,3 +42,7 @@ contract (doc coverage, `{@link}` integrity, curated grouping, since-map, API di
 the last release — see `docs/api-json.md`); an API-changing PR needs a changeset of
 the matching level, and a new export must be placed in `packages/fix/api/groups.json`
 and `api/since.json` (`"next"`).
+
+Packages version independently. Name a `fix-dict-*` package in a changeset only when that
+dictionary itself changed — an engine release must not bump the dictionaries. See
+[`CONTRIBUTING.md`](./CONTRIBUTING.md) § "Changesets (versioning)".

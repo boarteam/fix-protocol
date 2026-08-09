@@ -60,6 +60,16 @@ pnpm changeset
 Pre-1.0 SemVer: breaking changes to the **output shape**, **accepted input**, or **issue
 codes** are a minor bump and must be called out in the changeset. See `CHANGELOG.md`.
 
+Each package versions on its own changes. The dictionaries do **not** ride along with an engine
+release: they declare `@boarteam/fix` as a peer dependency over the whole pre-1.0 line
+(`">=0.5.0 <1.0.0"`), which every engine release stays inside, so releasing the engine leaves
+them untouched. Name a dictionary in your changeset only when that dictionary actually changed
+— including when an engine change breaks it. (Changesets would otherwise force a **major** bump
+on every peer dependent of a released package; `onlyUpdatePeerDependentsWhenOutOfRange` in
+`.changeset/config.json` limits that to peers whose range the new version actually leaves.
+When the engine does reach 1.0, that major bump fires as intended — check the Version Packages
+PR, which rewrites the peer range to a bare `>=1.0.0`, and restore the upper bound by hand.)
+
 ## Releasing (maintainers)
 
 Releases are automated by the [Release workflow](.github/workflows/release.yml) using the

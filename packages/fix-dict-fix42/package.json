@@ -46,7 +46,7 @@
     "node": ">=18"
   },
   "peerDependencies": {
-    "@boarteam/fix": "workspace:^"
+    "@boarteam/fix": ">=0.5.0 <1.0.0"
   },
   "devDependencies": {
     "@boarteam/fix": "workspace:*",

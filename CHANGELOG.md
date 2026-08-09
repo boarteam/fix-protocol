@@ -15,6 +15,18 @@ While the project is pre-1.0, the public contract under SemVer covers:
 A breaking change to any of these is released as a **minor** bump (0.x → 0.(x+1)) and called
 out in the changeset. Additive changes and fixes are patch bumps.
 
+### Dictionary packages version independently
+
+The `@boarteam/fix-dict-*` packages carry their own version line, tracking changes to _their own_
+data and generated types — a regenerated dictionary, a new export, a corrected field. They are
+**not** re-released just because the engine was, and their version number is not expected to
+resemble the engine's.
+
+Each dictionary declares the engine as a peer dependency over the whole pre-1.0 line
+(`">=0.5.0 <1.0.0"`), so an engine release stays inside the range and needs no dictionary
+republish. If an engine change genuinely breaks a dictionary, that dictionary gets its own
+changeset saying so.
+
 ## Unreleased
 
 - **FIX 5.0 SP2 / FIXT.1.1 support** (engine minor + two new dictionary packages):
