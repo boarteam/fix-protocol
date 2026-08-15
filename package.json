@@ -28,7 +28,7 @@
     "check:bundle": "node scripts/check-bundle.mjs",
     "examples": "node examples/parse-and-validate.mjs && node examples/encode-a-message.mjs && node examples/demo-decode.mjs snapshot && node examples/demo-decode.mjs broken && node examples/fixt-pair.mjs",
     "changeset": "changeset",
-    "version-packages": "changeset version",
+    "version-packages": "changeset version && pnpm --filter @boarteam/fix build && node packages/fix/scripts/refresh-api-baseline.mjs",
     "release": "pnpm -r build && changeset publish"
   },
   "devDependencies": {

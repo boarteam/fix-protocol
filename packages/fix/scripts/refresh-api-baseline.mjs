@@ -1,6 +1,9 @@
 #!/usr/bin/env node
-/* Post-release maintenance for the API contract files — run once after each
- * publish of @boarteam/fix (see docs/api-json.md):
+/* Maintenance for the API contract files. Runs AUTOMATICALLY as the tail of
+ * the root `version-packages` script, so the changesets "Version Packages" PR
+ * carries the refreshed baseline and no post-release chore PR is needed (see
+ * docs/api-json.md § Release-time maintenance). Kept runnable by hand for
+ * recovery:
  *
  *   1. api/baseline.json becomes the just-released structural surface, so the
  *      next PR diffs against the version users actually have;
@@ -10,6 +13,7 @@
  * Reads the CURRENT build output — run `pnpm --filter @boarteam/fix build`
  * first, from the released commit.
  */
+import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -48,6 +52,17 @@ for (const [name, version] of Object.entries(since)) {
   }
 }
 writeFileSync(sincePath, JSON.stringify(since, null, 2) + '\n');
+
+/* Prettier-format the outputs so a no-op refresh is byte-identical to the
+ * committed files — the version-packages chain must not churn the release PR
+ * with formatting-only diffs. */
+execFileSync(
+  'pnpm',
+  ['exec', 'prettier', '--write', join(PKG_DIR, 'api', 'baseline.json'), sincePath],
+  {
+    stdio: 'ignore',
+  },
+);
 
 console.log(
   `[api] baseline refreshed to ${pkg.version} (${symbols.length} symbols)` +
