@@ -10,7 +10,8 @@
     "start:encode": "node encode-a-message.mjs",
     "start:extend": "node extend-dictionary.mjs",
     "start:fixt": "node fixt-pair.mjs",
-    "start:parse": "node parse-and-validate.mjs"
+    "start:parse": "node parse-and-validate.mjs",
+    "start:read": "node read-a-message.mjs"
   },
   "dependencies": {
     "@boarteam/fix": "workspace:*",

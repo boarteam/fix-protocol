@@ -54,6 +54,19 @@ export type {
   UntypedBody,
 } from './message';
 
+// Inbound: the typed read view over a parsed message.
+export { toInbound, inboundTypeGuard, inboundKnownGuard } from './inbound';
+export type {
+  InboundMessage,
+  InboundMessageOf,
+  InboundEnvelope,
+  InboundBody,
+  InboundTypeGuard,
+  InboundOf,
+  InboundUnion,
+  InboundKnownGuard,
+} from './inbound';
+
 // Dictionary runtime + contract.
 export { Dictionary, loadDictionary } from './dictionary/Dictionary';
 export type { ResolvedDatatype } from './dictionary/Dictionary';

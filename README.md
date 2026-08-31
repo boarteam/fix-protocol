@@ -141,6 +141,7 @@ The full documentation lives at **[boar.team/fix/docs](https://boar.team/fix/doc
 | [Validate](https://boar.team/fix/docs/validate/)             | The `FixIssue` shape, stable issue codes as the SemVer contract, severities, layers            |
 | [Encode](https://boar.team/fix/docs/encode/)                 | Tag-keyed encode, dictionary field order, byte-accurate `BodyLength` / `CheckSum`              |
 | [Typed messages](https://boar.team/fix/docs/typed-messages/) | The `message()` builder, compile-error safety, `render()`, immutability, type guards           |
+| [Inbound messages](https://boar.team/fix/docs/inbound/)      | `toInbound`, the name-keyed body and the session envelope, `switch (msgType)` dispatch         |
 | [Extend a dictionary](https://boar.team/fix/docs/extend/)    | Venue-custom tags with `defineExtension` — cTrader's `1007`/`1008` as the worked example       |
 | [Dictionaries](https://boar.team/fix/docs/dictionaries/)     | Choosing FIX 4.4, 4.2 or 5.0 SP2, the FIXT pair API, free functions and output shapes          |
 
@@ -277,6 +278,41 @@ if (isMessageType(message, MsgType.MarketDataSnapshotFullRefresh)) {
 ```
 
 → Full guide: [Typed messages](https://boar.team/fix/docs/typed-messages/).
+
+### Inbound messages
+
+The same per-message types work on the way **in**. `parse` above returns the wire faithfully but tag-keyed (`message.fields[262].value`, groups under `message.groups[268]`) — the right shape for a codec, the wrong one for application code, which ends up hand-writing a `switch (msgType)` plus a tag-to-field mapper per message. `toInbound` re-keys it by dictionary name, splits the standard header/trailer into a typed `envelope`, and hands back a read model that narrows per `MsgType`.
+
+```ts
+import { inboundKnownGuard, parse, toInbound } from '@boarteam/fix';
+import { dictionary, MsgType, type MessageBodies } from '@boarteam/fix-dict-fix44';
+
+const isKnownInbound = inboundKnownGuard<MessageBodies>(dictionary);
+
+const { message, issues } = parse(raw, dictionary); // gate on `issues` first
+const inbound = toInbound(message, dictionary);
+
+inbound.envelope.MsgSeqNum; // session envelope, before narrowing
+
+if (isKnownInbound(inbound)) {
+  switch (
+    inbound.msgType // narrows per case
+  ) {
+    case MsgType.Logon:
+      inbound.get('HeartBtInt'); // typed to LogonBody
+      break;
+    case MsgType.MarketDataSnapshotFullRefresh:
+      inbound.get('NoMDEntries')?.[0]?.MDEntryPx; // the typed entry array
+      break;
+    default:
+      break; // known, but not handled here
+  }
+}
+```
+
+Repeating groups are arrays of entry objects under their counter's name — the declared counter is not a property, because the entry array _is_ the count. Header/trailer fields land on `envelope`, matching the body types, which exclude them by construction. The `isKnownInbound` guard is not ceremony: an unrecognised `MsgType` cannot be a member of the message union (a `msgType: string` member overlaps every literal, so no `case` eliminates it and its loose `get` makes every branch uncallable), and it does not parse like one either — it is read flat, with no groups reconstructed. `inboundTypeGuard` is the single-MsgType `if` form. Nothing is re-parsed: `toInbound` is a pure re-keying, and the original `ParsedMessage` stays reachable as `inbound.parsed` for byte-faithful re-encoding. The engine façade binds `.inbound()`, `.isInbound` and `.isKnown`. Runnable: [`examples/read-a-message.mjs`](examples/read-a-message.mjs).
+
+→ Full guide: [Inbound messages](https://boar.team/fix/docs/inbound/).
 
 ### Reading pipe-delimited logs
 

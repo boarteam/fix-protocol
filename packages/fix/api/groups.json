@@ -76,6 +76,23 @@
     ]
   },
   {
+    "id": "inbound",
+    "title": "Inbound messages",
+    "symbols": [
+      "toInbound",
+      "InboundMessage",
+      "InboundMessageOf",
+      "InboundEnvelope",
+      "InboundBody",
+      "InboundOf",
+      "InboundUnion",
+      "inboundTypeGuard",
+      "InboundTypeGuard",
+      "inboundKnownGuard",
+      "InboundKnownGuard"
+    ]
+  },
+  {
     "id": "dictionaries",
     "title": "Dictionaries",
     "symbols": [

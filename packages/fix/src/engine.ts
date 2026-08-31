@@ -7,6 +7,14 @@ import {
   parseAll,
 } from './codec/parse';
 import { Dictionary, loadDictionary } from './dictionary/Dictionary';
+import {
+  type InboundKnownGuard,
+  type InboundMessage,
+  type InboundTypeGuard,
+  inboundKnownGuard,
+  inboundTypeGuard,
+  toInbound,
+} from './inbound';
 import { type FixtDictionaries, isFixtDictionaries, resolveFixt } from './dictionary/fixt';
 import type { DictionaryJSON } from './dictionary/types';
 import type { FixIssue } from './errors';
@@ -82,6 +90,28 @@ export interface FixEngine<Bodies = Record<string, UntypedBody>> {
    * message's body. Runtime is a plain `msgType` compare. See {@link messageTypeGuard}.
    */
   is: MessageTypeGuard<Bodies>;
+  /**
+   * Re-key a parsed message into a typed, name-keyed read view — the inbound counterpart
+   * of {@link FixEngine.create}. See {@link toInbound}.
+   *
+   * Takes the `ParsedMessage` rather than raw bytes on purpose: the issues that came with
+   * it are what decide whether the message is worth reading at all, so a session gates on
+   * `parse(...).issues` first and converts second.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  inbound<B extends object = any>(message: ParsedMessage): InboundMessage<B>;
+  /**
+   * Narrow a received message to a specific message's typed read surface, keyed on its
+   * `MsgType` value — {@link FixEngine.is} for the inbound path, preserving the view's
+   * envelope. See {@link inboundTypeGuard}.
+   */
+  isInbound: InboundTypeGuard<Bodies>;
+  /**
+   * Narrow a received message to this dictionary's {@link InboundUnion}, so a
+   * `switch (message.msgType)` dispatches with per-case body types — and separate out the
+   * unknown `MsgType` that cannot be a union member. See {@link inboundKnownGuard}.
+   */
+  isKnown: InboundKnownGuard<Bodies>;
 }
 
 /**
@@ -150,6 +180,11 @@ export function createFixEngine<Bodies = Record<string, UntypedBody>>(
       createImmutable: (msgType, init) =>
         createImmutableMessage<Bodies[typeof msgType] & object>(msgType, resolved.merged, init),
       is: messageTypeGuard<Bodies>(),
+      // The merged view, matching the builders: a session message's envelope is the
+      // transport's, and only the merge sees both layers' header components.
+      inbound: (message) => toInbound(message, resolved.merged),
+      isInbound: inboundTypeGuard<Bodies>(),
+      isKnown: inboundKnownGuard<Bodies>(resolved.merged),
     };
   }
   const dict = dictionary instanceof Dictionary ? dictionary : loadDictionary(dictionary);
@@ -163,6 +198,9 @@ export function createFixEngine<Bodies = Record<string, UntypedBody>>(
     createImmutable: (msgType, init) =>
       createImmutableMessage<Bodies[typeof msgType] & object>(msgType, dict, init),
     is: messageTypeGuard<Bodies>(),
+    inbound: (message) => toInbound(message, dict),
+    isInbound: inboundTypeGuard<Bodies>(),
+    isKnown: inboundKnownGuard<Bodies>(dict),
   };
 }
 
