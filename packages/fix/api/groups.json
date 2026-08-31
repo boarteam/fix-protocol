@@ -72,16 +72,22 @@
       "UntypedBody",
       "messageTypeGuard",
       "MessageTypeGuard",
-      "MessageOf",
+      "MessageOf"
+    ]
+  },
+  {
+    "id": "inbound",
+    "title": "Inbound messages",
+    "symbols": [
       "toInbound",
       "InboundMessage",
       "InboundMessageOf",
       "InboundEnvelope",
       "InboundBody",
-      "inboundTypeGuard",
-      "InboundTypeGuard",
       "InboundOf",
       "InboundUnion",
+      "inboundTypeGuard",
+      "InboundTypeGuard",
       "inboundKnownGuard",
       "InboundKnownGuard"
     ]
