@@ -72,7 +72,18 @@
       "UntypedBody",
       "messageTypeGuard",
       "MessageTypeGuard",
-      "MessageOf"
+      "MessageOf",
+      "toInbound",
+      "InboundMessage",
+      "InboundMessageOf",
+      "InboundEnvelope",
+      "InboundBody",
+      "inboundTypeGuard",
+      "InboundTypeGuard",
+      "InboundOf",
+      "InboundUnion",
+      "inboundKnownGuard",
+      "InboundKnownGuard"
     ]
   },
   {

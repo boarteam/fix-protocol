@@ -185,8 +185,12 @@ export interface MessageFactory<Bodies> {
 /**
  * Shared state and read logic for both message flavours. Holds the runtime dictionary, the
  * fixed `msgType`, and the name-keyed body object (which IS the typed read model).
+ *
+ * Exported for the inbound read view in `inbound.ts` to extend; NOT part of the public API
+ * (it is deliberately absent from `index.ts`).
+ * @internal
  */
-abstract class MessageBase<B extends object> implements MessageView<B> {
+export abstract class MessageBase<B extends object> implements MessageView<B> {
   protected readonly dict: Dictionary;
   readonly msgType: string;
   /** The name-keyed body: field name → scalar value, or group counter name → entry bodies. */

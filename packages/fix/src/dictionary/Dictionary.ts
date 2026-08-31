@@ -26,6 +26,7 @@ export class Dictionary {
   readonly #messagesByType = new Map<string, MessageDef>();
   readonly #messagesByName = new Map<string, MessageDef>();
   readonly #allowedTags = new Map<string, Set<number>>();
+  #envelopeTags?: ReadonlySet<number>;
   // `null` caches a known-miss so an unknown datatype name is not re-resolved each call.
   readonly #resolvedDatatypes = new Map<string, ResolvedDatatype | null>();
 
@@ -210,6 +211,74 @@ export class Dictionary {
     return tags;
   }
 
+  /**
+   * The tags belonging to the standard message header and trailer — the session envelope
+   * (`BeginString`, `BodyLength`, `MsgType`, `MsgSeqNum`, `SenderCompID`, `SendingTime`,
+   * `CheckSum`, …) as opposed to a message's own body. Includes everything reachable
+   * through the header's nested components and groups (FIX 4.4's `HopGrp`, FIXT's
+   * `ApplVerID`).
+   *
+   * Detected by STRUCTURE, not by name: the header is the component every message names
+   * first that carries `SenderCompID`(49) or `MsgSeqNum`(34); the trailer is the last-named
+   * component carrying `CheckSum`(10). A dictionary whose messages disagree on either
+   * component contributes neither, and a dictionary with no header/trailer components at
+   * all yields an empty set — the envelope is then indistinguishable from the body, which
+   * is the honest answer for a dictionary that does not model one.
+   *
+   * This deliberately mirrors the exclusion the code generator applies when emitting
+   * `MessageBodies`, so a body split on this set matches the generated body types
+   * field-for-field. Memoised; the same set instance is returned on every call.
+   */
+  envelopeTags(): ReadonlySet<number> {
+    if (!this.#envelopeTags) {
+      const tags = new Set<number>();
+      for (const name of this.#detectEnvelopeComponents()) {
+        const component = this.component(name);
+        if (component) {
+          this.#collectTags(component.members, tags, new Set());
+        }
+      }
+      this.#envelopeTags = tags;
+    }
+    return this.#envelopeTags;
+  }
+
+  /**
+   * The header/trailer component names, by vote across every message. A name is kept only
+   * while every message that has one agrees; the first disagreement retires the candidate
+   * (`null`), because a split that is right for some messages and wrong for others would be
+   * worse than no split at all.
+   *
+   * `extendDictionary` carries a sibling of this vote over the un-indexed JSON draft it
+   * mutates; the two are deliberately separate — that one cannot use a built index.
+   */
+  #detectEnvelopeComponents(): string[] {
+    let header: string | null | undefined;
+    let trailer: string | null | undefined;
+    for (const message of this.json.messages) {
+      const first = message.members[0];
+      if (first?.kind === 'component' && this.#componentHasAny(first.name, HEADER_MARKER_TAGS)) {
+        header = header === undefined || header === first.name ? first.name : null;
+      }
+      const last = message.members[message.members.length - 1];
+      if (last?.kind === 'component' && this.#componentHasAny(last.name, TRAILER_MARKER_TAGS)) {
+        trailer = trailer === undefined || trailer === last.name ? last.name : null;
+      }
+    }
+    return [header, trailer].filter((name): name is string => typeof name === 'string');
+  }
+
+  /** Whether a component's expansion carries any of `markers`. */
+  #componentHasAny(name: string, markers: readonly number[]): boolean {
+    const component = this.component(name);
+    if (!component) {
+      return false;
+    }
+    const tags = new Set<number>();
+    this.#collectTags(component.members, tags, new Set());
+    return markers.some((tag) => tags.has(tag));
+  }
+
   #collectTags(members: MemberRef[], out: Set<number>, seenComponents: Set<string>): void {
     for (const member of members) {
       switch (member.kind) {
@@ -252,6 +321,16 @@ export interface ResolvedDatatype {
 }
 
 const EMPTY_TAGS: ReadonlySet<number> = new Set();
+
+/**
+ * Tags that identify the standard header among a message's first-named components:
+ * `MsgSeqNum`(34) and `SenderCompID`(49). Either alone is enough — both are header-only
+ * across FIX 4.x and FIXT, and no application message body carries them.
+ */
+const HEADER_MARKER_TAGS: readonly number[] = [34, 49];
+
+/** `CheckSum`(10) identifies the standard trailer; it terminates every framed message. */
+const TRAILER_MARKER_TAGS: readonly number[] = [10];
 
 /**
  * Own-property check used for every name-keyed lookup into the plain-object dictionary

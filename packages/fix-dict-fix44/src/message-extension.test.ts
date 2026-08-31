@@ -16,7 +16,13 @@
  * bridging two venues over the same dialect, intersect a hand-written override interface into a
  * distinct `ExtendedBodies` type instead (see the README).
  */
-import { createFixEngine, defineExtension, extendDictionary, messageFactory } from '@boarteam/fix';
+import {
+  createFixEngine,
+  defineExtension,
+  extendDictionary,
+  inboundTypeGuard,
+  messageFactory,
+} from '@boarteam/fix';
 import { describe, expect, expectTypeOf, it } from 'vitest';
 import { type MessageBodies, dictionary } from './index';
 
@@ -92,6 +98,40 @@ describe('typed extension: cTrader SymbolName(1007) placed into an existing mess
     const entries = parsed.groups[146]!;
     expect(entries.map((e) => e.fields[1007]!.raw)).toEqual(['EURUSD', 'GBPUSD']);
     expect(entries.map((e) => e.fields[55]!.raw)).toEqual(['1', '2']);
+  });
+
+  it('reads the venue fields back through the typed inbound view', () => {
+    // The read-side half of the same seam: the augmentation that made SymbolName settable
+    // also makes it readable, because `toInbound` keys the body by dictionary name and the
+    // extension put 1007/1008 inside NoRelatedSym. Compare with the round-trip above, which
+    // digs the same values out of `groups[146][i].fields[1007].raw` by hand.
+    const engine = createFixEngine<MessageBodies>(extended);
+    const isInboundType = inboundTypeGuard<MessageBodies>();
+    const wire = message('y', {
+      SecurityReqID: 'req-1',
+      SecurityResponseID: 'resp-1',
+      SecurityRequestResult: 0,
+    })
+      .set('NoRelatedSym', [
+        { Symbol: '1', SymbolName: 'EURUSD', SymbolDigits: 5 },
+        { Symbol: '2', SymbolName: 'GBPUSD', SymbolDigits: 3 },
+      ])
+      .render(ENV);
+
+    const inbound = engine.inbound(engine.parse(wire).message);
+    if (isInboundType(inbound, 'y')) {
+      const entries = inbound.get('NoRelatedSym');
+      expect(entries?.map((e) => e.SymbolName)).toEqual(['EURUSD', 'GBPUSD']);
+      expect(entries?.map((e) => e.Symbol)).toEqual(['1', '2']);
+      // `int` decodes to a number on the way in, where the entry type widens it for the
+      // build side.
+      expect(entries?.[0]?.SymbolDigits).toBe(5);
+      expectTypeOf(entries?.[0]?.SymbolName).toEqualTypeOf<string | undefined>();
+      // The session envelope of the received message, off to the side as always.
+      expect(inbound.envelope.SenderCompID).toBe('cServer');
+    } else {
+      expect.unreachable('y should have narrowed');
+    }
   });
 
   it('exposes the venue fields on the entry type', () => {
