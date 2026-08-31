@@ -1,6 +1,6 @@
 {
   "note": "Structural API of the last published release — regenerate with scripts/refresh-api-baseline.mjs after each release.",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "symbols": [
     {
       "id": "BaseType",
@@ -341,6 +341,12 @@
           "kind": "method",
           "optional": false,
           "text": "allowedTags(msgType: string): ReadonlySet<number>"
+        },
+        {
+          "name": "envelopeTags",
+          "kind": "method",
+          "optional": false,
+          "text": "envelopeTags(): ReadonlySet<number>"
         }
       ],
       "unionOf": null
@@ -843,6 +849,24 @@
           "kind": "property",
           "optional": false,
           "text": "is: MessageTypeGuard<Bodies>"
+        },
+        {
+          "name": "inbound",
+          "kind": "method",
+          "optional": false,
+          "text": "inbound<B extends object = any>(message: ParsedMessage): InboundMessage<B>"
+        },
+        {
+          "name": "isInbound",
+          "kind": "property",
+          "optional": false,
+          "text": "isInbound: InboundTypeGuard<Bodies>"
+        },
+        {
+          "name": "isKnown",
+          "kind": "property",
+          "optional": false,
+          "text": "isKnown: InboundKnownGuard<Bodies>"
         }
       ],
       "unionOf": null
@@ -1104,6 +1128,190 @@
           "text": "toMutable(): MutableMessage<B>"
         }
       ],
+      "unionOf": null
+    },
+    {
+      "id": "InboundBody",
+      "kind": "interface",
+      "signature": "interface InboundBody",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "[name: string]",
+          "kind": "index",
+          "optional": false,
+          "text": "readonly [name: string]: DecodedValue | readonly InboundBody[] | undefined"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "InboundEnvelope",
+      "kind": "interface",
+      "signature": "interface InboundEnvelope",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "BeginString",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly BeginString?: string"
+        },
+        {
+          "name": "BodyLength",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly BodyLength?: number"
+        },
+        {
+          "name": "MsgType",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly MsgType?: string"
+        },
+        {
+          "name": "MsgSeqNum",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly MsgSeqNum?: number"
+        },
+        {
+          "name": "SenderCompID",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly SenderCompID?: string"
+        },
+        {
+          "name": "TargetCompID",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly TargetCompID?: string"
+        },
+        {
+          "name": "SenderSubID",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly SenderSubID?: string"
+        },
+        {
+          "name": "TargetSubID",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly TargetSubID?: string"
+        },
+        {
+          "name": "SendingTime",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly SendingTime?: string"
+        },
+        {
+          "name": "OrigSendingTime",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly OrigSendingTime?: string"
+        },
+        {
+          "name": "PossDupFlag",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly PossDupFlag?: boolean | string"
+        },
+        {
+          "name": "PossResend",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly PossResend?: boolean | string"
+        },
+        {
+          "name": "CheckSum",
+          "kind": "property",
+          "optional": true,
+          "text": "readonly CheckSum?: string"
+        },
+        {
+          "name": "[name: string]",
+          "kind": "index",
+          "optional": false,
+          "text": "readonly [name: string]: DecodedValue | readonly InboundBody[] | undefined"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "InboundKnownGuard",
+      "kind": "type",
+      "signature": "type InboundKnownGuard<Bodies> = (message: InboundMessage<any>) => message is InboundUnion<Bodies>",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "InboundMessage",
+      "kind": "interface",
+      "signature": "interface InboundMessage<B extends object>",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "envelope",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly envelope: InboundEnvelope"
+        },
+        {
+          "name": "parsed",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly parsed: ParsedMessage"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "InboundMessageOf",
+      "kind": "interface",
+      "signature": "interface InboundMessageOf<B extends object, M extends string>",
+      "params": [],
+      "returns": "",
+      "members": [
+        {
+          "name": "msgType",
+          "kind": "property",
+          "optional": false,
+          "text": "readonly msgType: M"
+        }
+      ],
+      "unionOf": null
+    },
+    {
+      "id": "InboundOf",
+      "kind": "type",
+      "signature": "type InboundOf<Bodies, M extends keyof Bodies & string> = InboundMessageOf<Bodies[M] & object, M>",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "InboundTypeGuard",
+      "kind": "type",
+      "signature": "type InboundTypeGuard<Bodies> = <M extends keyof Bodies & string>(message: InboundMessage<any>, msgType: M) => message is InboundOf<Bodies, M>",
+      "params": [],
+      "returns": "",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "InboundUnion",
+      "kind": "type",
+      "signature": "type InboundUnion<Bodies> = {\n    [M in keyof Bodies & string]: InboundOf<Bodies, M>;\n}[keyof Bodies & string]",
+      "params": [],
+      "returns": "",
+      "members": [],
       "unionOf": null
     },
     {
@@ -1996,6 +2204,30 @@
       "unionOf": null
     },
     {
+      "id": "inboundKnownGuard",
+      "kind": "function",
+      "signature": "function inboundKnownGuard<Bodies>(dict: Dictionary | DictionaryJSON): InboundKnownGuard<Bodies>",
+      "params": [
+        {
+          "name": "dict",
+          "type": "Dictionary | DictionaryJSON",
+          "optional": false
+        }
+      ],
+      "returns": "InboundKnownGuard<Bodies>",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "inboundTypeGuard",
+      "kind": "function",
+      "signature": "function inboundTypeGuard<Bodies>(): InboundTypeGuard<Bodies>",
+      "params": [],
+      "returns": "InboundTypeGuard<Bodies>",
+      "members": [],
+      "unionOf": null
+    },
+    {
       "id": "invertMsgTypes",
       "kind": "function",
       "signature": "function invertMsgTypes<const T extends Record<string, string>>(msgTypes: T): InvertMsgTypes<T>",
@@ -2236,6 +2468,26 @@
         }
       ],
       "returns": "EncodeMessage",
+      "members": [],
+      "unionOf": null
+    },
+    {
+      "id": "toInbound",
+      "kind": "function",
+      "signature": "function toInbound<B extends object = any>(parsed: ParsedMessage, dict: Dictionary | DictionaryJSON): InboundMessage<B>",
+      "params": [
+        {
+          "name": "parsed",
+          "type": "ParsedMessage",
+          "optional": false
+        },
+        {
+          "name": "dict",
+          "type": "Dictionary | DictionaryJSON",
+          "optional": false
+        }
+      ],
+      "returns": "InboundMessage<B>",
       "members": [],
       "unionOf": null
     },
