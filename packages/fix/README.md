@@ -116,6 +116,69 @@ patch the shared interface via declaration merging (single venue) or an override
 intersection (multiple venues), then rebind `messageFactory<MessageBodies>(extended)`. The
 augmented type and the extended dictionary ship as a pair.
 
+## Reading an inbound message
+
+The same per-message types work on the way **in**. `parse` returns a faithful but tag-keyed
+`ParsedMessage` (`message.fields[262].value`, groups under `message.groups[268]`), which is the
+right shape for a codec and the wrong one for application code — it leaves you writing a
+`switch (msgType)` and a tag-to-field mapper per message, re-deriving what the dictionary
+already knows. `toInbound` re-keys it by name, so a received message reads the way a built one
+does.
+
+```ts
+import { inboundKnownGuard, parse, toInbound } from '@boarteam/fix';
+import { dictionary, MsgType, type MessageBodies } from '@boarteam/fix-dict-fix44';
+
+const isKnownInbound = inboundKnownGuard<MessageBodies>(dictionary);
+
+const { message, issues } = parse(raw, dictionary); // gate on `issues` first
+const inbound = toInbound(message, dictionary);
+
+inbound.envelope.MsgSeqNum; // the session envelope, before narrowing
+
+if (isKnownInbound(inbound)) {
+  switch (
+    inbound.msgType // narrows per case
+  ) {
+    case MsgType.Logon:
+      inbound.get('HeartBtInt'); // typed to LogonBody
+      break;
+    case MsgType.MarketDataSnapshotFullRefresh:
+      inbound.get('NoMDEntries')?.[0]?.MDEntryPx; // the typed entry array
+      break;
+    default:
+      break; // known, but not handled here
+  }
+}
+```
+
+- **Body by name, envelope on the side.** Repeating groups are arrays of entry objects under
+  their counter's name (`NoMDEntries`, `NoRelatedSym`) — the declared counter is not a property,
+  because the entry array _is_ the count. Header/trailer fields land on `envelope`, matching the
+  body types, which exclude them by construction. Which tags count as envelope is decided by the
+  dictionary's header/trailer components (`Dictionary.envelopeTags()`), not by a fixed list.
+- **`switch (inbound.msgType)` narrows** once `isKnownInbound` has run. The guard is not
+  ceremony: an unrecognised `MsgType` cannot be a member of the message union — a `msgType:
+string` member overlaps every literal, so no `case` eliminates it and its loose `get` makes
+  every branch uncallable — and it does not parse like one either, being read flat with no groups
+  reconstructed. `inboundTypeGuard` is the single-MsgType `if` form. Handle every message and
+  `default` narrows to `never`; handle a subset and it stays live and typed.
+- **It is a `MessageView`**, so a received message also renders: `inbound.render(envelope)`
+  re-emits the body under a fresh envelope — the useful shape for a proxy that re-signs what it
+  forwards. For a byte-exact echo, go through `toEncodeMessage(inbound.parsed)` instead:
+  `ParsedField.raw` is the round-trip source of truth, and a body carries the coerced value.
+- **Nothing is re-parsed or re-validated.** `toInbound` is a pure re-keying of what `parse`
+  produced; every diagnostic was already reported there, and `validate()` still runs against the
+  `ParsedMessage`, which stays reachable as `inbound.parsed`.
+- The engine façade mirrors it: `createFixEngine<MessageBodies>(dictionary)` binds `.inbound()`,
+  `.isInbound` and `.isKnown`.
+
+One deliberate sharp edge: the body type of an un-narrowed inbound message is `any`, not a loose
+index-signature type. A generated body is an `interface`, and TypeScript never gives an interface
+an implicit index signature — so no loose type is ever its supertype, and a guard narrowing _to_
+one would silently produce an intersection whose loose `get` overload wins at every call site.
+`InboundBody` is exported for callers who mean not to narrow; pass it explicitly.
+
 Examples and the contribution guide live in the
 [monorepo](https://github.com/boarteam/fix-protocol).
 

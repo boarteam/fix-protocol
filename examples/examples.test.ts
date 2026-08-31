@@ -9,6 +9,7 @@ import { run as runEncode } from './encode-a-message.mjs';
 import { run as runDemo } from './demo-decode.mjs';
 import { run as runExtend } from './extend-dictionary.mjs';
 import { run as runFixt } from './fixt-pair.mjs';
+import { run as runRead } from './read-a-message.mjs';
 
 describe('examples', () => {
   it('extend-dictionary nests the cTrader custom tags and keeps every gate clean', () => {
@@ -34,6 +35,12 @@ describe('examples', () => {
     expect(r.logonValidation).toBe(0);
     expect(r.sessionLayer).toBe('session');
     expect(r.applicationLayer).toBe('application');
+  });
+
+  it('read-a-message dispatches each frame through the typed read view', () => {
+    // The unknown MsgType reaches the guard rather than the reject gate: it is the one
+    // parse error this example tolerates, mirroring a client reading a venue's stream.
+    expect(runRead()).toEqual(['logon', 'snapshot', 'unknown']);
   });
 
   it('encode-a-message produces a framed, re-parseable message', () => {
