@@ -284,9 +284,11 @@ if (isMessageType(message, MsgType.MarketDataSnapshotFullRefresh)) {
 The same per-message types work on the way **in**. `parse` above returns the wire faithfully but tag-keyed (`message.fields[262].value`, groups under `message.groups[268]`) — the right shape for a codec, the wrong one for application code, which ends up hand-writing a `switch (msgType)` plus a tag-to-field mapper per message. `toInbound` re-keys it by dictionary name, splits the standard header/trailer into a typed `envelope`, and hands back a read model that narrows per `MsgType`.
 
 ```ts
-import { inboundKnownGuard, parse, toInbound } from '@boarteam/fix';
-import { dictionary, MsgType, type MessageBodies } from '@boarteam/fix-dict-fix44';
+import { inboundKnownGuard, loadDictionary, parse, toInbound } from '@boarteam/fix';
+import { dictionary as fix44, MsgType, type MessageBodies } from '@boarteam/fix-dict-fix44';
 
+// The dict packages ship the dictionary as data; `parse` wants it indexed.
+const dictionary = loadDictionary(fix44);
 const isKnownInbound = inboundKnownGuard<MessageBodies>(dictionary);
 
 const { message, issues } = parse(raw, dictionary); // gate on `issues` first
@@ -386,7 +388,7 @@ venue packages (e.g. a future `@boarteam/fix-dict-fix44-ctrader`).
 
 ### Lower-level building blocks
 
-If you do not want the engine wrapper, the same capabilities are exported as free functions: `parse`, `parseAll`, `encode`, `validate`, `tokenize`, `splitMessages`, `decodeValue`, `calculateChecksum`, `bodyLength`, `loadDictionary`, `Dictionary`, `validateDictionary`, the typed-message helpers (`messageFactory`, `messageTypeGuard`, `createMessage`, `createImmutableMessage`), and the dictionary-extension helpers (`extendDictionary`, `defineExtension`, `tagsOf`, `msgTypesOf`, `extendTags`, `invertTags`, `extendMsgTypes`, `invertMsgTypes`).
+If you do not want the engine wrapper, the same capabilities are exported as free functions: `parse`, `parseAll`, `encode`, `validate`, `tokenize`, `splitMessages`, `decodeValue`, `calculateChecksum`, `bodyLength`, `loadDictionary`, `Dictionary`, `validateDictionary`, the typed-message helpers (`messageFactory`, `messageTypeGuard`, `createMessage`, `createImmutableMessage`, `toInbound`, `inboundTypeGuard`, `inboundKnownGuard`), and the dictionary-extension helpers (`extendDictionary`, `defineExtension`, `tagsOf`, `msgTypesOf`, `extendTags`, `invertTags`, `extendMsgTypes`, `invertMsgTypes`).
 
 Every one of them is documented, signature by signature, in the [API reference](https://boar.team/fix/docs/api/).
 
