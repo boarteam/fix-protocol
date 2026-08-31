@@ -126,9 +126,11 @@ already knows. `toInbound` re-keys it by name, so a received message reads the w
 does.
 
 ```ts
-import { inboundKnownGuard, parse, toInbound } from '@boarteam/fix';
-import { dictionary, MsgType, type MessageBodies } from '@boarteam/fix-dict-fix44';
+import { inboundKnownGuard, loadDictionary, parse, toInbound } from '@boarteam/fix';
+import { dictionary as fix44, MsgType, type MessageBodies } from '@boarteam/fix-dict-fix44';
 
+// The dict packages ship the dictionary as data; `parse` wants it indexed.
+const dictionary = loadDictionary(fix44);
 const isKnownInbound = inboundKnownGuard<MessageBodies>(dictionary);
 
 const { message, issues } = parse(raw, dictionary); // gate on `issues` first
