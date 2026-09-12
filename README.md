@@ -172,6 +172,12 @@ const fix = createFixEngine(dictionary);
 
 `parse` accepts a `string` or `Uint8Array` and **never throws** — it returns `{ message, issues }`.
 
+<!-- doc-typecheck
+import type { FixEngine } from '@boarteam/fix';
+declare const fix: FixEngine;
+declare const raw: string;
+-->
+
 ```ts
 const { message, issues } = fix.parse(raw);
 
@@ -202,6 +208,12 @@ Use `parseAll` for a stream of concatenated messages (e.g. a log file).
 
 `validate` checks presence (required fields), enum membership, datatypes, and conditional-required rules against the dictionary, returning a `FixIssue[]`:
 
+<!-- doc-typecheck
+import type { FixEngine, ParsedMessage } from '@boarteam/fix';
+declare const fix: FixEngine;
+declare const message: ParsedMessage;
+-->
+
 ```ts
 const problems = fix.validate(message);
 for (const issue of problems) {
@@ -214,6 +226,11 @@ Every `FixIssue` carries a **stable `code`** (e.g. `validate/value-not-in-enum`,
 → Full guide: [Validating FIX messages](https://boar.team/fix/docs/validate/). Every issue code the engine can emit is catalogued, with its usual cause, in the [diagnostics reference](https://boar.team/fix/diagnostics/).
 
 ### Encode
+
+<!-- doc-typecheck
+import type { FixEngine } from '@boarteam/fix';
+declare const fix: FixEngine;
+-->
 
 ```ts
 import { MsgType, Tags } from '@boarteam/fix-dict-fix44';
@@ -266,6 +283,11 @@ Illegal fields, wrong value types, and malformed group entries are **compile err
 
 Where the concrete type is erased — a generic `send(message: MessageView<any>)`, a log-metadata helper — `message.msgType === 'W'` cannot narrow the body, so each dictionary package also ships `isMessageType`, a guard keyed on the `MsgType` value (and a `MessageOf<M>` alias for annotations). Inside it, reads are typed to that message with no casts; the runtime is a plain string compare, the typing comes from the generated body registry. The engine binds the same guard as `createFixEngine<MessageBodies>(dictionary).is`.
 
+<!-- doc-typecheck
+import type { MessageView } from '@boarteam/fix';
+declare const message: MessageView<any>;
+-->
+
 ```ts
 import { isMessageType, MsgType } from '@boarteam/fix-dict-fix44';
 
@@ -282,6 +304,10 @@ if (isMessageType(message, MsgType.MarketDataSnapshotFullRefresh)) {
 ### Inbound messages
 
 The same per-message types work on the way **in**. `parse` above returns the wire faithfully but tag-keyed (`message.fields[262].value`, groups under `message.groups[268]`) — the right shape for a codec, the wrong one for application code, which ends up hand-writing a `switch (msgType)` plus a tag-to-field mapper per message. `toInbound` re-keys it by dictionary name, splits the standard header/trailer into a typed `envelope`, and hands back a read model that narrows per `MsgType`.
+
+<!-- doc-typecheck
+declare const raw: string;
+-->
 
 ```ts
 import { inboundKnownGuard, loadDictionary, parse, toInbound } from '@boarteam/fix';
@@ -319,6 +345,12 @@ Repeating groups are arrays of entry objects under their counter's name — the 
 ### Reading pipe-delimited logs
 
 Most captured logs render the SOH separator as `|`. Pass it through:
+
+<!-- doc-typecheck
+import type { FixEngine } from '@boarteam/fix';
+declare const fix: FixEngine;
+declare const pipeDelimitedLine: string;
+-->
 
 ```ts
 const { message, issues } = fix.parse(pipeDelimitedLine, { soh: '|' });
@@ -365,6 +397,15 @@ if the base passed `validateDictionary` and the result has no error-severity iss
 passes too.
 
 The **same declaration** drives the typed maps — no duplication, full literal typing (TS ≥ 5.0):
+
+<!-- doc-typecheck
+import { defineExtension } from '@boarteam/fix';
+// The declaration from the fence above, repeated so this one type-checks on its own.
+const ctrader = defineExtension({
+  id: 'ctrader',
+  fields: { SymbolName: { tag: 1007, type: 'String' }, SymbolDigits: { tag: 1008, type: 'int' } },
+});
+-->
 
 ```ts
 import { extendTags, invertTags, tagsOf } from '@boarteam/fix';

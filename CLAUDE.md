@@ -37,6 +37,11 @@ dict (FIXT.1.1 envelope + session messages + base-SP2 app messages, `applVerID: 
 `fix-dict-fixt11` is the transport-only FIXT.1.1 dict.
 Gates: `pnpm -r typecheck`, `pnpm test`, `pnpm lint`, `node scripts/check-bundle.mjs`
 (browser-safety + bundle-size tripwires), and the FIX42 + FIX50SP2 drift crosschecks.
+`pnpm test` also carries the three doc gates: TSDoc `@example` blocks are executed, the
+`examples/*.mjs` are executed, and the `ts` fences in every README (root + each published
+package) are type-checked against the built packages (`examples/readme-typecheck.test.ts` —
+a fence needing context from the prose carries a `<!-- doc-typecheck ... -->` preamble). See
+[`CONTRIBUTING.md`](./CONTRIBUTING.md) § "Documentation gates".
 `packages/fix` build also emits `dist/api.json` and holds the public surface to its
 contract (doc coverage, `{@link}` integrity, curated grouping, since-map, API diff vs
 the last release — see `docs/api-json.md`); an API-changing PR needs a changeset of

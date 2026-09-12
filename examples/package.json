@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@boarteam/fix": "workspace:*",
+    "@boarteam/fix-dict-fix42": "workspace:*",
     "@boarteam/fix-dict-fix44": "workspace:*",
     "@boarteam/fix-dict-fix50sp2": "workspace:*",
     "@boarteam/fix-dict-fixt11": "workspace:*"
