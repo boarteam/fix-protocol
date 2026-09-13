@@ -87,6 +87,34 @@ describe('diffAgainstBaseline', () => {
     expect(diffAgainstBaseline([altered, sym('Gone')], baseline).required).toBe('major');
   });
 
+  it('an added type-parameter default is additive; changing or removing one is not', () => {
+    const plain = sym('Keep', { signature: 'interface Keep<B extends object>' });
+    const defaulted = sym('Keep', { signature: 'interface Keep<B extends object = any>' });
+    const base = { symbols: structuralOf([plain, sym('Gone')]) };
+
+    const added = diffAgainstBaseline([defaulted, sym('Gone')], base);
+    expect(added.changes).toEqual(['extended Keep (+B extends object = any)']);
+    expect(added.required).toBe('minor');
+
+    // A default that already existed may not change or vanish — both can break callers.
+    const defaultedBase = { symbols: structuralOf([defaulted, sym('Gone')]) };
+    expect(
+      diffAgainstBaseline(
+        [sym('Keep', { signature: 'interface Keep<B extends object = never>' }), sym('Gone')],
+        defaultedBase,
+      ).required,
+    ).toBe('major');
+    expect(diffAgainstBaseline([plain, sym('Gone')], defaultedBase).required).toBe('major');
+
+    // Anything else in the signature is still an alteration.
+    expect(
+      diffAgainstBaseline(
+        [sym('Keep', { signature: 'interface Keep<B extends string = any>' }), sym('Gone')],
+        base,
+      ).required,
+    ).toBe('major');
+  });
+
   it('doc-text changes are not surface changes', () => {
     const redocumented = sym('Keep', {
       doc: 'entirely new prose',

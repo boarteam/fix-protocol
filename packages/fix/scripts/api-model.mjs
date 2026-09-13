@@ -332,6 +332,96 @@ export function structuralOf(symbols) {
 }
 
 /**
+ * Split a signature's leading type-parameter list into `{ head, params, tail }`, or `null`
+ * when there is none (or it does not parse). Depth-aware, and a `>` that closes an arrow
+ * (`=>`) does not close the list.
+ */
+function splitTypeParams(signature) {
+  const start = signature.indexOf('<');
+  if (start === -1) return null;
+  let depth = 0;
+  let end = -1;
+  for (let i = start; i < signature.length; i++) {
+    const ch = signature[i];
+    if (ch === '<') depth++;
+    else if (ch === '>' && signature[i - 1] !== '=') {
+      depth--;
+      if (depth === 0) {
+        end = i;
+        break;
+      }
+    }
+  }
+  if (end === -1) return null;
+  const params = [];
+  let buf = '';
+  depth = 0;
+  for (const ch of signature.slice(start + 1, end)) {
+    if ('<([{'.includes(ch)) depth++;
+    else if ('>)]}'.includes(ch)) depth--;
+    if (ch === ',' && depth === 0) {
+      params.push(buf);
+      buf = '';
+    } else buf += ch;
+  }
+  params.push(buf);
+  return { head: signature.slice(0, start), params, tail: signature.slice(end + 1) };
+}
+
+/** One type parameter as `{ decl, def }` — `def` is `null` when it has no default. */
+function splitParamDefault(param) {
+  let depth = 0;
+  for (let i = 0; i < param.length; i++) {
+    const ch = param[i];
+    if ('<([{'.includes(ch)) depth++;
+    else if ('>)]}'.includes(ch)) {
+      if (!(ch === '>' && param[i - 1] === '=')) depth--;
+    } else if (
+      ch === '=' &&
+      depth === 0 &&
+      param[i + 1] !== '>' &&
+      !['=', '!', '<', '>'].includes(param[i - 1])
+    ) {
+      return { decl: param.slice(0, i).trim(), def: param.slice(i + 1).trim() };
+    }
+  }
+  return { decl: param.trim(), def: null };
+}
+
+/**
+ * The type-parameter defaults `current` adds over `baseline`, or `null` when the two
+ * signatures differ in any other way.
+ *
+ * Adding a default is **not** a breaking change: `Foo<B extends object = any>` still accepts
+ * every `Foo<X>` written against `Foo<B extends object>`, and bare `Foo` becomes legal where
+ * it was an error before — strictly more code compiles, none less. Without this the
+ * `signature` string comparison below reads it as an alteration, and since changesets bumps
+ * with a plain `semver.inc`, the demanded major would publish a 0.x package as 1.0.0 over a
+ * change that breaks nobody.
+ *
+ * Deliberately narrow: it returns `null` — leaving the caller's major verdict alone — for a
+ * default that is *changed* or *removed* (both really can break callers), for any other
+ * signature edit, and for anything it cannot parse confidently.
+ */
+function typeParamDefaultsAdded(baselineSignature, currentSignature) {
+  if (baselineSignature === currentSignature) return [];
+  const b = splitTypeParams(baselineSignature);
+  const c = splitTypeParams(currentSignature);
+  if (!b || !c) return null;
+  if (b.head !== c.head || b.tail !== c.tail || b.params.length !== c.params.length) return null;
+  const added = [];
+  for (let i = 0; i < b.params.length; i++) {
+    const bp = splitParamDefault(b.params[i]);
+    const cp = splitParamDefault(c.params[i]);
+    if (bp.decl !== cp.decl) return null;
+    if (bp.def === cp.def) continue;
+    if (bp.def !== null) return null; // changed or removed an existing default
+    added.push(`${cp.decl} = ${cp.def}`);
+  }
+  return added;
+}
+
+/**
  * Diff the current structural surface against the last released baseline and
  * return `{ changes, required }`: what changed, and the minimum release level
  * those changes demand (additions → minor; removals/alterations → major).
@@ -358,17 +448,19 @@ export function diffAgainstBaseline(current, baseline) {
       const cNames = memberNames(c);
       const removedMembers = [...bNames].filter((n) => !cNames.has(n));
       const addedMembers = [...cNames].filter((n) => !bNames.has(n));
+      const defaultsAdded = typeParamDefaultsAdded(b.signature, c.signature);
       const sameShape =
         removedMembers.length === 0 &&
         c.kind === b.kind &&
-        c.signature === b.signature &&
+        defaultsAdded !== null &&
         c.returns === b.returns &&
         JSON.stringify(c.params) === JSON.stringify(b.params) &&
         JSON.stringify(c.unionOf) === JSON.stringify(b.unionOf) &&
         JSON.stringify(c.members.filter((m) => bNames.has(m.name || m.kind))) ===
           JSON.stringify(b.members);
-      if (sameShape && addedMembers.length > 0) {
-        changes.push(`extended ${id} (+${addedMembers.join(', +')})`);
+      if (sameShape && (addedMembers.length > 0 || defaultsAdded.length > 0)) {
+        const additions = [...addedMembers, ...defaultsAdded].map((a) => `+${a}`);
+        changes.push(`extended ${id} (${additions.join(', ')})`);
         raise('minor');
       } else {
         changes.push(`changed ${id}`);
