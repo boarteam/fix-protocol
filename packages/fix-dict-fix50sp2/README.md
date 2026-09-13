@@ -40,7 +40,9 @@ Exports: `dictionary` (the data), `Tags`/`TagNames`, `MsgType`/`MsgTypeNames`, `
 (e.g. `Enums.ApplVerID.FIX50SP2 === '9'`), a top-level const + same-name type per
 enumerated field, `DICTIONARY_VERSION` (`'FIX.5.0SP2'` — the _application_ version; tag 8
 carries `dictionary.beginString`, `'FIXT.1.1'`), and the typed message API: `message`,
-`MessageBodies` (admin + application bodies), `isMessageType`, `MessageOf<M>`.
+`MessageBodies` (admin + application bodies), and a narrowing pair per direction —
+`isMessageType`/`MessageOf<M>` for a message you built, `isInboundType`/`InboundOf<M>` for one
+you received.
 
 ## Provenance & coverage
 

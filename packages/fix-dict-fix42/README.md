@@ -31,9 +31,11 @@ message-type map: use `Enums.MsgType`.
 
 It also exports the typed encode-side API: `message` (a factory bound to this dictionary),
 `MessageBodies` (the `MsgType` value → body-type registry), and a named body type per message
-plus augmentable per-container group/component `interface`s. For the read side it exports
-`isMessageType` (a type guard that narrows a `MessageView<any>` of unknown type to a specific
-message's body, keyed on its `MsgType` value) and `MessageOf<M>` (the matching annotation alias).
+plus augmentable per-container group/component `interface`s. It also exports a narrowing pair per
+direction, keyed on the `MsgType` value: `isMessageType` + `MessageOf<M>` for a message you
+**built** (narrowing a `MessageView<any>` of unknown type to a specific message's body), and
+`isInboundType` + `InboundOf<M>` for one you **received**, which narrow an `InboundMessage` and
+keep its session `envelope` reachable afterwards.
 The typed-message API is documented in full in the
 [Typed messages guide](https://boar.team/fix/docs/typed-messages/).
 
