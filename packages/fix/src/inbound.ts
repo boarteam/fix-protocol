@@ -131,8 +131,21 @@ export interface InboundEnvelope {
  * a fresh envelope, which is the useful shape for a proxy that re-signs what it forwards.
  * For a byte-exact echo of what arrived, go through `toEncodeMessage(inbound.parsed)`
  * instead — see the module note on `raw` vs `value`.
+ *
+ * **The body parameter defaults to `any`**, so an unnarrowed message is spelled
+ * `InboundMessage` rather than `InboundMessage<any>`. That agrees with both ends of its own
+ * lifecycle: {@link toInbound} and {@link FixEngine.inbound} already default `B` the same
+ * way, and {@link InboundTypeGuard}/{@link InboundKnownGuard} take an `InboundMessage<any>`,
+ * because *not narrowed yet* is the ordinary starting state on the read side. The write-side
+ * views ({@link MutableMessage}, {@link ImmutableMessage}) deliberately keep no default —
+ * there you always know what you are building, having named the `MsgType` to build it.
+ *
+ * The default cannot be {@link InboundBody}, or any other loose shape, for the reason that
+ * type's own note gives: a guard would then intersect rather than replace, and the loose
+ * `get` overload would win at every call site. `any` is what keeps narrowing real.
  */
-export interface InboundMessage<B extends object> extends MessageView<B> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface InboundMessage<B extends object = any> extends MessageView<B> {
   /** The standard header/trailer fields, by name. See {@link InboundEnvelope}. */
   readonly envelope: InboundEnvelope;
   /**
