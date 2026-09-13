@@ -48,8 +48,9 @@ jobs:
       - name: Format check (Prettier)
         run: pnpm format:check
 
-      # Vitest runs the Node suites, the happy-dom browser smoke test, and the runnable
-      # examples.
+      # Vitest runs the Node suites, the happy-dom browser smoke test, and the three doc
+      # gates: the executed TSDoc @example blocks, the runnable examples, and the README
+      # type-check (every README's `ts` fences compiled against the built packages).
       - name: Test (Node + browser-like env)
         run: pnpm test
 

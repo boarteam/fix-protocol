@@ -18,6 +18,10 @@ testing, and the roadmap — [feedback](https://github.com/boarteam/fix-protocol
   <img src="https://raw.githubusercontent.com/boarteam/fix-protocol/main/.github/demo.gif" width="900" alt="Terminal recording of @boarteam/fix: a raw FIX 4.4 log line is piped in and decoded in stages into named, typed fields with its repeating group expanded into nested Bid/Offer objects, validating clean; then a corrupted message is piped in and still parses without throwing, returning the bad float, wrong checksum, and invalid enum as structured diagnostics. The same pure engine runs in a browser tab or Node.">
 </p>
 
+<!-- doc-typecheck
+declare const raw: string;
+-->
+
 ```ts
 import { createFixEngine } from '@boarteam/fix';
 import { dictionary } from '@boarteam/fix-dict-fix44';
@@ -125,6 +129,10 @@ right shape for a codec and the wrong one for application code — it leaves you
 already knows. `toInbound` re-keys it by name, so a received message reads the way a built one
 does.
 
+<!-- doc-typecheck
+declare const raw: string;
+-->
+
 ```ts
 import { inboundKnownGuard, loadDictionary, parse, toInbound } from '@boarteam/fix';
 import { dictionary as fix44, MsgType, type MessageBodies } from '@boarteam/fix-dict-fix44';
@@ -190,6 +198,10 @@ FIX 5.0 splits the wire into a session protocol (tag 8 carries `FIXT.1.1`) and a
 application version negotiated via `DefaultApplVerID(1137)` / per-message `ApplVerID(1128)`.
 The engine models that split first-class — every codec entry point accepts either a single
 dictionary or a **transport/application pair**:
+
+<!-- doc-typecheck
+declare const raw: string;
+-->
 
 ```ts
 import { createFixEngine } from '@boarteam/fix';

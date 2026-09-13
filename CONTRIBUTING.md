@@ -18,7 +18,7 @@ will pick up the pinned version from `packageManager`).
 ```bash
 pnpm install
 pnpm -r build      # tsup → ESM + CJS + d.ts (build first: cross-package tests import the built engine)
-pnpm test          # vitest: Node suites + browser-like smoke + examples + cross-check drift gate
+pnpm test          # vitest: Node suites + browser-like smoke + examples + doc gates + cross-check drift gate
 pnpm -r typecheck  # tsc --strict
 pnpm lint          # eslint
 pnpm format        # prettier --write   (pnpm format:check to verify)
@@ -36,6 +36,36 @@ Before opening a PR, the full gate should be green:
 ```bash
 pnpm -r build && pnpm -r typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm check:bundle
 ```
+
+## Documentation gates
+
+Three gates hold the documentation to the code, and all three run under `pnpm test`:
+
+- **TSDoc `@example` blocks are executed** — `examples/api-doctest.test.ts` runs each block
+  verbatim and asserts its `// → ` annotations against stdout. Authoring rules:
+  [`docs/api-json.md`](./docs/api-json.md).
+- **`examples/*.mjs` are executed** — `examples/examples.test.ts` (and `pnpm examples`).
+- **README TypeScript fences are type-checked** — `examples/readme-typecheck.test.ts` compiles
+  every fence tagged `ts` or `typescript` in the root [`README.md`](./README.md) and in each
+  published package's README against the built packages, so a snippet cannot ship code that
+  does not compile. A README importing a package the runnable examples do not already use
+  needs that package added to `examples/package.json` for the import to resolve.
+
+That last one is compile-only, because fences are excerpts: they lean on identifiers the
+surrounding prose established. Give such a fence a preamble in an HTML comment sitting
+immediately above it — HTML comments render nowhere, so the README is unchanged:
+
+    <!-- doc-typecheck
+    declare const raw: string;
+    -->
+
+Where a fence genuinely cannot be compiled, opt out and say why:
+
+    <!-- doc-typecheck: skip — pseudocode for a transport the library does not ship -->
+
+A fence with neither is expected to compile on its own; a `skip` without a reason fails the
+gate. Build first (`pnpm -r build`) — like the doctest, this gate skips itself until
+`packages/fix/dist` exists.
 
 ## The dictionaries are generated — never hand-edit them
 

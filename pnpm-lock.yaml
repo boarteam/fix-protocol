@@ -57,6 +57,9 @@ importers:
       '@boarteam/fix':
         specifier: workspace:*
         version: link:../packages/fix
+      '@boarteam/fix-dict-fix42':
+        specifier: workspace:*
+        version: link:../packages/fix-dict-fix42
       '@boarteam/fix-dict-fix44':
         specifier: workspace:*
         version: link:../packages/fix-dict-fix44
