@@ -49,9 +49,14 @@ For the typed encode side it also exports `message` (a factory bound to this dic
 `MessageBodies` (the `MsgType` value → body-type registry), and a named body type per message
 (`NewOrderSingleBody`, `MarketDataSnapshotFullRefreshBody`, …) plus augmentable per-container
 group/component `interface`s (`SecListGrp_NoRelatedSymEntry`, `InstrumentFields`, …) that venue
-extensions patch via declaration merging. For the read side it exports `isMessageType` — a type
-guard that narrows a `MessageView<any>` of unknown type to a specific message's body keyed on its
-`MsgType` value (so `get()` becomes typed) — and `MessageOf<M>`, the matching annotation alias.
+extensions patch via declaration merging. It also exports a narrowing pair per direction, both
+keyed on the `MsgType` value: `isMessageType` + `MessageOf<M>` for a message you **built** (they
+narrow a `MessageView<any>` of unknown type to a specific message's body, so `get()` becomes
+typed), and `isInboundType` + `InboundOf<M>` for one you **received** — same narrowing over an
+`InboundMessage`, with the session `envelope` and the original `parsed` still reachable
+afterwards. Narrowing to _every_ message at once is `inboundKnownGuard`, which takes the
+dictionary at runtime and so is bound by the consumer — an app that extends this dictionary must
+bind its own rather than borrow one bound to the stock one.
 The typed-message API is documented in full in the
 [Typed messages guide](https://boar.team/fix/docs/typed-messages/).
 

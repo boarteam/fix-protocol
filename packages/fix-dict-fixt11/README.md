@@ -38,7 +38,8 @@ Exports: `dictionary` (the data; `version === beginString === 'FIXT.1.1'`),
 `Tags`/`TagNames`, `MsgType`/`MsgTypeNames`, `Enums` (e.g. `Enums.ApplVerID`,
 `Enums.SessionRejectReason`), a top-level const + same-name type per enumerated field,
 `DICTIONARY_VERSION`, and the typed message API (`message`, `MessageBodies` with the 7
-admin bodies, `isMessageType`, `MessageOf<M>`).
+admin bodies, and a narrowing pair per direction — `isMessageType`/`MessageOf<M>` for a
+message you built, `isInboundType`/`InboundOf<M>` for one you received).
 
 ## Provenance & coverage
 
